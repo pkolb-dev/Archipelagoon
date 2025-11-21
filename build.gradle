@@ -33,6 +33,7 @@ repositories {
 
 dependencies {
   implementation "legend:lod:snapshot"
+  implementation 'io.github.archipelagomw:Java-Client:0.2.1'
 }
 
 sourceSets {
