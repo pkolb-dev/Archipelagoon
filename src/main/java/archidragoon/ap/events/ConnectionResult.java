@@ -1,4 +1,4 @@
-package archidragoon.services.archipelago.events;
+package archidragoon.ap.events;
 import io.github.archipelagomw.events.ArchipelagoEventListener;
 import io.github.archipelagomw.events.ConnectionResultEvent;
 
