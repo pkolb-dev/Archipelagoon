@@ -1,8 +1,11 @@
 # Global stuff
 archidragoon.name=ArchiDragoon
 
-archidragoon.config.host.label=Host
-archidragoon.config.slot_name.label=Slot Name
+archidragoon.config.address.label=Address
+archidragoon.config.slot_name.label=Slot
 archidragoon.config.password.label=Password
 archidragoon.config.archipelago.configure=Configure
 archidragoon.config.archipelago_config.label=Archipelago Settings
+archidragoon.config.not_connected=Not connected
+archidragoon.config.connect=Connect
+archidragoon.config.connecting=Connecting

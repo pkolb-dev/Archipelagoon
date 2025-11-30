@@ -3,11 +3,15 @@ package archidragoon.ap;
 
 import archidragoon.ap.events.ConnectionResult;
 import io.github.archipelagomw.Client;
+import legend.game.inventory.screens.MessageBoxScreen;
 
 import java.net.URISyntaxException;
 
+import static legend.game.SItem.menuStack;
 
 public class APClient extends Client {
+  private boolean errorDisplayed;
+
   public APClient(){
     super();
     final String gameName = "The Legend of Dragoon";
@@ -17,7 +21,15 @@ public class APClient extends Client {
 
   @Override
   public void onError(final Exception ex) {
-    // TODO pk
+
+    final String message = "An error has occurred:\n" + ex.getLocalizedMessage();
+    if (this.errorDisplayed) {
+      return;
+    }
+    this.errorDisplayed = true;
+    menuStack.pushScreen(new MessageBoxScreen(message,0, result -> {
+      this.errorDisplayed = false;
+    }));
   }
 
   @Override
@@ -25,14 +37,10 @@ public class APClient extends Client {
    // TODO pk
   }
 
-  public void connectToServer(final String host, final String slotName, final String password) {
+  public void connectToServer(final String host, final String slotName, final String password) throws URISyntaxException {
     this.setName(slotName);
     this.setPassword(password);
-    try {
-      this.connect(host);
-    } catch (final URISyntaxException e) {
-      // TODO handle this
-    }
+    this.connect(host);
   }
 
   private void registerDefaultListeners() {
