@@ -1,9 +1,11 @@
 package archidragoon.screens;
 
+import archidragoon.ArchiDragoon;
 import archidragoon.ap.APContext;
 import legend.core.platform.input.InputAction;
 import legend.game.Audio;
 import legend.game.Menus;
+import legend.game.i18n.I18n;
 import legend.game.inventory.WhichMenu;
 import legend.game.inventory.screens.InputPropagation;
 import legend.game.inventory.screens.VerticalLayoutScreen;
@@ -14,6 +16,8 @@ import legend.game.inventory.screens.controls.Textbox;
 import legend.game.modding.coremod.CoreMod;
 import legend.game.saves.ConfigCollection;
 import org.jetbrains.annotations.NotNull;
+
+import java.net.URISyntaxException;
 
 import static archidragoon.ArchiDragoon.ADDRESS_CONFIG;
 import static archidragoon.ArchiDragoon.PASSWORD_CONFIG;
@@ -49,33 +53,37 @@ public class ArchipelagoConnectScreen  extends VerticalLayoutScreen {
       this.address.setText(this.config.getConfig(ADDRESS_CONFIG.get()));
       this.address.setMaxLength(30);
       this.address.setZ(35);
-      // TODO use I18n
-      this.addRow("Host name", this.address);
+
+      this.addRow(I18n.translate(ArchiDragoon.MOD_ID + ".config.address.label"), this.address);
 
       this.slotName = new Textbox();
       this.slotName.setText(this.config.getConfig(SLOT_NAME_CONFIG.get()));
       this.slotName.setMaxLength(15);
       this.slotName.setZ(35);
-      // TODO use I18n
-      this.addRow("Slot name", this.slotName);
+
+      this.addRow(I18n.translate(ArchiDragoon.MOD_ID + ".config.slot_name.label"), this.slotName);
 
       this.password = new Textbox();
       this.password.setText(this.config.getConfig(PASSWORD_CONFIG.get()));
       this.password.setMaxLength(15);
       this.password.setZ(35);
-      // TODO use I18n
-      this.addRow("Password", this.password);
 
-      // TODO use I18n
-      this.statusLabel = new Label("Not connected");
+      this.addRow(I18n.translate(ArchiDragoon.MOD_ID + ".config.password.label"), this.password);
+
+      final String connectedText = this.apContext.isConnected() ? "connected" : "not_connected";
+
+      this.statusLabel = new Label(I18n.translate(ArchiDragoon.MOD_ID + ".config." + connectedText));
       this.addRow("", this.statusLabel);
 
-      // TODO use I18n
-      final Button connect = new Button("connect");
+      final Button connect = new Button(I18n.translate(ArchiDragoon.MOD_ID + ".config.connect"));
       this.addRow("", connect);
       connect.onPressed(() -> {
-        this.statusLabel.setText("Connecting...");
-        this.apContext.connect(this.address.getText(), this.slotName.getText(), this.password.getText());
+        this.statusLabel.setText(I18n.translate(ArchiDragoon.MOD_ID + ".config.connecting"));
+        try {
+          this.apContext.connect(this.address.getText(), this.slotName.getText(), this.password.getText());
+        } catch(final URISyntaxException e) {
+          // show message
+        }
       });
 
       // TODO handle failure to connect

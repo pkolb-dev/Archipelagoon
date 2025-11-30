@@ -1,5 +1,7 @@
 package archidragoon.ap;
 
+import java.net.URISyntaxException;
+
 public class APContext {
   private static final APContext INSTANCE = new APContext();
 
@@ -13,12 +15,16 @@ public class APContext {
     return this.client;
   }
 
-  public void connect(final String address, final String slotName, final String password) {
-    try {
-      this.client = new APClient();
-      this.client.connectToServer(address, slotName, password);
-    } catch(final Exception e){
-      // TODO handle
+  public void connect(final String address, final String slotName, final String password) throws URISyntaxException {
+    this.client = new APClient();
+    this.client.connectToServer(address, slotName, password);
+  }
+
+  public boolean isConnected() {
+    if (this.client == null ) {
+      return false;
     }
+
+    return this.client.isConnected();
   }
 }

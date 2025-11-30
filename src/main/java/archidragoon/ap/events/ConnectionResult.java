@@ -1,6 +1,12 @@
 package archidragoon.ap.events;
 import io.github.archipelagomw.events.ArchipelagoEventListener;
 import io.github.archipelagomw.events.ConnectionResultEvent;
+import legend.game.SItem;
+import legend.game.i18n.I18n;
+import legend.game.inventory.screens.MessageBoxScreen;
+import legend.game.types.MessageBoxResult;
+
+import static legend.game.SItem.menuStack;
 
 public class ConnectionResult {
 
@@ -22,11 +28,9 @@ public class ConnectionResult {
     // display msg in UI somehow.
     // print(msg);
 
+
     if (event.getResult() != io.github.archipelagomw.network.ConnectionResult.Success) {
       return;
     }
-
-    // after connection, sync game state with slot data settings
-    // SlotData slotData = event.getSlotData(SlotData.class);
   }
 }
