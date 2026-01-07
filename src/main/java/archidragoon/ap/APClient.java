@@ -1,16 +1,14 @@
 package archidragoon.ap;
 
-
-import archidragoon.ap.events.ConnectionResult;
+import archidragoon.ap.events.ConnectionResultListener;
+import archidragoon.ap.events.DeathLinkListener;
+import archidragoon.ap.events.LocationInfoListener;
+import archidragoon.ap.events.ReceiveItemListener;
 import io.github.archipelagomw.Client;
-import legend.game.inventory.screens.MessageBoxScreen;
 
 import java.net.URISyntaxException;
 
-import static legend.game.SItem.menuStack;
-
 public class APClient extends Client {
-  private boolean errorDisplayed;
 
   public APClient(){
     super();
@@ -21,20 +19,13 @@ public class APClient extends Client {
 
   @Override
   public void onError(final Exception ex) {
-
     final String message = "An error has occurred:\n" + ex.getLocalizedMessage();
-    if (this.errorDisplayed) {
-      return;
-    }
-    this.errorDisplayed = true;
-    menuStack.pushScreen(new MessageBoxScreen(message,0, result -> {
-      this.errorDisplayed = false;
-    }));
+    APContext.getContext().displayMessage(message);
   }
 
   @Override
   public void onClose(final String Reason, final int attemptingReconnect) {
-   // TODO pk
+    client.disconnect();
   }
 
   public void connectToServer(final String host, final String slotName, final String password) throws URISyntaxException {
@@ -44,6 +35,10 @@ public class APClient extends Client {
   }
 
   private void registerDefaultListeners() {
-    this.getEventManager().registerListener(new ConnectionResult());
+    this.getEventManager().registerListener(new ConnectionResultListener());
+    // TODO: Enable once deathlink is figured out.
+    //    this.getEventManager().registerListener(new DeathLinkListener());
+    this.getEventManager().registerListener(new ReceiveItemListener());
+    this.getEventManager().registerListener(new LocationInfoListener());
   }
 }
