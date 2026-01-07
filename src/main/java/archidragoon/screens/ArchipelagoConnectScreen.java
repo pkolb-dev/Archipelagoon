@@ -30,7 +30,7 @@ public class ArchipelagoConnectScreen  extends VerticalLayoutScreen {
     private final Textbox address;
     private final Textbox password;
     private final Textbox slotName;
-    private final Label statusLabel;
+    private Label statusLabel;
 
     private final APContext apContext;
     private final Runnable unload;
@@ -47,7 +47,7 @@ public class ArchipelagoConnectScreen  extends VerticalLayoutScreen {
 
       this.addControl(new Background());
 
-      this.apContext = new APContext();
+      this.apContext = APContext.getContext();
 
       this.address = new Textbox();
       this.address.setText(this.config.getConfig(ADDRESS_CONFIG.get()));
@@ -70,9 +70,7 @@ public class ArchipelagoConnectScreen  extends VerticalLayoutScreen {
 
       this.addRow(I18n.translate(ArchiDragoon.MOD_ID + ".config.password.label"), this.password);
 
-      final String connectedText = this.apContext.isConnected() ? "connected" : "not_connected";
-
-      this.statusLabel = new Label(I18n.translate(ArchiDragoon.MOD_ID + ".config." + connectedText));
+      this.statusLabel = new Label(I18n.translate(ArchiDragoon.MOD_ID + ".config." + (this.apContext.isConnected() ? "connected" : "not_connected")));
       this.addRow("", this.statusLabel);
 
       final Button connect = new Button(I18n.translate(ArchiDragoon.MOD_ID + ".config.connect"));
@@ -81,12 +79,11 @@ public class ArchipelagoConnectScreen  extends VerticalLayoutScreen {
         this.statusLabel.setText(I18n.translate(ArchiDragoon.MOD_ID + ".config.connecting"));
         try {
           this.apContext.connect(this.address.getText(), this.slotName.getText(), this.password.getText());
+          this.statusLabel = new Label(I18n.translate(ArchiDragoon.MOD_ID + ".config." + (this.apContext.isConnected() ? "connected" : "not_connected")));
         } catch(final URISyntaxException e) {
-          // show message
+          this.statusLabel = new Label(I18n.translate(ArchiDragoon.MOD_ID + ".config." + "not_connected"));
         }
       });
-
-      // TODO handle failure to connect
     }
 
     @Override
