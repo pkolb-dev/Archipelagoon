@@ -2,7 +2,6 @@ package archidragoon.ap.events;
 
 import archidragoon.ap.APContext;
 import archidragoon.ap.mapping.items.Items;
-import io.github.archipelagomw.ItemManager;
 import io.github.archipelagomw.events.ArchipelagoEventListener;
 import io.github.archipelagomw.events.ReceiveItemEvent;
 import legend.core.GameEngine;
@@ -13,12 +12,10 @@ import legend.game.inventory.Equipment;
 import legend.game.inventory.Good;
 import legend.game.inventory.Item;
 import legend.game.types.CharacterData2c;
-import legend.game.types.GameState52c;
 import legend.lodmod.LodMod;
 import org.legendofdragoon.modloader.registries.RegistryId;
 
 import static archidragoon.ArchiDragoon.LAST_ITEM_INDEX;
-import static java.lang.IO.print;
 import static legend.game.Scus94491BpeSegment_800b.gameState_800babc8;
 
 public class ReceiveItemListener {
@@ -60,7 +57,7 @@ public class ReceiveItemListener {
       GameEngine.CONFIG.setConfig(LAST_ITEM_INDEX.get(), event.getIndex());
 
       // queue message
-      final String message = String.format("Received \n%s from \n%s", event.getItemName(), event.getPlayerName());
+      final String message = String.format("Received %s\nfrom %s", event.getItemName(), event.getPlayerName());
       APContext.getContext().displayMessage(message);
     }
   }

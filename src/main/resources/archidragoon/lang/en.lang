@@ -6,6 +6,11 @@ archidragoon.config.slot_name.label=Slot
 archidragoon.config.password.label=Password
 archidragoon.config.archipelago.configure=Configure
 archidragoon.config.archipelago_config.label=Archipelago Settings
-archidragoon.config.not_connected=Not connected
+archidragoon.config.not_connected=Not Connected
+archidragoon.config.connected=Connected
 archidragoon.config.connect=Connect
 archidragoon.config.connecting=Connecting
+
+archidragoon.ap.priority.item=AP Item
+archidragoon.ap.priority.item.description=an item considered progression
+archidragoon.ap.good.description=A good from your game

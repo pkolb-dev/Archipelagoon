@@ -5,13 +5,13 @@ import legend.game.inventory.InventoryEntry;
 import legend.game.inventory.ItemIcon;
 import org.legendofdragoon.modloader.registries.RegistryId;
 
+
 public class APGood implements InventoryEntry<APGood> {
   private final Good good;
-  private final int price;
 
-  public APGood (final Good good, final int price) {
+  public APGood(final Good good, final int price) {
+    final ItemIcon icon = good.getIcon() == null ? good.getIcon() : APIcon.PRIORITY;
     this.good = good;
-    this.price = price;
   }
 
   @Override
@@ -31,14 +31,8 @@ public class APGood implements InventoryEntry<APGood> {
 
   @Override
   public String getDescriptionTranslationKey() {
-    return this.good.getTranslationKey();
+    return "archidragoon.ap.good.description";
   }
-
-  @Override
-  public int getBuyPrice() { return this.price; }
-
-  @Override
-  public int getSellPrice() { return this.price; }
 
   @Override
   public int getSize() {

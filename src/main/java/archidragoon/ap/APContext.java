@@ -1,6 +1,8 @@
 package archidragoon.ap;
 
+import archidragoon.ap.mapping.goals.Goals;
 import archidragoon.ap.mapping.locations.Additions;
+import archidragoon.ap.mapping.locations.Enemies;
 import archidragoon.ap.mapping.locations.Locations;
 import archidragoon.data.SlotData;
 import archidragoon.randomizer.MessageManager;
@@ -12,30 +14,26 @@ import org.legendofdragoon.modloader.registries.RegistryId;
 
 import java.net.URISyntaxException;
 import java.util.ArrayList;
+import java.util.Map;
+import java.util.Objects;
 
 import static archidragoon.ArchiDragoon.ADDRESS_CONFIG;
 import static archidragoon.ArchiDragoon.PASSWORD_CONFIG;
 import static archidragoon.ArchiDragoon.SLOT_NAME_CONFIG;
-import static java.lang.IO.print;
-
 public class APContext {
   private static final APContext INSTANCE = new APContext();
   private APClient client;
-  private final MessageManager messageManager;
+  private SlotData slotData;
 
-  public APContext () {
-    this.messageManager = new MessageManager();
-  }
+  public APContext () {}
 
   public static APContext getContext() {
     return INSTANCE;
   }
 
-
   public void displayMessage(final String message) {
-    this.messageManager.displayMessage(message);
+    MessageManager.displayMessage(message);
   }
-
 
   public void reconnect() throws URISyntaxException {
     this.client = new APClient();
@@ -68,16 +66,31 @@ public class APContext {
   }
 
   public void retrieveLocations() {
-    // scout locations via client, don't mark as hint.
     final ArrayList<Long> locationIDs = new ArrayList<>(Locations.getStaticMap().keySet());
     final var result = this.client.scoutLocations(locationIDs, CreateAsHint.NO);
   }
 
-  public void setSlotData(final SlotData slotData) {
-    print(slotData);
+  public SlotData getSlotData() {
+    return this.slotData;
   }
 
-  public void checkGoal() {
-//    this.client.setGameState(ClientStatus.CLIENT_GOAL);
+  public void setSlotData(final SlotData slotData) {
+    this.slotData = slotData;
+  }
+
+  public void checkEncounter(final RegistryId encounterRegistryId) {
+    if (encounterRegistryId == null) {
+      return;
+    }
+
+    final Map<Integer, String> goals = Goals.getStaticMap();
+    final int goalId = APContext.getContext().getSlotData().completionCondition;
+    if (Objects.equals(goals.get(goalId), encounterRegistryId.entryId())) {
+      this.client.setGameState(ClientStatus.CLIENT_GOAL);
+      return;
+    }
+
+    Enemies.findAPLocationId(encounterRegistryId)
+      .ifPresent(this.client::checkLocation);
   }
 }

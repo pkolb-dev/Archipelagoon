@@ -1,11 +1,14 @@
 package archidragoon.ap.events;
 import archidragoon.ap.APContext;
+import archidragoon.data.SlotData;
 import archidragoon.screens.ArchipelagoConnectScreen;
 import io.github.archipelagomw.events.ArchipelagoEventListener;
 import io.github.archipelagomw.events.ConnectionResultEvent;
 import io.github.archipelagomw.network.ConnectionResult;
 import legend.core.GameEngine;
 import legend.game.SItem;
+
+import java.util.stream.Collectors;
 
 import static legend.game.FullScreenEffects.startFadeEffect;
 
@@ -37,7 +40,16 @@ public class ConnectionResultListener {
     }
 
     final APContext ctx = APContext.getContext();
-    // TODO: fetch slot data from client later
+    final SlotData slotData = event.getSlotData(SlotData.class);
+
+    // TODO: once we pass mod version in, we can do this
+//    if (!SlotData.EXPECTED_MOD_VERSIONS.contains(slotData.modVersion)) {
+//      ctx.displayMessage("Mod is not compatible with generated world. Generated world version: " +
+//        slotData.modVersion + ". Expected version one of " + SlotData.EXPECTED_MOD_VERSIONS.stream().map(Object::toString).collect(Collectors.joining(" or ")));
+//      return;
+//    }
+
+    ctx.setSlotData(slotData);
     ctx.retrieveLocations();
   }
 }
