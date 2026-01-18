@@ -1,51 +1,41 @@
 package archidragoon.randomizer;
 
-import legend.game.Menus;
+import archidragoon.ap.APContext;
 import legend.game.SItem;
-import legend.game.inventory.WhichMenu;
-import legend.game.inventory.screens.MenuStack;
 import legend.game.inventory.screens.MessageBoxScreen;
 
+import java.util.ArrayDeque;
+import java.util.Deque;
 import java.util.List;
 
-public class MessageManager {
-  private List<String> messages;
-  private boolean currentlyDisplaying;
+import static legend.game.SItem.menuStack;
 
-  public MessageManager () {
-    this.messages = List.of();
-    this. currentlyDisplaying = false;
+public final class MessageManager {
+  private MessageManager () {
   }
 
-  private void addMessage (final String message) {
-    this.messages.add(message);
+  private static final Deque<String> messageQueue = new ArrayDeque<>();
+  private static boolean messageActive = false;
 
-    if (this.currentlyDisplaying) {
-      return;
-    }
+  public static void displayMessage(final String message) {
+    if(message.isEmpty()) return;
 
-    // otherwise display message
-    this.displayMessage(message);
+    messageQueue.add(message);
+    tryShowNextMessage();
   }
 
-  public void displayMessage (final String message) {
-    if (this.currentlyDisplaying) {
-      return;
-    }
+  private static void tryShowNextMessage() {
+    if(messageActive || messageQueue.isEmpty()) return;
 
-    this.currentlyDisplaying = true;
-    SItem.menuStack.pushScreen(new MessageBoxScreen(message, 0, _ -> {
-      this.messages.removeFirst();
-      if (!this.messages.isEmpty()) {
-        // pop screen
-        SItem.menuStack.popScreen();
-        this.currentlyDisplaying = false;
-        this.displayMessage(this.messages.getFirst());
+    messageActive = true;
+
+    menuStack.pushScreen(new MessageBoxScreen(
+      messageQueue.poll(),
+      0,
+      result -> {
+        messageActive = false;
+        tryShowNextMessage();
       }
-
-    }));
-//    Menus.initMenu(WhichMenu.RENDER_NEW_MENU, () -> new MessageBoxScreen(message, 0, _ -> {
-//      Menus.whichMenu_800bdc38 = WhichMenu.UNLOAD;
-//    }));
+    ));
   }
 }

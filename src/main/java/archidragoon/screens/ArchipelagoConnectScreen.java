@@ -30,13 +30,24 @@ public class ArchipelagoConnectScreen  extends VerticalLayoutScreen {
     private final Textbox address;
     private final Textbox password;
     private final Textbox slotName;
-    private Label statusLabel;
+    private boolean connecting;
+    private final Label statusLabel;
 
     private final APContext apContext;
+    private Boolean lastConnectedState = null;
     private final Runnable unload;
 
     private final ConfigCollection config;
     private final boolean unloading = false;
+
+  private final String connectedText =
+    I18n.translate(ArchiDragoon.MOD_ID + ".config.connected");
+
+  private final String notConnectedText =
+    I18n.translate(ArchiDragoon.MOD_ID + ".config.not_connected");
+
+  private final String connectingText =
+    I18n.translate(ArchiDragoon.MOD_ID + ".config.connecting");
 
     public ArchipelagoConnectScreen(final ConfigCollection config, final Runnable unload) {
       deallocateRenderables(0xff);
@@ -44,6 +55,7 @@ public class ArchipelagoConnectScreen  extends VerticalLayoutScreen {
 
       this.config = config;
       this.unload = unload;
+      this.connecting = false;
 
       this.addControl(new Background());
 
@@ -70,24 +82,39 @@ public class ArchipelagoConnectScreen  extends VerticalLayoutScreen {
 
       this.addRow(I18n.translate(ArchiDragoon.MOD_ID + ".config.password.label"), this.password);
 
+      this.lastConnectedState = this.apContext.isConnected();
       this.statusLabel = new Label(I18n.translate(ArchiDragoon.MOD_ID + ".config." + (this.apContext.isConnected() ? "connected" : "not_connected")));
       this.addRow("", this.statusLabel);
 
       final Button connect = new Button(I18n.translate(ArchiDragoon.MOD_ID + ".config.connect"));
       this.addRow("", connect);
       connect.onPressed(() -> {
-        this.statusLabel.setText(I18n.translate(ArchiDragoon.MOD_ID + ".config.connecting"));
+        this.connecting = true;
+        this.statusLabel.setText(this.connectingText);
         try {
           this.apContext.connect(this.address.getText(), this.slotName.getText(), this.password.getText());
-          this.statusLabel = new Label(I18n.translate(ArchiDragoon.MOD_ID + ".config." + (this.apContext.isConnected() ? "connected" : "not_connected")));
         } catch(final URISyntaxException e) {
-          this.statusLabel = new Label(I18n.translate(ArchiDragoon.MOD_ID + ".config." + "not_connected"));
+          this.connecting = false;
+          this.statusLabel.setText(this.notConnectedText);
         }
       });
     }
 
     @Override
     protected void render() {
+      super.render();
+      final boolean connected = this.apContext.isConnected();
+      if(connected) {
+        this.connecting = false;
+      }
+
+      if(!this.connecting) {
+        if(this.lastConnectedState == null || this.lastConnectedState != connected) {
+          this.lastConnectedState = connected;
+          this.statusLabel.setText(connected ? this.connectedText : this.notConnectedText);
+        }
+      }
+
       if(!this.unloading) {
         return;
       }

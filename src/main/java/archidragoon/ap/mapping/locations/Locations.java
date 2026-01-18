@@ -15,7 +15,8 @@ public final class Locations {
     LOCATION_MAP.putAll(Additions.getStaticMap());
 //    LOCATION_MAP.putAll(Chests.getStaticMap());
 //    LOCATION_MAP.putAll(Events.getStaticMap());
-    LOCATION_MAP.putAll(Shops.getStaticFlatMap()); // TODO: make flat map of... things.
+//    LOCATION_MAP.putAll(Shops.getStaticFlatMap()); // TODO: make flat map of... things.
+    LOCATION_MAP.putAll(Enemies.getStaticReverseMap());
 
     for (final Map.Entry<Long, String> entry :LOCATION_MAP.entrySet()) {
       LOCATION_MAP_REVERSE.put(entry.getValue(), entry.getKey());
@@ -33,11 +34,11 @@ public final class Locations {
     return Collections.unmodifiableMap(LOCATION_MAP_REVERSE);
   }
 
-  public static Long getAPItemIdFromRegistryId(final RegistryId registryId) {
+  public static Long getAPLocationIdFromRegistryId(final RegistryId registryId) {
     return getStaticReverseMap().get(registryId.entryId());
   }
 
-  public static String getEntryIdFromAPItemId (final Long itemId) {
-    return getStaticMap().get(itemId);
+  public static String getEntryIdFromAPLocationId (final Long LocationId) {
+    return getStaticMap().get(LocationId);
   }
 }
