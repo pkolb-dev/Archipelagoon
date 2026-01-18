@@ -5,7 +5,7 @@ plugins {
   id 'maven-publish'
 }
 
-group = "archidragoon"
+group = "archipelagoon"
 version = "1.0-SNAPSHOT"
 
 java {

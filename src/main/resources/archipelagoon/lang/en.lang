@@ -1,0 +1,16 @@
+# Global stuff
+archipelagoon.name=Archipelagoon
+
+archipelagoon.config.address.label=Address
+archipelagoon.config.slot_name.label=Slot
+archipelagoon.config.password.label=Password
+archipelagoon.config.archipelago.configure=Configure
+archipelagoon.config.archipelago_config.label=Archipelago Settings
+archipelagoon.config.not_connected=Not Connected
+archipelagoon.config.connected=Connected
+archipelagoon.config.connect=Connect
+archipelagoon.config.connecting=Connecting
+
+archipelagoon.ap.priority.item=AP Item
+archipelagoon.ap.priority.item.description=an item considered progression
+archipelagoon.ap.good.description=A good from your game

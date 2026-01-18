@@ -61,3 +61,5 @@ gradle-app.setting
 # Using symlinks
 files
 isos
+*.iml
+/.idea
