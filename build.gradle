@@ -1,3 +1,13 @@
+buildscript {
+  repositories {
+    mavenCentral()
+  }
+
+  dependencies {
+    classpath 'com.gradleup.shadow:shadow-gradle-plugin:9.3.0'
+  }
+}
+
 plugins {
   id 'java'
   id 'org.openjfx.javafxplugin' version '0.1.0'
@@ -5,8 +15,28 @@ plugins {
   id 'maven-publish'
 }
 
+repositories {
+  mavenLocal()
+  maven { url = "https://jitpack.io" }
+  maven { url = "https://central.sonatype.com/repository/maven-snapshots/"}
+  mavenCentral()
+}
+
+dependencies {
+  implementation "legend:lod:snapshot"
+  implementation 'io.github.archipelagomw:Java-Client:0.2.1'
+}
+
+apply plugin: 'com.gradleup.shadow'
+
 group = "archipelagoon"
-version = "1.0-SNAPSHOT"
+version = "0.0.1-SNAPSHOT"
+
+shadowJar {
+  dependencies {
+    exclude(dependency(files("$projectDir/lod-game-snapshot-2.jar")))
+  }
+}
 
 java {
   sourceCompatibility = targetCompatibility = JavaVersion.VERSION_25
@@ -22,18 +52,6 @@ javafx {
 // This is so it picks up new builds on jitpack
 configurations.all {
   resolutionStrategy.cacheChangingModulesFor(0, "seconds")
-}
-
-repositories {
-  mavenCentral()
-  mavenLocal()
-  maven { url = "https://central.sonatype.com/repository/maven-snapshots/" }
-  maven { url = "https://jitpack.io" }
-}
-
-dependencies {
-  implementation "legend:lod:snapshot"
-  implementation 'io.github.archipelagomw:Java-Client:0.2.1'
 }
 
 sourceSets {
