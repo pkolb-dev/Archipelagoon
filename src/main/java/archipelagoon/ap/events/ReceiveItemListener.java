@@ -28,6 +28,10 @@ public class ReceiveItemListener {
       final String itemId = Items.getEntryIdFromAPItemId(apItemId);
       final RegistryId registryId = new RegistryId(LodMod.MOD_ID, itemId);
 
+      // update index
+      GameEngine.CONFIG.setConfig(LAST_ITEM_INDEX.get(), event.getIndex());
+
+      // give to player
       if (GameEngine.REGISTRIES.items.hasEntry(registryId)) {
         final Item item = GameEngine.REGISTRIES.items.getEntry(registryId).get();
         SItem.giveItem(item);
@@ -50,11 +54,6 @@ public class ReceiveItemListener {
           additionStats.unlocked = true;
         }
       }
-      // give to player
-
-
-      // update index
-      GameEngine.CONFIG.setConfig(LAST_ITEM_INDEX.get(), event.getIndex());
 
       // queue message
       final String message = String.format("Received %s\nfrom %s", event.getItemName(), event.getPlayerName());
