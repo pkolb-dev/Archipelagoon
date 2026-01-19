@@ -1,5 +1,6 @@
 package archipelagoon.ap;
 
+import archipelagoon.ap.mapping.LocationState;
 import archipelagoon.ap.mapping.goals.Goals;
 import archipelagoon.ap.mapping.locations.Additions;
 import archipelagoon.ap.mapping.locations.Enemies;
@@ -14,10 +15,12 @@ import org.legendofdragoon.modloader.registries.RegistryId;
 
 import java.net.URISyntaxException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
 import static archipelagoon.Archipelagoon.ADDRESS_CONFIG;
+import static archipelagoon.Archipelagoon.LOCATION_STATE_REGISTRY;
 import static archipelagoon.Archipelagoon.PASSWORD_CONFIG;
 import static archipelagoon.Archipelagoon.SLOT_NAME_CONFIG;
 public class APContext {
@@ -83,14 +86,41 @@ public class APContext {
       return;
     }
 
-    final Map<Integer, String> goals = Goals.getStaticMap();
-    final int goalId = APContext.getContext().getSlotData().completionCondition;
-    if (Objects.equals(goals.get(goalId), encounterRegistryId.entryId())) {
-      this.client.setGameState(ClientStatus.CLIENT_GOAL);
+    final Map<String, Long> thing = Enemies.getStaticReverseMap();
+
+    if (!thing.containsKey(encounterRegistryId.entryId())) {
       return;
     }
 
-    Enemies.findAPLocationId(encounterRegistryId)
-      .ifPresent(this.client::checkLocation);
+    final long apId = Enemies.getAPLocationIdFromRegistryId(encounterRegistryId);
+    final List<LocationState> locationStates = GameEngine.CONFIG.getConfig(LOCATION_STATE_REGISTRY.get());
+    final LocationState locationState = locationStates.stream()
+      .filter(ls -> ls.getLocationID() == apId)
+      .findFirst()
+      .orElse(null);
+
+    if (locationState == null) {
+      return;
+    }
+
+    if (locationState.isApplied()) {
+      return;
+    }
+
+    final Long location = Enemies.getAPLocationIdFromRegistryId(encounterRegistryId);
+    if (location != null) {
+      this.client.checkLocation(location);
+    }
+
+    final Map<Integer, String> goals = Goals.getStaticMap();
+    final int goalId = APContext.getContext().getSlotData().completionCondition;
+
+    if (Objects.equals(goals.get(goalId), encounterRegistryId.entryId())) {
+      this.client.setGameState(ClientStatus.CLIENT_GOAL);
+    }
+  }
+
+  public List<Long> getReceivedItemIDs() {
+    return this.client.getItemManager().getReceivedItemIDs();
   }
 }

@@ -2,11 +2,13 @@ package archipelagoon;
 
 import archipelagoon.ap.APContext;
 import archipelagoon.ap.mapping.LocationState;
+import archipelagoon.ap.mapping.items.Goods;
 import archipelagoon.ap.mapping.locations.Additions;
 import archipelagoon.config.ArchipelagoConfigEntry;
 import archipelagoon.config.ItemIndexConfigEntry;
 import archipelagoon.config.LocationStateRegistry;
 import legend.core.GameEngine;
+import legend.game.inventory.Good;
 import legend.game.inventory.Item;
 import legend.game.inventory.ItemRegistryEvent;
 import legend.game.modding.events.battle.BattleEndedEvent;
@@ -31,6 +33,7 @@ import org.legendofdragoon.modloader.registries.RegistryDelegate;
 import org.legendofdragoon.modloader.registries.RegistryId;
 
 import java.net.URISyntaxException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -93,6 +96,10 @@ public class Archipelagoon {
   @EventListener
   public void additionUnlock(final AdditionUnlockEvent event) {
     if (!event.additionStats.unlocked) {
+      return;
+    }
+
+    if (!Additions.getStaticMap().containsValue(event.addition.getRegistryId().entryId())) {
       return;
     }
 
@@ -179,8 +186,47 @@ public class Archipelagoon {
 
   @EventListener
   public void giveGood(final GiveGoodsEvent event) {
-    // TODO: performCheck on good
-    event.cancel();
+    // received a good from somewhere SC/AP
+    final List<Good> goods = event.givenGoods;
+    final List<LocationState> locationStates = GameEngine.CONFIG.getConfig(LOCATION_STATE_REGISTRY.get());
+    final List<Good> allowedGoods = new ArrayList<>();
+    final APContext ctx = APContext.getContext();
+
+    if (!ctx.isConnected()) {
+      return;
+    }
+
+    // how do we find out if it came from SC or not?
+    // check good ap id to list of received id's via ItemManager
+    for (final Good good : goods) {
+      final long apId = Goods.getAPItemIdFromRegistryId(good.getRegistryId());
+      final List<Long> receivedItemIds = ctx.getReceivedItemIDs();
+
+      // if we've received this item via archipelago
+      if (receivedItemIds.contains(apId)) {
+        // AND we haven't stored it before
+        if(!event.goods.has(good)) {
+          // queue it for add
+          allowedGoods.add(good);
+        } else {
+          // must have been SC given later
+          // potentially check?
+          continue;
+        }
+      } else {
+        // this wasn't in our received list, must be from SC
+        // potentially check?
+        continue;
+      }
+    }
+
+    if (allowedGoods.isEmpty()) {
+      event.cancel();
+      return;
+    }
+
+    event.givenGoods.clear();
+    event.givenGoods.addAll(allowedGoods);
   }
 
   @EventListener
@@ -190,9 +236,8 @@ public class Archipelagoon {
 
   @EventListener
   public void battleEnded(final BattleEndedEvent event) {
-
     final APContext ctx = APContext.getContext();
-   ctx.checkEncounter(event.encounter.getRegistryId());
+    ctx.checkEncounter(event.encounter.getRegistryId());
   }
 
   @EventListener
