@@ -46,9 +46,14 @@ public class MagicManager {
         spellIds.addAll(charData.getAllSpells());
       }
 
+      final int finalCharIndex = charIndex;
       spellIds.forEach(spell -> {
         final int timestamp = 0;
-        charData.getSpellInfo(spell).setUnlockState(UnlockState.LOCKED, timestamp);
+        if(finalCharIndex == 0) {
+          this.getDartMagic(state, spell).setUnlockState(UnlockState.LOCKED, timestamp);
+        } else {
+          charData.getSpellInfo(spell).setUnlockState(UnlockState.LOCKED, timestamp);
+        }
       });
     }
   }
