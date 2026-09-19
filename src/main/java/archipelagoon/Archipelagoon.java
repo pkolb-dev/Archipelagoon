@@ -34,6 +34,7 @@ import legend.game.modding.events.RenderEvent;
 import legend.game.modding.events.battle.BattleEndedEvent;
 import legend.game.modding.events.battle.EnemyRewardsEvent;
 import legend.game.modding.events.characters.AdditionUnlockEvent;
+import legend.game.modding.events.characters.PostAdditionLevelUpEvent;
 import legend.game.modding.events.characters.PostCharacterDragoonLevelUpEvent;
 import legend.game.modding.events.characters.PostCharacterLevelUpEvent;
 import legend.game.modding.events.gamestate.GameLoadedEvent;
@@ -185,11 +186,11 @@ public class Archipelagoon {
   public void additionUnlock(final AdditionUnlockEvent event) {
     final APContext ctx = APContext.getContext();
 
-    if(!Additions.getStaticMap().containsValue(event.addition.getRegistryId().toString())) {
+    if(!Additions.getStaticMap().containsKey(event.addition.getRegistryId())) {
       return;
     }
 
-    final long apId = Additions.getAPLocationIdFromRegistryId(event.addition.getRegistryId());
+    final long apId = Additions.getAPLocationId(event.addition.getRegistryId());
 
     final List<LocationState> locationStates = GameEngine.CONFIG.getConfig(LOCATION_STATE_REGISTRY.get());
     final LocationState locationState = locationStates.stream().filter(ls -> ls.getLocationID() == apId).findFirst().orElse(null);
@@ -345,6 +346,11 @@ public class Archipelagoon {
       event.takenGoods.clear();
       event.takenGoods.addAll(allowedGoods);
     }
+  }
+
+  @EventListener
+  public void additionLevelUpListener(final PostAdditionLevelUpEvent event) {
+    AdditionManager.getInstance().checkAdditionLevelLocation(event.additionId, event.additionInfo.level);
   }
 
   @EventListener
