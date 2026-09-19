@@ -17,6 +17,7 @@ import archipelagoon.icons.APIconUiType;
 import archipelagoon.randomizer.AdditionManager;
 import archipelagoon.randomizer.MagicManager;
 import archipelagoon.randomizer.ShopManager;
+import archipelagoon.randomizer.StoryFlagManager;
 import legend.core.GameEngine;
 import legend.core.lang.I18nText;
 import legend.game.combat.BattleTransitionMode;
@@ -43,6 +44,7 @@ import legend.game.modding.events.inventory.ShopBuyEvent;
 import legend.game.modding.events.inventory.ShopContentsEvent;
 import legend.game.modding.events.inventory.TakeGoodsEvent;
 import legend.game.modding.events.scripting.ReadGlobalFlagsEvent;
+import legend.game.modding.events.submap.SubmapWarpEvent;
 import legend.game.saves.ConfigCategory;
 import legend.game.saves.ConfigCollection;
 import legend.game.saves.ConfigDefaultPresetsEvent;
@@ -52,7 +54,6 @@ import legend.game.saves.ConfigPresetEntry;
 import legend.game.saves.ConfigRegistryEvent;
 import legend.game.saves.ConfigStorageLocation;
 import legend.game.saves.StringConfigEntry;
-import legend.game.scripting.ScriptFlagArrayEnum;
 import legend.lodmod.LodGoods;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -74,7 +75,6 @@ import static legend.core.GameEngine.EVENTS;
 import static legend.game.SItem.buildUiRenderable;
 import static legend.game.Scus94491BpeSegment_8005.submapCut_80052c30;
 import static legend.game.Scus94491BpeSegment_8006.battleState_8006e398;
-import static legend.game.Scus94491BpeSegment_800b.gameState_800babc8;
 import static legend.game.modding.coremod.CoreMod.AUTO_TEXT_CONFIG;
 import static legend.game.modding.coremod.CoreMod.AUTO_TEXT_DELAY_CONFIG;
 import static legend.game.modding.coremod.CoreMod.BATTLE_TRANSITION_MODE_CONFIG;
@@ -389,24 +389,13 @@ public class Archipelagoon {
   }
 
   @EventListener
+  public void submapWarpListener(final SubmapWarpEvent event){
+    StoryFlagManager.submapWarpListener(event);
+  }
+
+  @EventListener
   public void readScriptFlags(final ReadGlobalFlagsEvent event) {
-    if(event.flagArray == ScriptFlagArrayEnum.FLAGS2) {
-      switch(event.getFlagIndex()) {
-        case 59:
-          event.flagValue = gameState_800babc8.goods_19c.has(GameEngine.REGISTRIES.goods.getEntry(LodGoods.LIFE_WATER.getId()));
-        case 58:
-          event.flagValue = gameState_800babc8.goods_19c.has(GameEngine.REGISTRIES.goods.getEntry(LodGoods.WATER_BOTTLE.getId()));
-        case 9:
-          event.flagValue = gameState_800babc8.goods_19c.has(GameEngine.REGISTRIES.goods.getEntry(LodGoods.PRISON_KEY.getId()));
-        case 203:
-          event.flagValue = gameState_800babc8.goods_19c.has(GameEngine.REGISTRIES.goods.getEntry(LodGoods.BOAT_LICENSE.getId()));
-      }
-    } else if(event.flagArray == ScriptFlagArrayEnum.FLAGS1) {
-      switch(event.getFlagIndex()) {
-        case 1:
-          event.flagValue = gameState_800babc8.goods_19c.has(GameEngine.REGISTRIES.goods.getEntry(LodGoods.AXE_FROM_THE_SHACK.getId()));
-      }
-    }
+    StoryFlagManager.readScriptFlags(event);
   }
 
 /* Example of giving the player an ice trap item impersonating healing breeze
