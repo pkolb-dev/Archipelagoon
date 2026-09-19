@@ -51,8 +51,6 @@ public final class Additions {
 
     additionUnlocks.add(LodAdditions.INFERNO.getId());
     additionUnlocks.add(LodAdditions.BONE_CRUSH.getId());
-    additionUnlocks.add(LodAdditions.VOLCANO.getId());
-    additionUnlocks.add(LodAdditions.VOLCANO.getId());
 
     // iterate for IDs
     long currId = BASE_ID;
