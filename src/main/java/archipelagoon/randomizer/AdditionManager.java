@@ -150,7 +150,7 @@ public final class AdditionManager {
       }
 
       if(info.checkUnlockCriteria(charData)) {
-        final Long apId = archipelagoon.ap.mapping.locations.Additions.getAPLocationIdFromRegistryId(id);
+        final Long apId = archipelagoon.ap.mapping.locations.Additions.getAPLocationId(id);
         if(apId != null) {
           apContext.checkLocation(apId);
         }
@@ -179,5 +179,19 @@ public final class AdditionManager {
     }
 
     return additions.get(totalReceived);
+  }
+
+  public void checkAdditionLevelLocation(final RegistryId additionId, final int level) {
+    final APContext apContext = APContext.getContext();
+
+    final var addition = GameEngine.REGISTRIES.additions.getEntry(additionId).get();
+    if(addition == null) {
+      return;
+    }
+
+    final Long apId = archipelagoon.ap.mapping.locations.Additions.getAPLocationId(additionId, level);
+    if(apId != null) {
+      apContext.checkLocation(apId);
+    }
   }
 }
