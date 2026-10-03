@@ -102,4 +102,15 @@ public final class DragoonLevels {
       return -1L;
     }
   }
+
+  public static Map<Long, String> getStaticFlatMap() {
+    final Map<Long, String> locationMap = new LinkedHashMap<>();
+    for(final Map.Entry<RegistryId, Map<Integer, Long>> magicInfo : CHARACTER_MAGIC_LOCATIONS.entrySet()) {
+      for(final Map.Entry<Integer, Long> slotInfo : magicInfo.getValue().entrySet()) {
+        locationMap.put(slotInfo.getValue(), String.valueOf(magicInfo.getKey()));
+      }
+    }
+
+    return Collections.unmodifiableMap(locationMap);
+  }
 }

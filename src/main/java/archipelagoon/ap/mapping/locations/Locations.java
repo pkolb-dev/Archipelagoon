@@ -17,6 +17,7 @@ public final class Locations {
     //    LOCATION_MAP.putAll(Goods.getStaticMap());
     LOCATION_MAP.putAll(Shops.getStaticFlatMap());
     LOCATION_MAP.putAll(Enemies.getStaticMap());
+    LOCATION_MAP.putAll(DragoonLevels.getStaticFlatMap());
 
     for(final Map.Entry<Long, String> entry : LOCATION_MAP.entrySet()) {
       LOCATION_MAP_REVERSE.put(entry.getValue(), entry.getKey());
