@@ -735,7 +735,7 @@ public final class Shops {
     fletzAccessoryShop.put(6, 108_53107L);
     fletzAccessoryShop.put(7, 108_53108L);
     fletzAccessoryShop.put(8, 108_53109L);
-    fletzAccessoryShop.put(9, 108_531010L);
+    fletzAccessoryShop.put(9, 108_53110L);
     fletzAccessoryShop.put(10, 108_53111L);
     fletzAccessoryShop.put(11, 108_53112L);
     fletzAccessoryShop.put(12, 108_53113L);

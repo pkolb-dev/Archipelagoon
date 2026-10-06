@@ -44,8 +44,8 @@ public class APShopExtension extends ShopExtension<APInventoryEntry> {
   }
 
   @Override
-  public void drawShopDescription(ShopScreen screen, Shop shop, GameState52c gameState, final ShopScreen.ShopEntry<APInventoryEntry> entry, final int x, final int y) {
-    final String message = String.format(I18n.translate(entry.item.getDescriptionTranslationKey()), entry.item.playerName, entry.item.itemName);
+  public void drawShopDescription(final ShopScreen screen, final Shop shop, final GameState52c gameState, final ShopScreen.ShopEntry<APInventoryEntry> entry, final int x, final int y) {
+    final String message = I18n.translate(entry.item.getDescriptionTranslationKey(), entry.item.playerName, entry.item.itemName);
     SItem.renderString(x, y, message, false);
   }
 

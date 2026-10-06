@@ -10,8 +10,12 @@ import legend.game.additions.UnlockState;
 import legend.game.characters.CharacterData2c;
 import legend.game.characters.CharacterSpellInfo;
 import legend.game.types.GameState52c;
+import legend.lodmod.LodSpells;
+import legend.lodmod.characters.DartCharacterData;
 import org.legendofdragoon.modloader.registries.RegistryId;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -33,16 +37,31 @@ public class MagicManager {
 
     for(int charIndex = 0; charIndex < 9; charIndex++) {
       final CharacterData2c charData = state.charData_32c.get(charIndex);
-      charData.getAllSpells().forEach(spell -> {
+      final Collection<RegistryId> spellIds = new ArrayList<>();
+      if(charIndex == 0) {
+        final DartCharacterData dartData = (DartCharacterData)charData;
+        spellIds.addAll(dartData.getDivineSpells());
+        spellIds.addAll(dartData.getRedEyeSpells());
+      } else {
+        spellIds.addAll(charData.getAllSpells());
+      }
+
+      final int finalCharIndex = charIndex;
+      spellIds.forEach(spell -> {
         final int timestamp = 0;
-        charData.getSpellInfo(spell).setUnlockState(UnlockState.LOCKED, timestamp);
+        if(finalCharIndex == 0) {
+          this.getDartMagic(state, spell).setUnlockState(UnlockState.LOCKED, timestamp);
+        } else {
+          charData.getSpellInfo(spell).setUnlockState(UnlockState.LOCKED, timestamp);
+        }
       });
     }
   }
 
   public void setMagic(final GameState52c gameState) {
     final APContext ctx = APContext.getContext();
-    switch(MagicRandomizerType.values()[ctx.getSlotData().magicRandomizer]) {
+    final MagicRandomizerType type = MagicRandomizerType.values()[ctx.getSlotData().magicRandomizer];
+    switch(type) {
       case MagicRandomizerType.PROGRESSIVE:
         this.setProgressive(gameState);
         break;
@@ -84,7 +103,14 @@ public class MagicManager {
         }
 
         final RegistryId registryId = spells.get(i);
-        charData.getSpellInfo(registryId).setUnlockState(UnlockState.UNLOCKED, state.timestamp_a0);
+        final CharacterSpellInfo info;
+        if(charIndex == 0) {
+          info = this.getDartMagic(state, registryId);
+        } else {
+          info = charData.getSpellInfo(registryId);
+        }
+
+        info.setUnlockState(UnlockState.UNLOCKED, state.timestamp_a0);
       }
     }
   }
@@ -98,24 +124,31 @@ public class MagicManager {
 
     for(int charIndex = 0; charIndex < 9; charIndex++) {
       final CharacterData2c charData = state.charData_32c.get(charIndex);
-      final CharacterSpellInfo info = charData.getSpellInfo(spellId);
+      final CharacterSpellInfo info;
+      if(charIndex == 0) {
+        info = this.getDartMagic(state, spellId);
+      } else {
+        info = charData.getSpellInfo(spellId);
+      }
+
       if(info == null) {
         continue;
       }
 
-      charData.getSpellInfo(spellId).setUnlockState(UnlockState.UNLOCKED, state.timestamp_a0);
+      info.setUnlockState(UnlockState.UNLOCKED, state.timestamp_a0);
     }
   }
 
   public void checkUnlock(final CharacterData2c charData) {
     final APContext ctx = APContext.getContext();
-    final Long apId = DragoonLevels.getLocationId(charData.template.getRegistryId(), charData.dlevel_13);
+    for(int i = 1; i <= charData.dlevel_13; i++) {
+      final Long apId = DragoonLevels.getLocationId(charData.template.getRegistryId(), i);
+      if(apId == null || apId == -1L) {
+        continue;
+      }
 
-    if(apId == null || apId == -1L) {
-      return;
+      ctx.checkLocation(apId);
     }
-
-    ctx.checkLocation(apId);
   }
 
   public RegistryId getProgressiveMagicRegistryId(final long itemId) {
@@ -135,6 +168,16 @@ public class MagicManager {
     }
 
     return spells.get(totalReceived);
+  }
+
+  private CharacterSpellInfo getDartMagic(final GameState52c state, final RegistryId spellRegistryId) {
+    final DartCharacterData dartData = (DartCharacterData)state.charData_32c.getFirst();
+    final boolean isDivineSpell = spellRegistryId == LodSpells.DIVINE_DG_BALL.getId() || spellRegistryId == LodSpells.DIVINE_DG_CANNON.getId();
+    if(isDivineSpell) {
+      return dartData.getDivineSpellInfo(spellRegistryId);
+    } else {
+      return dartData.getRedEyeSpellInfo(spellRegistryId);
+    }
   }
 
   private GameState52c resolveState(final GameState52c state) {

@@ -44,7 +44,6 @@ public final class ShopManager {
   }
 
   public static int getItemPrice(final Random rand) {
-
     return getItemPrice(rand, 1);
   }
 
@@ -85,10 +84,6 @@ public final class ShopManager {
     final double weight = Math.pow(rand.nextDouble(), 3);
 
     for(final LocationState locationState : slots) {
-      if(locationState.isApplied()) {
-        continue;
-      }
-
       final int price;
 
       if(shop.getRegistryId() == LodShops.FOREST_ITEM_SHOP.getId()) {
@@ -99,6 +94,11 @@ public final class ShopManager {
         price = getItemPrice(rand, weight);
       } else {
         price = getItemPrice(rand);
+      }
+
+      // moved down here to keep costs matched with the appropriate item
+      if(locationState.isApplied()) {
+        continue;
       }
 
       final APInventoryEntry entry = new APInventoryEntry(locationState);
