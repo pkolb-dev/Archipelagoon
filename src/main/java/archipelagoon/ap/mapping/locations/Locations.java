@@ -12,7 +12,7 @@ public final class Locations {
   private static final Map<String, Long> LOCATION_MAP_REVERSE = new LinkedHashMap<>();
 
   static {
-    LOCATION_MAP.putAll(Additions.getStaticMap());
+    LOCATION_MAP.putAll(Additions.getStaticFlatMap());
     //    LOCATION_MAP.putAll(Chests.getStaticMap());
     //    LOCATION_MAP.putAll(Goods.getStaticMap());
     LOCATION_MAP.putAll(Shops.getStaticFlatMap());
