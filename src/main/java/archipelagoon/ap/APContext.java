@@ -63,6 +63,10 @@ public class APContext {
     final String address = GameEngine.CONFIG.getConfig(ADDRESS_CONFIG.get());
     final String slotName = GameEngine.CONFIG.getConfig(SLOT_NAME_CONFIG.get());
     final String password = GameEngine.CONFIG.getConfig(PASSWORD_CONFIG.get());
+    if(address.isEmpty() || slotName.isEmpty()) {
+      return;
+    }
+    
     this.connect(address, slotName, password);
   }
 
