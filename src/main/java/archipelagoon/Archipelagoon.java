@@ -14,10 +14,13 @@ import archipelagoon.data.APInventoryEntry;
 import archipelagoon.data.APShopExtension;
 import archipelagoon.data.SlotData;
 import archipelagoon.icons.APIconUiType;
+import archipelagoon.interfaces.LloydInterface;
+import archipelagoon.interfaces.LloydNotLoaded;
 import archipelagoon.randomizer.AdditionManager;
 import archipelagoon.randomizer.MagicManager;
 import archipelagoon.randomizer.ShopManager;
 import archipelagoon.randomizer.StoryFlagManager;
+import legend.core.AddRegistryEvent;
 import legend.core.GameEngine;
 import legend.core.lang.I18nText;
 import legend.game.characters.LevelUpSource;
@@ -36,11 +39,13 @@ import legend.game.modding.events.RenderEvent;
 import legend.game.modding.events.battle.BattleEndedEvent;
 import legend.game.modding.events.battle.EnemyRewardsEvent;
 import legend.game.modding.events.characters.AdditionUnlockEvent;
+import legend.game.modding.events.characters.CloneCharacterEvent;
 import legend.game.modding.events.characters.PostAdditionLevelUpEvent;
 import legend.game.modding.events.characters.PostCharacterDragoonLevelUpEvent;
 import legend.game.modding.events.characters.PostCharacterLevelUpEvent;
 import legend.game.modding.events.gamestate.GameLoadedEvent;
 import legend.game.modding.events.gamestate.NewGameEvent;
+import legend.game.modding.events.gamestate.PartyFlagsChangeEvent;
 import legend.game.modding.events.inventory.GiveGoodsEvent;
 import legend.game.modding.events.inventory.ShopBuyEvent;
 import legend.game.modding.events.inventory.ShopContentsEvent;
@@ -61,10 +66,12 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.legendofdragoon.modloader.Mod;
 import org.legendofdragoon.modloader.events.EventListener;
+import org.legendofdragoon.modloader.events.Priority;
 import org.legendofdragoon.modloader.registries.Registrar;
 import org.legendofdragoon.modloader.registries.RegistryDelegate;
 import org.legendofdragoon.modloader.registries.RegistryId;
 
+import java.lang.reflect.InvocationTargetException;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -74,6 +81,7 @@ import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 
 import static legend.core.GameEngine.EVENTS;
+import static legend.core.GameEngine.MODS;
 import static legend.game.SItem.buildUiRenderable;
 import static legend.game.Scus94491BpeSegment_8005.submapCut_80052c30;
 import static legend.game.Scus94491BpeSegment_8006.battleState_8006e398;
@@ -103,6 +111,7 @@ public class Archipelagoon {
   public static final RegistryDelegate<LocationStateRegistry> LOCATION_STATE_REGISTRY = CONFIG_REGISTRAR.register("location_states", LocationStateRegistry::new);
   private static final Registrar<Item, ItemRegistryEvent> ITEM_REGISTRAR = new Registrar<>(GameEngine.REGISTRIES.items, MOD_ID);
   private static final Logger LOGGER = LogManager.getFormatterLogger(Archipelagoon.class);
+  private LloydInterface lloydInterface = new LloydNotLoaded();
 
   public Archipelagoon() {
     EVENTS.register(this);
@@ -152,8 +161,8 @@ public class Archipelagoon {
     CONFIG_REGISTRAR.registryEvent(event);
   }
 
-  @EventListener
-  public void newGame(final NewGameEvent event) {
+  @EventListener(priority = Priority.LOWEST)
+  public void newGameEventListener(final NewGameEvent event) {
     final APContext ctx = APContext.getContext();
     ctx.initGame(event.gameState);
     // causes error on new game, still works though?
@@ -165,13 +174,13 @@ public class Archipelagoon {
     event.addExtension(new APShopExtension(), 999);
   }
 
-  @EventListener
-  public void gameLoaded(final GameLoadedEvent game) {
+  @EventListener(priority = Priority.LOWEST)
+  public void gameLoaded(final GameLoadedEvent event) {
     final APContext ctx = APContext.getContext();
 
     if(ctx.isConnected()) {
-      ctx.initAdditions(game.gameState);
-      ctx.initMagic(game.gameState);
+      ctx.initAdditions(event.gameState);
+      ctx.initMagic(event.gameState);
     }
 
     try {
@@ -409,10 +418,33 @@ public class Archipelagoon {
     StoryFlagManager.readScriptFlags(event);
   }
 
+  @EventListener
+  public void cloneCharacterListener(final CloneCharacterEvent event) {
+    event.cancel();
+  }
+
 /* Example of giving the player an ice trap item impersonating healing breeze
   @EventListener
   public void onLoad(final GameLoadedEvent event) {
     event.gameState.items_2e9.give(APItems.ICE_TRAP.get().impersonate(LodItems.HEALING_BREEZE.get()));
   }
 */
+
+  @EventListener
+  public void partyFlagChangedListener(final PartyFlagsChangeEvent event) {
+    event.partyFlags = event.gameState.charData_32c.get(event.characterIndex).partyFlags_04;
+  }
+
+  @EventListener
+  public void addRegistry(final AddRegistryEvent event) {
+    if(MODS.isLoaded("lloyd_mod")) {
+      try {
+        final Class<?> cls = Class.forName("archipelagoon.interfaces.LloydLoaded");
+        this.lloydInterface = (LloydInterface)cls.getConstructor().newInstance();
+      } catch(final ClassNotFoundException | InvocationTargetException | InstantiationException | IllegalAccessException | NoSuchMethodException e) {
+        throw new RuntimeException(e);
+      }
+    }
+    this.lloydInterface.registerEvents();
+  }
 }
