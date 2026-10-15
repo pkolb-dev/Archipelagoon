@@ -10,6 +10,7 @@ import legend.game.additions.UnlockState;
 import legend.game.characters.CharacterData2c;
 import legend.game.characters.CharacterSpellInfo;
 import legend.game.types.GameState52c;
+import legend.lodmod.LodCharacterTemplates;
 import legend.lodmod.LodSpells;
 import legend.lodmod.characters.DartCharacterData;
 import org.legendofdragoon.modloader.registries.RegistryId;
@@ -35,27 +36,26 @@ public class MagicManager {
   public void lockSpells(final GameState52c gameState) {
     final GameState52c state = this.resolveState(gameState);
 
-    for(int charIndex = 0; charIndex < 9; charIndex++) {
-      final CharacterData2c charData = state.charData_32c.get(charIndex);
+    state.charData_32c.forEach(cd -> {
+      final RegistryId charId = cd.template.getRegistryId();
       final Collection<RegistryId> spellIds = new ArrayList<>();
-      if(charIndex == 0) {
-        final DartCharacterData dartData = (DartCharacterData)charData;
+      if(charId == LodCharacterTemplates.DART.getId()) {
+        final DartCharacterData dartData = (DartCharacterData)cd;
         spellIds.addAll(dartData.getDivineSpells());
         spellIds.addAll(dartData.getRedEyeSpells());
       } else {
-        spellIds.addAll(charData.getAllSpells());
+        spellIds.addAll(cd.getAllSpells());
       }
 
-      final int finalCharIndex = charIndex;
       spellIds.forEach(spell -> {
         final int timestamp = 0;
-        if(finalCharIndex == 0) {
+        if(charId == LodCharacterTemplates.DART.getId()) {
           this.getDartMagic(state, spell).setUnlockState(UnlockState.LOCKED, timestamp);
         } else {
-          charData.getSpellInfo(spell).setUnlockState(UnlockState.LOCKED, timestamp);
+          cd.getSpellInfo(spell).setUnlockState(UnlockState.LOCKED, timestamp);
         }
       });
-    }
+    });
   }
 
   public void setMagic(final GameState52c gameState) {
@@ -92,11 +92,11 @@ public class MagicManager {
     final APContext ctx = APContext.getContext();
     final List<Long> receivedItems = ctx.getReceivedItemIDs();
 
-    for(int charIndex = 0; charIndex < 9; charIndex++) {
-      final CharacterData2c charData = state.charData_32c.get(charIndex);
-      final Long progressiveId = Magic.getAPItemIdFromCharacterIndex(charIndex);
+    state.charData_32c.forEach(cd -> {
+      final RegistryId charId = cd.template.getRegistryId();
+      final Long progressiveId = Magic.getAPItemIdFromCharacterIndex(charId);
       final int totalReceived = Collections.frequency(receivedItems, progressiveId);
-      final Map<Integer, RegistryId> spells = ProgressiveSpells.getSpellsForChar(charIndex);
+      final Map<Integer, RegistryId> spells = ProgressiveSpells.getSpellsForChar(charId);
       for(int i = 1; i <= totalReceived; i++) {
         if(!spells.containsKey(i)) {
           break;
@@ -104,15 +104,15 @@ public class MagicManager {
 
         final RegistryId registryId = spells.get(i);
         final CharacterSpellInfo info;
-        if(charIndex == 0) {
+        if(charId == LodCharacterTemplates.DART.getId()) {
           info = this.getDartMagic(state, registryId);
         } else {
-          info = charData.getSpellInfo(registryId);
+          info = cd.getSpellInfo(registryId);
         }
 
         info.setUnlockState(UnlockState.UNLOCKED, state.timestamp_a0);
       }
-    }
+    });
   }
 
   public void setSpell(final RegistryId spellId, final GameState52c gameState) {
@@ -122,21 +122,21 @@ public class MagicManager {
 
     final GameState52c state = this.resolveState(gameState);
 
-    for(int charIndex = 0; charIndex < 9; charIndex++) {
-      final CharacterData2c charData = state.charData_32c.get(charIndex);
+    state.charData_32c.forEach(cd -> {
+      final RegistryId charId = cd.template.getRegistryId();
       final CharacterSpellInfo info;
-      if(charIndex == 0) {
+      if(charId == LodCharacterTemplates.DART.getId()) {
         info = this.getDartMagic(state, spellId);
       } else {
-        info = charData.getSpellInfo(spellId);
+        info = cd.getSpellInfo(spellId);
       }
 
       if(info == null) {
-        continue;
+        return;
       }
 
       info.setUnlockState(UnlockState.UNLOCKED, state.timestamp_a0);
-    }
+    });
   }
 
   public void checkUnlock(final CharacterData2c charData) {
@@ -155,13 +155,13 @@ public class MagicManager {
     final APContext ctx = APContext.getContext();
     final List<Long> receivedItems = ctx.getReceivedItemIDs();
 
-    final int charIndex = Magic.getCharacterIndexFromAPItemId(itemId);
-    if(charIndex == -1) {
+    final RegistryId charId = Magic.getCharacterIndexFromAPItemId(itemId);
+    if(charId == null) {
       return null;
     }
 
     final int totalReceived = Collections.frequency(receivedItems, itemId);
-    final Map<Integer, RegistryId> spells = ProgressiveSpells.getSpellsForChar(charIndex);
+    final Map<Integer, RegistryId> spells = ProgressiveSpells.getSpellsForChar(charId);
 
     if(!spells.containsKey(totalReceived)) {
       return null;

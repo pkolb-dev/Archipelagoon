@@ -53,7 +53,8 @@ gradle-app.setting
 # # Work around https://youtrack.jetbrains.com/issue/IDEA-116898
 # gradle/wrapper/gradle-wrapper.properties
 
-
+# mod impl
+mods/lloyd_mod/*
 
 # Mac
 .DS_STORE

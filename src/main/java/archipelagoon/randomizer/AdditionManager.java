@@ -30,13 +30,12 @@ public final class AdditionManager {
   public void lockAdditions(final GameState52c gameState) {
     final GameState52c state = this.resolveState(gameState);
 
-    for(int charIndex = 0; charIndex < 9; charIndex++) {
-      final CharacterData2c charData = state.charData_32c.get(charIndex);
-      charData.getAllAdditions().forEach(addition -> {
+    state.charData_32c.forEach(cd -> {
+      cd.getAllAdditions().forEach(addition -> {
         final int timestamp = 0;
-        charData.getAdditionInfo(addition).setUnlockState(UnlockState.LOCKED, timestamp);
+        cd.getAdditionInfo(addition).setUnlockState(UnlockState.LOCKED, timestamp);
       });
-    }
+    });
   }
 
   public void setAdditions(final GameState52c gameState) {
@@ -53,16 +52,17 @@ public final class AdditionManager {
   }
 
   private void setShuffled(final GameState52c gameState) {
-    final Map<Long, String> additionList = Additions.getStaticMap();
+    final Map<Long, RegistryId> additionList = Additions.getStaticMap();
     final GameState52c state = this.resolveState(gameState);
     final APContext ctx = APContext.getContext();
 
     for(final Long id : ctx.getReceivedItemIDs()) {
-      if(!additionList.containsKey(id)) {
+
+      final RegistryId registryId = additionList.getOrDefault(id, null);
+      if(registryId == null) {
         continue;
       }
 
-      final RegistryId registryId = new RegistryId(Additions.getRegistryIdFromAPItemId(id));
       this.unlockAddition(registryId, state);
     }
   }
@@ -73,11 +73,10 @@ public final class AdditionManager {
     final APContext ctx = APContext.getContext();
     final List<Long> receivedItems = ctx.getReceivedItemIDs();
 
-    for(int charIndex = 0; charIndex < 9; charIndex++) {
-      final CharacterData2c charData = state.charData_32c.get(charIndex);
-      final Long progressiveId = Additions.getAPItemIdFromCharacterIndex(charIndex);
+    state.charData_32c.forEach(cd -> {
+      final Long progressiveId = Additions.getAPItemIdFromCharacterIndex(cd.template.getRegistryId());
       final int totalReceived = Collections.frequency(receivedItems, progressiveId);
-      final Map<Integer, RegistryId> additions = ProgressiveAdditions.getAdditionsForChar(charIndex);
+      final Map<Integer, RegistryId> additions = ProgressiveAdditions.getAdditionsForChar(cd.template.getRegistryId());
 
       for(int i = 1; i <= totalReceived; i++) {
         if(!additions.containsKey(i)) {
@@ -86,12 +85,12 @@ public final class AdditionManager {
 
         final RegistryId registryId = additions.get(i);
 
-        final CharacterAdditionInfo additionInfo = charData.getAdditionInfo(registryId);
+        final CharacterAdditionInfo additionInfo = cd.getAdditionInfo(registryId);
         if(additionInfo.getUnlockState() != UnlockState.UNLOCKED) {
           additionInfo.setUnlockState(UnlockState.UNLOCKED, state.timestamp_a0);
         }
       }
-    }
+    });
   }
 
   public void unlockAddition(final RegistryId registryId, final GameState52c gameState) {
@@ -101,36 +100,34 @@ public final class AdditionManager {
 
     final GameState52c state = this.resolveState(gameState);
 
-    for(int charIndex = 0; charIndex < 9; charIndex++) {
-      final CharacterData2c charData = state.charData_32c.get(charIndex);
-      final CharacterAdditionInfo info = charData.getAdditionInfo(registryId);
+    state.charData_32c.forEach(cd -> {
+      final CharacterAdditionInfo info = cd.getAdditionInfo(registryId);
       if(info == null) {
-        continue;
+        return;
       }
 
-      final CharacterAdditionInfo additionInfo = charData.getAdditionInfo(registryId);
+      final CharacterAdditionInfo additionInfo = cd.getAdditionInfo(registryId);
       if(additionInfo.getUnlockState() != UnlockState.UNLOCKED) {
         additionInfo.setUnlockState(UnlockState.UNLOCKED, state.timestamp_a0);
       }
-    }
+    });
   }
 
   public void selectAddition(final GameState52c gameState) {
     final GameState52c state = this.resolveState(gameState);
-    for(int charIndex = 0; charIndex < 9; charIndex++) {
-      final CharacterData2c charData = state.charData_32c.get(charIndex);
-      final CharacterAdditionInfo addition = charData.getAdditionInfo(charData.selectedAddition_19);
+    for(final CharacterData2c cd : state.charData_32c) {
+      final CharacterAdditionInfo addition = cd.getAdditionInfo(cd.selectedAddition_19);
       if(addition == null) {
-        continue;
+        return;
       }
 
       if(addition.getUnlockState() == UnlockState.UNLOCKED) {
         break;
       }
 
-      for(final RegistryId entry : charData.getAllAdditions()) {
-        if(charData.getAdditionInfo(entry).getUnlockState() == UnlockState.UNLOCKED) {
-          charData.selectedAddition_19 = entry;
+      for(final RegistryId entry : cd.getAllAdditions()) {
+        if(cd.getAdditionInfo(entry).getUnlockState() == UnlockState.UNLOCKED) {
+          cd.selectedAddition_19 = entry;
           break;
         }
       }
@@ -166,13 +163,13 @@ public final class AdditionManager {
     final APContext ctx = APContext.getContext();
     final List<Long> receivedItems = ctx.getReceivedItemIDs();
 
-    final int charIndex = Additions.getCharacterIndexFromAPItemId(itemId);
-    if(charIndex == -1) {
+    final RegistryId charId = Additions.getCharacterIndexFromAPItemId(itemId);
+    if(charId == null) {
       return null;
     }
 
     final int totalReceived = Collections.frequency(receivedItems, itemId);
-    final Map<Integer, RegistryId> additions = ProgressiveAdditions.getAdditionsForChar(charIndex);
+    final Map<Integer, RegistryId> additions = ProgressiveAdditions.getAdditionsForChar(charId);
 
     if(!additions.containsKey(totalReceived)) {
       return null;

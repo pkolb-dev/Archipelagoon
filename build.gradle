@@ -20,9 +20,11 @@ configurations {
 
 dependencies {
   // SC supplies the engine and its dependencies, including Log4j and Gson.
-  compileOnly('legend:lod:snapshot') {
+  implementation('legend:lod:snapshot') {
     changing = true
   }
+
+  implementation files("mods/lloyd-mod-1.0-SNAPSHOT.jar")
 
   bundled('io.github.archipelagomw:Java-Client:0.2.1') {
     // These are already supplied by SC; retain the client's networking libraries.

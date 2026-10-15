@@ -9,6 +9,7 @@ import archipelagoon.ap.mapping.locations.Locations;
 import archipelagoon.data.SlotData;
 import archipelagoon.data.tables.ProgressiveDartSpirit;
 import archipelagoon.randomizer.AdditionManager;
+import archipelagoon.randomizer.CharacterManager;
 import archipelagoon.randomizer.DeathlinkManager;
 import archipelagoon.randomizer.MagicManager;
 import archipelagoon.randomizer.MessageManager;
@@ -41,6 +42,7 @@ public class APContext {
   private final MagicManager magicManager = MagicManager.getInstance();
   private final MessageManager messageManager = MessageManager.getInstance();
   private final DeathlinkManager deathlinkManager = DeathlinkManager.getInstance();
+  private final CharacterManager characterManager = CharacterManager.getInstance();
   private SlotData slotData;
 
   public APContext() {
@@ -66,12 +68,12 @@ public class APContext {
     if(address.isEmpty() || slotName.isEmpty()) {
       return;
     }
-    
+
     this.connect(address, slotName, password);
   }
 
   public void connect(final String address, final String slotName, final String password) throws URISyntaxException {
-    if(this.isConnected()) {
+    if(this.isConnected() || address.isEmpty() || slotName.isEmpty()) {
       return;
     }
 
@@ -202,6 +204,7 @@ public class APContext {
   public void initGame(final GameState52c state) {
     this.additionManager.lockAdditions(state);
     this.magicManager.lockSpells(state);
+    this.characterManager.lockCharacters(state);
   }
 
   public void retrieveItems() {

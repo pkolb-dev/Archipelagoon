@@ -3,6 +3,7 @@ package archipelagoon.ap.events;
 import archipelagoon.ap.APContext;
 import archipelagoon.ap.mapping.items.Items;
 import archipelagoon.randomizer.AdditionManager;
+import archipelagoon.randomizer.CharacterManager;
 import archipelagoon.randomizer.MagicManager;
 import io.github.archipelagomw.events.ArchipelagoEventListener;
 import io.github.archipelagomw.events.ReceiveItemEvent;
@@ -47,16 +48,13 @@ public class ReceiveItemListener {
   }
 
   private RegistryId getProgressiveRegistryId(final long apItemId) {
-    final String itemId = Items.getRegistryIdFromAPItemId(apItemId);
+    RegistryId registryId = Items.getStaticMap().getOrDefault(apItemId, null);
 
     final APContext ctx = APContext.getContext();
     // This is the list of progressive maps we want to check against
     final List<RegistryId> MATCHERS = Arrays.asList(ctx.getProgressiveAdditionMatch(apItemId), ctx.getProgressiveMagicMatch(apItemId), ctx.getProgressiveDartSpiritMatch(apItemId));
 
-    final RegistryId registryId;
-    if(itemId != null) {
-      registryId = new RegistryId(itemId);
-    } else {
+    if(registryId == null) {
       registryId = MATCHERS.stream().filter(Objects::nonNull).findFirst().orElse(null);
     }
 
@@ -77,6 +75,8 @@ public class ReceiveItemListener {
       AdditionManager.getInstance().unlockAddition(registryId, null);
     } else if(GameEngine.REGISTRIES.spells.hasEntry(registryId)) {
       MagicManager.getInstance().setSpell(registryId, null);
+    } else if(GameEngine.REGISTRIES.characterTemplates.hasEntry(registryId)) {
+      CharacterManager.getInstance().addToPool(registryId, null);
     }
   }
 }

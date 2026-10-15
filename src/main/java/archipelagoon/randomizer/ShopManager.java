@@ -40,7 +40,8 @@ public final class ShopManager {
     final int min = slotData.minimumShopPrice;
     final int max = slotData.maximumShopPrice + 1;
 
-    return (int)(rand.nextInt(min, max) * weight);
+    final int price = (int)(rand.nextInt(min, max) * weight);
+    return Math.clamp(price, min, max);
   }
 
   public static int getItemPrice(final Random rand) {
