@@ -3,79 +3,154 @@ package archipelagoon.ap.mapping.locations;
 import legend.lodmod.LodAdditions;
 import org.legendofdragoon.modloader.registries.RegistryId;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
 public final class Additions {
-  private static final Map<Long, String> ADDITION_LOCATIONS = new LinkedHashMap<>();
-  private static final Map<String, Long> ADDITION_LOCATIONS_REVERSE = new LinkedHashMap<>();
+  private static final Map<RegistryId, Long> ADDITION_LOCATIONS = new LinkedHashMap<>();
+  private static final Map<RegistryId, Long[]> ADDITION_LEVEL_LOCATIONS = new LinkedHashMap<>();
 
   static {
-    //    ADDITION_LOCATIONS.put(10860000L, LodAdditions.DOUBLE_SLASH.getId().toString());
-    ADDITION_LOCATIONS.put(10860001L, LodAdditions.VOLCANO.getId().toString());
-    ADDITION_LOCATIONS.put(10860002L, LodAdditions.BURNING_RUSH.getId().toString());
-    ADDITION_LOCATIONS.put(10860003L, LodAdditions.CRUSH_DANCE.getId().toString());
-    ADDITION_LOCATIONS.put(10860004L, LodAdditions.MADNESS_HERO.getId().toString());
-    ADDITION_LOCATIONS.put(10860005L, LodAdditions.MOON_STRIKE.getId().toString());
-    ADDITION_LOCATIONS.put(10860006L, LodAdditions.BLAZING_DYNAMO.getId().toString());
+    final Long BASE_ID = 108_60000L;
 
-    //    ADDITION_LOCATIONS.put(108_60016L, LodAdditions.WHIP_SMACK.getId().toString());
-    ADDITION_LOCATIONS.put(108_60011L, LodAdditions.MORE_MORE.getId().toString());
-    ADDITION_LOCATIONS.put(108_60012L, LodAdditions.HARD_BLADE.getId().toString());
-    ADDITION_LOCATIONS.put(108_60013L, LodAdditions.DEMONS_DANCE.getId().toString());
+    final ArrayList<RegistryId> additionUnlocks = new ArrayList<>();
+    final ArrayList<RegistryId> dartAdditions = new ArrayList<>();
+    dartAdditions.add(LodAdditions.DOUBLE_SLASH.getId());
+    dartAdditions.add(LodAdditions.VOLCANO.getId());
+    dartAdditions.add(LodAdditions.BURNING_RUSH.getId());
+    dartAdditions.add(LodAdditions.CRUSH_DANCE.getId());
+    dartAdditions.add(LodAdditions.MADNESS_HERO.getId());
+    dartAdditions.add(LodAdditions.MOON_STRIKE.getId());
+    dartAdditions.add(LodAdditions.BLAZING_DYNAMO.getId());
 
-    //    ADDITION_LOCATIONS.put(108_60010L, LodAdditions.HARPOON.getId().toString());
-    ADDITION_LOCATIONS.put(108_60021L, LodAdditions.SPINNING_CANE.getId().toString());
-    ADDITION_LOCATIONS.put(108_60022L, LodAdditions.ROD_TYPHOON.getId().toString());
-    ADDITION_LOCATIONS.put(108_60023L, LodAdditions.GUST_OF_WIND_DANCE.getId().toString());
-    ADDITION_LOCATIONS.put(108_60024L, LodAdditions.FLOWER_STORM.getId().toString());
+    final ArrayList<RegistryId> lavitzAdditions = new ArrayList<>();
+    lavitzAdditions.add(LodAdditions.HARPOON.getId());
+    lavitzAdditions.add(LodAdditions.SPINNING_CANE.getId());
+    lavitzAdditions.add(LodAdditions.ROD_TYPHOON.getId());
+    lavitzAdditions.add(LodAdditions.GUST_OF_WIND_DANCE.getId());
+    lavitzAdditions.add(LodAdditions.FLOWER_STORM.getId());
 
-    //    ADDITION_LOCATIONS.put(108_60028L, LodAdditions.ALBERT_HARPOON.getId().toString());
-    ADDITION_LOCATIONS.put(108_60031L, LodAdditions.ALBERT_SPINNING_CANE.getId().toString());
-    ADDITION_LOCATIONS.put(108_60032L, LodAdditions.ALBERT_ROD_TYPHOON.getId().toString());
-    ADDITION_LOCATIONS.put(108_60033L, LodAdditions.ALBERT_GUST_OF_WIND_DANCE.getId().toString());
-    ADDITION_LOCATIONS.put(108_60034L, LodAdditions.ALBERT_FLOWER_STORM.getId().toString());
+    final ArrayList<RegistryId> roseAdditions = new ArrayList<>();
+    roseAdditions.add(LodAdditions.WHIP_SMACK.getId());
+    roseAdditions.add(LodAdditions.MORE_MORE.getId());
+    roseAdditions.add(LodAdditions.HARD_BLADE.getId());
+    roseAdditions.add(LodAdditions.DEMONS_DANCE.getId());
 
-    //    ADDITION_LOCATIONS.put(108_60021L, LodAdditions.DOUBLE_PUNCH.getId().toString());
-    ADDITION_LOCATIONS.put(108_60041L, LodAdditions.FERRY_OF_STYX.getId().toString());
-    ADDITION_LOCATIONS.put(108_60042L, LodAdditions.SUMMON_4_GODS.getId().toString());
-    ADDITION_LOCATIONS.put(108_60043L, LodAdditions.FIVE_RING_SHATTERING.getId().toString());
-    ADDITION_LOCATIONS.put(108_60044L, LodAdditions.HEX_HAMMER.getId().toString());
-    ADDITION_LOCATIONS.put(108_60045L, LodAdditions.OMNI_SWEEP.getId().toString());
+    final ArrayList<RegistryId> shanaAdditions = new ArrayList<>();
 
-    //    ADDITION_LOCATIONS.put(108_60034L, LodAdditions.DOUBLE_SMACK.getId().toString());
-    ADDITION_LOCATIONS.put(108_60051L, LodAdditions.HAMMER_SPIN.getId().toString());
-    ADDITION_LOCATIONS.put(108_60052L, LodAdditions.COOL_BOOGIE.getId().toString());
-    ADDITION_LOCATIONS.put(108_60053L, LodAdditions.CATS_CRADLE.getId().toString());
-    ADDITION_LOCATIONS.put(108_60054L, LodAdditions.PERKY_STEP.getId().toString());
+    final ArrayList<RegistryId> haschelAdditions = new ArrayList<>();
+    haschelAdditions.add(LodAdditions.DOUBLE_PUNCH.getId());
+    haschelAdditions.add(LodAdditions.FERRY_OF_STYX.getId());
+    haschelAdditions.add(LodAdditions.SUMMON_4_GODS.getId());
+    haschelAdditions.add(LodAdditions.FIVE_RING_SHATTERING.getId());
+    haschelAdditions.add(LodAdditions.HEX_HAMMER.getId());
+    haschelAdditions.add(LodAdditions.OMNI_SWEEP.getId());
 
-    //    ADDITION_LOCATIONS.put(108_60040L, LodAdditions.PURSUIT.getId().toString());
-    ADDITION_LOCATIONS.put(108_60061L, LodAdditions.INFERNO.getId().toString());
-    ADDITION_LOCATIONS.put(108_60062L, LodAdditions.BONE_CRUSH.getId().toString());
+    final ArrayList<RegistryId> albertAdditions = new ArrayList<>();
+    albertAdditions.add(LodAdditions.ALBERT_HARPOON.getId());
+    albertAdditions.add(LodAdditions.ALBERT_SPINNING_CANE.getId());
+    albertAdditions.add(LodAdditions.ALBERT_ROD_TYPHOON.getId());
+    albertAdditions.add(LodAdditions.ALBERT_GUST_OF_WIND_DANCE.getId());
+    albertAdditions.add(LodAdditions.ALBERT_FLOWER_STORM.getId());
 
-    for(final Map.Entry<Long, String> entry : ADDITION_LOCATIONS.entrySet()) {
-      ADDITION_LOCATIONS_REVERSE.put(entry.getValue(), entry.getKey());
+    final ArrayList<RegistryId> meruAdditions = new ArrayList<>();
+    meruAdditions.add(LodAdditions.DOUBLE_SMACK.getId());
+    meruAdditions.add(LodAdditions.HAMMER_SPIN.getId());
+    meruAdditions.add(LodAdditions.COOL_BOOGIE.getId());
+    meruAdditions.add(LodAdditions.CATS_CRADLE.getId());
+    meruAdditions.add(LodAdditions.PERKY_STEP.getId());
+
+    final ArrayList<RegistryId> kongolAdditions = new ArrayList<>();
+    kongolAdditions.add(LodAdditions.PURSUIT.getId());
+    kongolAdditions.add(LodAdditions.INFERNO.getId());
+    kongolAdditions.add(LodAdditions.BONE_CRUSH.getId());
+
+    final ArrayList<RegistryId> mirandaAdditions = new ArrayList<>();
+
+    final ArrayList<RegistryId> startingAdditions = new ArrayList<>();
+    startingAdditions.add(dartAdditions.getFirst());
+    startingAdditions.add(lavitzAdditions.getFirst());
+    //    startingAdditions.add(shanaAdditions.getFirst());
+    startingAdditions.add(roseAdditions.getFirst());
+    startingAdditions.add(haschelAdditions.getFirst());
+    startingAdditions.add(albertAdditions.getFirst());
+    startingAdditions.add(meruAdditions.getFirst());
+    startingAdditions.add(kongolAdditions.getFirst());
+    //    startingAdditions.add(mirandaAdditions.getFirst());
+
+    final ArrayList<RegistryId> additionList = new ArrayList<>();
+    additionList.addAll(dartAdditions);
+    additionList.addAll(lavitzAdditions);
+    additionList.addAll(shanaAdditions);
+    additionList.addAll(roseAdditions);
+    additionList.addAll(haschelAdditions);
+    additionList.addAll(albertAdditions);
+    additionList.addAll(meruAdditions);
+    additionList.addAll(kongolAdditions);
+    additionList.addAll(mirandaAdditions);
+
+    final ArrayList<RegistryId> unlockLocations = new ArrayList<>();
+    final ArrayList<ArrayList<RegistryId>> masteryLocations = new ArrayList<>();
+    for(final RegistryId id : additionList) {
+      // add unlocks
+      final ArrayList<RegistryId> locs = new ArrayList<>();
+      for(int i = 0; i < 4; i++) {
+        locs.add(id);
+      }
+      masteryLocations.add(locs);
+
+      if(startingAdditions.contains(id)) {
+        continue;
+      }
+
+      unlockLocations.add(id);
     }
-    assert ADDITION_LOCATIONS.size() == ADDITION_LOCATIONS_REVERSE.size();
+
+    long currId = BASE_ID;
+    for(final RegistryId id : unlockLocations) {
+      ADDITION_LOCATIONS.put(id, currId);
+      currId++;
+    }
+
+    for(final ArrayList<RegistryId> ids : masteryLocations) {
+      final ArrayList<Long> locs = new ArrayList<>();
+      for(final RegistryId id : ids) {
+        locs.add(currId);
+        currId++;
+      }
+      ADDITION_LEVEL_LOCATIONS.put(ids.getFirst(), locs.toArray(new Long[] {}));
+    }
   }
 
   private Additions() {
   }
 
-  public static Map<Long, String> getStaticMap() {
+  public static Map<RegistryId, Long> getStaticMap() {
     return Collections.unmodifiableMap(ADDITION_LOCATIONS);
   }
 
-  private static Map<String, Long> getStaticReverseMap() {
-    return Collections.unmodifiableMap(ADDITION_LOCATIONS_REVERSE);
+  public static Map<Long, String> getStaticFlatMap() {
+    final Map<Long, String> locationMap = new LinkedHashMap<>();
+    for(final Map.Entry<RegistryId, Long> additionInfo : ADDITION_LOCATIONS.entrySet()) {
+      locationMap.put(additionInfo.getValue(), additionInfo.getKey().toString());
+    }
+
+    for(final Map.Entry<RegistryId, Long[]> additionLevelInfo : ADDITION_LEVEL_LOCATIONS.entrySet()) {
+      for(final long levelLocationId : additionLevelInfo.getValue()) {
+        locationMap.put(levelLocationId, additionLevelInfo.getKey().toString());
+      }
+    }
+
+    return Collections.unmodifiableMap(locationMap);
   }
 
-  public static Long getAPLocationIdFromRegistryId(final RegistryId registryId) {
-    return getStaticReverseMap().get(registryId.toString());
+  public static Long getAPLocationId(final RegistryId additionId) {
+    return ADDITION_LOCATIONS.get(additionId);
   }
 
-  public static String getRegistryIdFromAPLocationId(final Long locationId) {
-    return getStaticMap().get(locationId);
+  public static Long getAPLocationId(final RegistryId additionId, final int level) {
+    return ADDITION_LEVEL_LOCATIONS.get(additionId)[level - 2];
   }
 }

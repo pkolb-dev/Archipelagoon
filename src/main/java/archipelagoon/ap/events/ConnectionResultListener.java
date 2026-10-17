@@ -64,5 +64,7 @@ public class ConnectionResultListener {
     }
 
     ctx.retrieveLocations();
+    ctx.initAdditions(null);
+    ctx.initMagic(null);
   }
 }

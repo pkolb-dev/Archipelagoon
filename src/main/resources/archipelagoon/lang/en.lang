@@ -11,13 +11,15 @@ archipelagoon.config.connected=Connected
 archipelagoon.config.connect=Connect
 archipelagoon.config.connecting=Connecting
 archipelagoon.config.xp_multiplier.label=Battle XP Gain
-archipelagoon.config.xp_multiplier.help=Increases xp given after combat
+archipelagoon.config.xp_multiplier.help=Increases XP given after combat
 archipelagoon.config.gold_multiplier.label=Battle Gold Gain
-archipelagoon.config.gold_multiplier.help=Increases gold given after combat
+archipelagoon.config.gold_multiplier.help=Increases Gold given after combat
+
+archipelagoon.config_presets.default=Archipelago
 
 archipelagoon.connection.slot_already_taken=Slot already in use.
 archipelagoon.connection.success=Connection successful.
-archipelagoon.connection.invalid_slot=Invalid Slot name./nPlease mae sure\nyou types it correctly.
+archipelagoon.connection.invalid_slot=Invalid Slot name./nPlease make sure\nyou typed it correctly.
 archipelagoon.connection.invalid_password=Invalid password.
 archipelagoon.connection.incompatible_version=Server Rejected\nour connection\ndue to an incompatible\ncommunication protocol.
 archipelagoon.connection.invalid_game=Invalid Game.\nCheck your slot.
@@ -32,6 +34,8 @@ archipelagoon.ap.item.description=%s's\n%s
 archipelagoon.items.ice_trap.use=Ice trap!
 
 archipelagoon.ap.event.deathlink=Deathlink Received!\nfrom: %s\n%s
+archipelagoon.ap.event.item_received=Received\n%s\nfrom\n%s
+archipelagoon.ap.event.checkLocation=Sent\n%s\nto %s
 
 archipelagoon.goods.law_making_license.name=Law Making License
 archipelagoon.goods.law_making_license.description=Allows laws to be made\nin Zenebatos

@@ -1,6 +1,9 @@
 package archipelagoon.data.items;
 
-import com.google.gson.JsonObject;
+import legend.core.tags.IntTag;
+import legend.core.tags.MapTag;
+import legend.core.tags.RegistryIdTag;
+import legend.core.tags.Tag;
 import legend.game.characters.CharacterData2c;
 import legend.game.characters.StatCollection;
 import legend.game.characters.VitalsStat;
@@ -37,34 +40,38 @@ public class IceTrapItem extends BattleItem {
    * Creates an ice trap that impersonates the item being passed in
    */
   public ItemStack impersonate(final ItemStack stack) {
-    final JsonObject data = new JsonObject();
-    data.addProperty("id", stack.getRegistryId().toString());
-    data.addProperty("has_durability", stack.hasDurability());
-    data.add("data", stack.getExtraData());
+    final MapTag itemTag = new MapTag();
+    itemTag.set("itemId", new RegistryIdTag(stack.getRegistryId()));
+    itemTag.set("durability", new IntTag(stack.getCurrentDurability()));
+
+    final Tag extraData = stack.getExtraData();
+
+    if(extraData != null) {
+      itemTag.set("extraData", extraData);
+    }
 
     final ItemStack impersonatedStack = new ItemStack(this, stack.getSize(), stack.getCurrentDurability());
-    impersonatedStack.setExtraData(data);
+    impersonatedStack.setExtraData(itemTag);
+
     return impersonatedStack;
   }
 
   private ItemStack getImpersonatedStack(final ItemStack stack) {
-    final JsonObject data = stack.getExtraData();
+    final Tag data = stack.getExtraData();
 
-    if(data == null || !data.has("id")) {
+    if(data == null || !data.asMap().has("itemId")) {
       return null;
     }
 
-    final RegistryDelegate<Item> delegate = REGISTRIES.items.getEntry(data.getAsJsonPrimitive("id").getAsString());
+    final RegistryDelegate<Item> delegate = REGISTRIES.items.getEntry(data.asMap().get("itemId").asRegistryId().get());
 
     if(!delegate.isValid()) {
       return null;
     }
 
-    final JsonObject impersonatedData = data.has("data") && data.get("data") instanceof JsonObject ? data.getAsJsonObject("data") : null;
-
     final Item item = delegate.get();
     final ItemStack impersonatedStack = new ItemStack(item, stack.getSize(), stack.getCurrentDurability());
-    impersonatedStack.setExtraData(impersonatedData);
+    impersonatedStack.setExtraData(data);
 
     return impersonatedStack;
   }
@@ -119,13 +126,18 @@ public class IceTrapItem extends BattleItem {
     // Reading the stack from our json data has to call this method. If we were to try to
     // read this from the impersonated stack it would cause a stack overflow.
 
-    final JsonObject extraData = stack.getExtraData();
+    final Tag extraData = stack.getExtraData();
 
-    if(extraData == null || !extraData.has("has_durability")) {
+    if(extraData == null) {
       return super.hasDurability(stack);
     }
 
-    return extraData.getAsJsonPrimitive("has_durability").getAsBoolean();
+    final MapTag itemTag = extraData.asMap();
+    if(!itemTag.has("durability")) {
+      return super.hasDurability(stack);
+    }
+
+    return itemTag.get("durability").asBool().get();
   }
 
   @Override
