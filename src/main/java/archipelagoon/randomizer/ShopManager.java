@@ -40,7 +40,10 @@ public final class ShopManager {
     final int min = slotData.minimumShopPrice;
     final int max = slotData.maximumShopPrice + 1;
 
-    final int price = (int)(rand.nextInt(min, max) * weight);
+    int price = max;
+    for(int i = 0; i < weight; i++) {
+      price = Math.min(price, rand.nextInt(min, max));
+    }
     return Math.clamp(price, min, max);
   }
 
@@ -74,15 +77,15 @@ public final class ShopManager {
     final SlotData slotData = ctx.getSlotData();
 
     final int numberOfSlots = slotData.getShopSlots(shop.getRegistryId());
-    final List<Long> shopSlots = Shops.getShopLocationIds(shop.getRegistryId().toString()).stream().limit(numberOfSlots).toList();
+    final List<Long> shopSlots = Shops.getShopLocationIds(shop.getRegistryId()).stream().limit(numberOfSlots).toList();
     final List<LocationState> slots = GameEngine.CONFIG.getConfig(LOCATION_STATE_REGISTRY.get()).stream()
       .filter(ls -> shopSlots.contains(ls.getLocationID())).toList();
 
     final List<ShopScreen.ShopEntry<?>> entries = new ArrayList<>();
 
-    final int shopSeed = Shops.getShopIndex(shop.getRegistryId().toString());
+    final int shopSeed = Shops.getShopIndex(shop.getRegistryId());
     final Random rand = new Random(slotData.slotSeed + shopSeed);
-    final double weight = Math.pow(rand.nextDouble(), 3);
+    final double weight = Math.pow(rand.nextDouble(), 5);
 
     for(final LocationState locationState : slots) {
       final int price;
