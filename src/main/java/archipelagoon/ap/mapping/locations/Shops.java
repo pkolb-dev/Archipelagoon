@@ -61,8 +61,6 @@ public final class Shops {
     missableShops.add(LodShops.HELLENA_02_ITEM_SHOP.getId());
     missableShops.add(LodShops.BLACK_CASTLE_ITEM_SHOP.getId());
 
-    final ArrayList<RegistryId> unlockLocations = new ArrayList<>();
-
     long currId = BASE_ID;
     for(final RegistryId shop : permaShops) {
       final Map<Integer, Long> slots = new HashMap<>();
