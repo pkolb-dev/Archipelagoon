@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import static legend.game.Scus94491BpeSegment_800b.gameState_800babc8;
 import static legend.lodmod.LodMod.ATTACK_AVOID_STAT;
 import static legend.lodmod.LodMod.ATTACK_HIT_STAT;
+import static legend.lodmod.LodMod.GUARD_HEAL_STAT;
 import static legend.lodmod.LodMod.HP_STAT;
 import static legend.lodmod.LodMod.MAGIC_AVOID_STAT;
 import static legend.lodmod.LodMod.MAGIC_HIT_STAT;
@@ -62,11 +63,13 @@ public final class CharacterManager {
     final UnaryStat mHitStat = character.stats.getStat(MAGIC_HIT_STAT.get());
     final UnaryStat aAvoStat = character.stats.getStat(ATTACK_AVOID_STAT.get());
     final UnaryStat mAvoStat = character.stats.getStat(ATTACK_AVOID_STAT.get());
-    character.stats.set(new StatCollection(HP_STAT.get(), MP_STAT.get(), LodMod.SP_STAT.get(), LodMod.SPEED_STAT.get(), LodMod.ATTACK_STAT.get(), LodMod.MAGIC_ATTACK_STAT.get(), LodMod.DEFENSE_STAT.get(), LodMod.MAGIC_DEFENSE_STAT.get(), ATTACK_HIT_STAT.get(), LodMod.MAGIC_HIT_STAT.get(), LodMod.ATTACK_AVOID_STAT.get(), LodMod.MAGIC_AVOID_STAT.get(), LodMod.DRAGOON_ATTACK_STAT.get(), LodMod.DRAGOON_MAGIC_ATTACK_STAT.get(), LodMod.DRAGOON_DEFENSE_STAT.get(), LodMod.DRAGOON_MAGIC_DEFENSE_STAT.get(), LodMod.GUARD_HEAL_STAT.get()));
+    final UnaryStat guardHealStat = character.stats.getStat(GUARD_HEAL_STAT.get());
+    character.stats.set(new StatCollection(HP_STAT.get(), MP_STAT.get(), LodMod.SP_STAT.get(), LodMod.SPEED_STAT.get(), LodMod.ATTACK_STAT.get(), LodMod.MAGIC_ATTACK_STAT.get(), LodMod.DEFENSE_STAT.get(), LodMod.MAGIC_DEFENSE_STAT.get(), ATTACK_HIT_STAT.get(), LodMod.MAGIC_HIT_STAT.get(), LodMod.ATTACK_AVOID_STAT.get(), LodMod.MAGIC_AVOID_STAT.get(), LodMod.DRAGOON_ATTACK_STAT.get(), LodMod.DRAGOON_MAGIC_ATTACK_STAT.get(), LodMod.DRAGOON_DEFENSE_STAT.get(), LodMod.DRAGOON_MAGIC_DEFENSE_STAT.get(), GUARD_HEAL_STAT.get()));
     character.stats.getStat(ATTACK_HIT_STAT.get()).set(aHitStat);
     character.stats.getStat(MAGIC_HIT_STAT.get()).set(mHitStat);
     character.stats.getStat(ATTACK_AVOID_STAT.get()).set(aAvoStat);
     character.stats.getStat(MAGIC_AVOID_STAT.get()).set(mAvoStat);
+    character.stats.getStat(GUARD_HEAL_STAT.get()).set(guardHealStat);
     character.xp_00 = 0;
     character.applyLevelUp(null, LevelUpSource.INITIALIZATION);
 
