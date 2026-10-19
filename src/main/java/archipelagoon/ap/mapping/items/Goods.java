@@ -13,6 +13,7 @@ public final class Goods {
   private static final Map<RegistryId, Long> GOOD_MAP_REVERSE = new HashMap<>();
 
   static {
+    GOOD_MAP.put(108_20002L, LodGoods.BLUE_DRAGOON_SPIRIT.getId());
     GOOD_MAP.put(108_20003L, LodGoods.JADE_DRAGOON_SPIRIT.getId());
     GOOD_MAP.put(108_20004L, LodGoods.GOLD_DRAGOON_SPIRIT.getId());
     GOOD_MAP.put(108_20005L, LodGoods.VIOLET_DRAGOON_SPIRIT.getId());
