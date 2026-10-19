@@ -25,18 +25,18 @@ public final class Additions {
     dartAdditions.add(LodAdditions.MOON_STRIKE.getId());
     dartAdditions.add(LodAdditions.BLAZING_DYNAMO.getId());
 
+    final ArrayList<RegistryId> roseAdditions = new ArrayList<>();
+    roseAdditions.add(LodAdditions.WHIP_SMACK.getId());
+    roseAdditions.add(LodAdditions.MORE_MORE.getId());
+    roseAdditions.add(LodAdditions.HARD_BLADE.getId());
+    roseAdditions.add(LodAdditions.DEMONS_DANCE.getId());
+
     final ArrayList<RegistryId> lavitzAdditions = new ArrayList<>();
     lavitzAdditions.add(LodAdditions.HARPOON.getId());
     lavitzAdditions.add(LodAdditions.SPINNING_CANE.getId());
     lavitzAdditions.add(LodAdditions.ROD_TYPHOON.getId());
     lavitzAdditions.add(LodAdditions.GUST_OF_WIND_DANCE.getId());
     lavitzAdditions.add(LodAdditions.FLOWER_STORM.getId());
-
-    final ArrayList<RegistryId> roseAdditions = new ArrayList<>();
-    roseAdditions.add(LodAdditions.WHIP_SMACK.getId());
-    roseAdditions.add(LodAdditions.MORE_MORE.getId());
-    roseAdditions.add(LodAdditions.HARD_BLADE.getId());
-    roseAdditions.add(LodAdditions.DEMONS_DANCE.getId());
 
     final ArrayList<RegistryId> shanaAdditions = new ArrayList<>();
 
@@ -80,32 +80,32 @@ public final class Additions {
     startingAdditions.add(kongolAdditions.getFirst());
     //    startingAdditions.add(mirandaAdditions.getFirst());
 
-    final ArrayList<RegistryId> additionList = new ArrayList<>();
-    additionList.addAll(dartAdditions);
-    additionList.addAll(lavitzAdditions);
-    additionList.addAll(shanaAdditions);
-    additionList.addAll(roseAdditions);
-    additionList.addAll(haschelAdditions);
-    additionList.addAll(albertAdditions);
-    additionList.addAll(meruAdditions);
-    additionList.addAll(kongolAdditions);
-    additionList.addAll(mirandaAdditions);
+    final Map<String, ArrayList<RegistryId>> additionList = new LinkedHashMap<>();
+    additionList.put("dart", dartAdditions);
+    additionList.put("lavitz", lavitzAdditions);
+    additionList.put("rose", roseAdditions);
+    additionList.put("shana", shanaAdditions);
+    additionList.put("haschel", haschelAdditions);
+    additionList.put("albert", albertAdditions);
+    additionList.put("meru", meruAdditions);
+    additionList.put("kongol", kongolAdditions);
+    additionList.put("miranda", mirandaAdditions);
 
     final ArrayList<RegistryId> unlockLocations = new ArrayList<>();
     final ArrayList<ArrayList<RegistryId>> masteryLocations = new ArrayList<>();
-    for(final RegistryId id : additionList) {
-      // add unlocks
-      final ArrayList<RegistryId> locs = new ArrayList<>();
-      for(int i = 0; i < 4; i++) {
-        locs.add(id);
-      }
-      masteryLocations.add(locs);
+    for(final Map.Entry<String, ArrayList<RegistryId>> character : additionList.entrySet()) {
+      for(final RegistryId id : character.getValue()) {
+        final ArrayList<RegistryId> locs = new ArrayList<>();
+        for(int i = 0; i < 4; i++) {
+          locs.add(id);
+        }
+        masteryLocations.add(locs);
+        if(startingAdditions.contains(id)) {
+          continue;
+        }
 
-      if(startingAdditions.contains(id)) {
-        continue;
+        unlockLocations.add(id);
       }
-
-      unlockLocations.add(id);
     }
 
     long currId = BASE_ID;
