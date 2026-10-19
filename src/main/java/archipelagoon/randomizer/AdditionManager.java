@@ -109,20 +109,24 @@ public final class AdditionManager {
       final CharacterAdditionInfo additionInfo = cd.getAdditionInfo(registryId);
       if(additionInfo.getUnlockState() != UnlockState.UNLOCKED) {
         additionInfo.setUnlockState(UnlockState.UNLOCKED, state.timestamp_a0);
+
+        if(cd.getAdditionInfo(cd.selectedAddition_19).getUnlockState() != UnlockState.UNLOCKED) {
+          cd.selectedAddition_19 = registryId;
+        }
       }
     });
   }
 
   public void selectAddition(final GameState52c gameState) {
     final GameState52c state = this.resolveState(gameState);
-    for(final CharacterData2c cd : state.charData_32c) {
+    state.charData_32c.forEach(cd -> {
       final CharacterAdditionInfo addition = cd.getAdditionInfo(cd.selectedAddition_19);
       if(addition == null) {
         return;
       }
 
       if(addition.getUnlockState() == UnlockState.UNLOCKED) {
-        break;
+        return;
       }
 
       for(final RegistryId entry : cd.getAllAdditions()) {
@@ -131,7 +135,7 @@ public final class AdditionManager {
           break;
         }
       }
-    }
+    });
   }
 
   public void checkUnlock(final CharacterData2c charData) {

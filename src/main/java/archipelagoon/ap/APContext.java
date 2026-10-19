@@ -191,13 +191,10 @@ public class APContext {
   }
 
   public void initAdditions(final GameState52c gameState) {
-    //    this.additionManager.lockAdditions(gameState);
     this.additionManager.setAdditions(gameState);
-    this.additionManager.selectAddition(gameState);
   }
 
   public void initMagic(final GameState52c gameState) {
-    //    this.magicManager.lockSpells(gameState);
     this.magicManager.setMagic(gameState);
   }
 
@@ -205,6 +202,7 @@ public class APContext {
     this.additionManager.lockAdditions(state);
     this.magicManager.lockSpells(state);
     this.characterManager.lockCharacters(state);
+    this.characterManager.setStartingEquipment(state);
   }
 
   public void retrieveItems() {
@@ -212,7 +210,9 @@ public class APContext {
   }
 
   public void disconnect() {
-    this.client.disconnect();
+    if(this.isConnected()) {
+      this.client.disconnect();
+    }
   }
 
   public void renderMessage() {
