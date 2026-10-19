@@ -448,7 +448,11 @@ public class Archipelagoon {
 
   @EventListener
   public void primaryPartyChangeListener(final PrimaryPartyChangeEvent event) {
-    event.characterIndex = event.gameState.charIds_88.getInt(event.activePartySlot);
+    try {
+      event.characterIndex = event.gameState.charIds_88.getInt(event.activePartySlot);
+    } catch(final Exception e) {
+      event.characterIndex = -1;
+    }
   }
 
   @EventListener
