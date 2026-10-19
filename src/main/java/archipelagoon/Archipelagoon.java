@@ -34,6 +34,7 @@ import legend.game.inventory.Item;
 import legend.game.inventory.ItemRegistryEvent;
 import legend.game.inventory.screens.GatherShopExtensionsEvent;
 import legend.game.inventory.screens.ShopScreen;
+import legend.game.modding.coremod.CoreEngineStateTypes;
 import legend.game.modding.coremod.config.QuickTextMode;
 import legend.game.modding.events.RenderEvent;
 import legend.game.modding.events.battle.BattleEndedEvent;
@@ -43,9 +44,11 @@ import legend.game.modding.events.characters.CloneCharacterEvent;
 import legend.game.modding.events.characters.PostAdditionLevelUpEvent;
 import legend.game.modding.events.characters.PostCharacterDragoonLevelUpEvent;
 import legend.game.modding.events.characters.PostCharacterLevelUpEvent;
+import legend.game.modding.events.engine.EngineStateChangeEvent;
 import legend.game.modding.events.gamestate.GameLoadedEvent;
 import legend.game.modding.events.gamestate.NewGameEvent;
 import legend.game.modding.events.gamestate.PartyFlagsChangeEvent;
+import legend.game.modding.events.gamestate.PrimaryPartyChangeEvent;
 import legend.game.modding.events.inventory.GiveGoodsEvent;
 import legend.game.modding.events.inventory.ShopBuyEvent;
 import legend.game.modding.events.inventory.ShopContentsEvent;
@@ -161,6 +164,14 @@ public class Archipelagoon {
     CONFIG_REGISTRAR.registryEvent(event);
   }
 
+  @EventListener
+  public void gameStateChangeListener(final EngineStateChangeEvent event) {
+    final APContext ctx = APContext.getContext();
+    if(event.engineState.type.getRegistryId() == CoreEngineStateTypes.TITLE.getId()) {
+      ctx.disconnect();
+    }
+  }
+
   @EventListener(priority = Priority.LOWEST)
   public void newGameEventListener(final NewGameEvent event) {
     final APContext ctx = APContext.getContext();
@@ -265,7 +276,7 @@ public class Archipelagoon {
 
     switch(event.source) {
       case GoodsSource.INITIALIZATION:
-        // probably can ignore?
+        allowedGoods.addAll(this.handleExternalGoods(event.givenGoods, receivedIds));
         break;
       case GoodsSource.DEBUGGER:
       case GoodsSource.EXTERNAL:
@@ -433,6 +444,11 @@ public class Archipelagoon {
   @EventListener
   public void partyFlagChangedListener(final PartyFlagsChangeEvent event) {
     event.partyFlags = event.gameState.charData_32c.get(event.characterIndex).partyFlags_04;
+  }
+
+  @EventListener
+  public void primaryPartyChangeListener(final PrimaryPartyChangeEvent event) {
+    event.characterIndex = event.gameState.charIds_88.getInt(event.activePartySlot);
   }
 
   @EventListener
