@@ -113,6 +113,22 @@ public class APContext {
     }
   }
 
+  public void checkLocations(final List<Long> ids) {
+    if(this.client.checkLocations(ids).getCode() != APResult.ResultCode.SUCCESS) {
+      return;
+    }
+
+    ids.forEach(id -> {
+      final LocationState item = GameEngine.CONFIG.getConfig(LOCATION_STATE_REGISTRY.get()).stream()
+        .filter(ls -> id.equals(ls.getLocationID())).findFirst().orElse(null);
+
+      if(item != null) {
+        final String sendMessage = I18n.translate(Archipelagoon.MOD_ID + ".ap.event.checkLocation", item.getItemName(), item.getPlayerName());
+        this.messageManager.displayMessage(sendMessage);
+      }
+    });
+  }
+
   public void retrieveLocations() {
     final ArrayList<Long> locationIDs = new ArrayList<>(Locations.getStaticMap().keySet());
     locationIDs.addAll(DragoonLevels.getAllLocationIds());
