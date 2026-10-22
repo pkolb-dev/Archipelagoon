@@ -50,6 +50,8 @@ import legend.game.modding.events.gamestate.NewGameEvent;
 import legend.game.modding.events.gamestate.PartyFlagsChangeEvent;
 import legend.game.modding.events.gamestate.PrimaryPartyChangeEvent;
 import legend.game.modding.events.inventory.GiveGoodsEvent;
+import legend.game.modding.events.inventory.ScriptFlags1ChangedEvent;
+import legend.game.modding.events.inventory.ScriptFlags2ChangedEvent;
 import legend.game.modding.events.inventory.ShopBuyEvent;
 import legend.game.modding.events.inventory.ShopContentsEvent;
 import legend.game.modding.events.inventory.TakeGoodsEvent;
@@ -466,5 +468,25 @@ public class Archipelagoon {
       }
     }
     this.lloydInterface.registerEvents();
+  }
+
+  /**
+   * this listener handles locations that can't be hit b/c of already owning the good.
+   *
+   * @param event
+   */
+  @EventListener
+  public void scriptFlags1ChangedListener(final ScriptFlags1ChangedEvent event) {
+    StoryFlagManager.handleScriptFlagsChanged(event);
+  }
+
+  /**
+   * this listener handles locations that can't be hit b/c of already owning the good.
+   *
+   * @param event
+   */
+  @EventListener
+  public void scriptFlags2ChangedListener(final ScriptFlags2ChangedEvent event) {
+    StoryFlagManager.handleScriptFlagsChanged(event);
   }
 }
