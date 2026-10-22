@@ -59,6 +59,7 @@ public final class CharacterManager {
 
     character.partyFlags_04 |= 0x3;
     character.level_12 = 0;
+    character.dlevel_13 = 0;
     final UnaryStat aHitStat = character.stats.getStat(ATTACK_HIT_STAT.get());
     final UnaryStat mHitStat = character.stats.getStat(MAGIC_HIT_STAT.get());
     final UnaryStat aAvoStat = character.stats.getStat(ATTACK_AVOID_STAT.get());
@@ -72,6 +73,7 @@ public final class CharacterManager {
     character.stats.getStat(GUARD_HEAL_STAT.get()).set(guardHealStat);
     character.xp_00 = 0;
     character.applyLevelUp(null, LevelUpSource.INITIALIZATION);
+    character.applyDragoonLevelUp(null);
 
     character.stats.getStat(HP_STAT.get()).restore();
     character.stats.getStat(MP_STAT.get()).restore();
