@@ -19,8 +19,6 @@ public final class GoodsLocations {
     GOOD_LOCATIONS.put(LodGoods.SILVER_DRAGOON_SPIRIT.getId(), 108_80006L);
     GOOD_LOCATIONS.put(LodGoods.DARK_DRAGOON_SPIRIT.getId(), 108_80007L);
     GOOD_LOCATIONS.put(LodGoods.DIVINE_DRAGOON_SPIRIT.getId(), 108_80008L);
-    GOOD_LOCATIONS.put(LodGoods.WAR_BULLETIN.getId(), 108_80009L);
-    GOOD_LOCATIONS.put(LodGoods.FATHERS_STONE.getId(), 108_80010L);
     GOOD_LOCATIONS.put(LodGoods.PRISON_KEY.getId(), 108_80011L);
     GOOD_LOCATIONS.put(LodGoods.AXE_FROM_THE_SHACK.getId(), 108_80012L);
     GOOD_LOCATIONS.put(LodGoods.GOOD_SPIRITS.getId(), 108_80013L);
@@ -40,9 +38,6 @@ public final class GoodsLocations {
     GOOD_LOCATIONS.put(LodGoods.MOON_GEM.getId(), 108_80027L);
     GOOD_LOCATIONS.put(LodGoods.MOON_DAGGER.getId(), 108_80028L);
     GOOD_LOCATIONS.put(LodGoods.MOON_MIRROR.getId(), 108_80029L);
-    GOOD_LOCATIONS.put(LodGoods.OMEGA_BOMB.getId(), 108_80030L);
-    GOOD_LOCATIONS.put(LodGoods.OMEGA_MASTER.getId(), 108_80031L);
-    GOOD_LOCATIONS.put(LodGoods.MAGIC_SHINY_BAG.getId(), 108_80035L);
     GOOD_LOCATIONS.put(LodGoods.VANISHING_STONE.getId(), 108_80036L);
     GOOD_LOCATIONS.put(LodGoods.LAVITZS_PICTURE.getId(), 108_80037L);
   }
@@ -56,5 +51,13 @@ public final class GoodsLocations {
 
   public static Long getAPLocationId(final RegistryId registryId) {
     return getStaticMap().getOrDefault(registryId, -1L);
+  }
+
+  public static Map<Long, String> getStaticStringMap() {
+    final Map<Long, String> locationMap = new LinkedHashMap<>();
+    for(final Map.Entry<RegistryId, Long> goodInfo : GOOD_LOCATIONS.entrySet()) {
+      locationMap.put(goodInfo.getValue(), String.valueOf(goodInfo.getKey()));
+    }
+    return locationMap;
   }
 }
