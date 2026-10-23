@@ -19,7 +19,7 @@ archipelagoon.config_presets.default=Archipelago
 
 archipelagoon.connection.slot_already_taken=Slot already in use.
 archipelagoon.connection.success=Connection successful.
-archipelagoon.connection.invalid_slot=Invalid Slot name./nPlease make sure\nyou typed it correctly.
+archipelagoon.connection.invalid_slot=Invalid Slot name.\nPlease make sure\nyou typed it correctly.
 archipelagoon.connection.invalid_password=Invalid password.
 archipelagoon.connection.incompatible_version=Server Rejected\nour connection\ndue to an incompatible\ncommunication protocol.
 archipelagoon.connection.invalid_game=Invalid Game.\nCheck your slot.

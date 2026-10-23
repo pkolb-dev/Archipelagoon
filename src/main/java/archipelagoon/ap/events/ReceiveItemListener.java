@@ -43,6 +43,11 @@ public class ReceiveItemListener {
     this.giveItem(registryId);
     GameEngine.CONFIG.setConfig(LAST_ITEM_INDEX.get(), event.getIndex());
 
+    // guard clause - ignore messages for server given items
+    if(event.getLocationID() == -2) {
+      return;
+    }
+
     final String message = I18n.translate(MOD_ID + ".ap.event.item_received", event.getItemName(), event.getPlayerName());
     ctx.displayMessage(message);
   }

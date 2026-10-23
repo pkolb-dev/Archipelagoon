@@ -24,7 +24,6 @@ public class ConnectionResultListener {
 
     final String msg = switch(event.getResult()) {
       case SlotAlreadyTaken -> "archipelagoon.connection.slot_already_taken";
-      case Success -> "archipelagoon.connection.success"; // unused
       case InvalidSlot -> "archipelagoon.connection.invalid_slot";
       case InvalidPassword -> "archipelagoon.connection.invalid_password";
       case IncompatibleVersion -> "archipelagoon.connection.incompatible_version";
@@ -66,5 +65,7 @@ public class ConnectionResultListener {
     ctx.retrieveLocations();
     ctx.initAdditions(null);
     ctx.initMagic(null);
+
+    ctx.displayMessage(I18n.translate("archipelagoon.connection.success"));
   }
 }
