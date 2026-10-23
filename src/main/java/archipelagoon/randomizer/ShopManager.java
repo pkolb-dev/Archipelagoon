@@ -85,7 +85,7 @@ public final class ShopManager {
 
     final int shopSeed = Shops.getShopIndex(shop.getRegistryId());
     final Random rand = new Random(slotData.slotSeed + shopSeed);
-    final double weight = Math.pow(rand.nextDouble(), 5);
+    final double weight = Math.pow(rand.nextDouble(), 10);
 
     for(final LocationState locationState : slots) {
       final int price;

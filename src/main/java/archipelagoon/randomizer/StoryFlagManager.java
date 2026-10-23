@@ -20,15 +20,10 @@ import java.util.List;
 import static legend.game.Scus94491BpeSegment_800b.gameState_800babc8;
 
 public final class StoryFlagManager {
-  private static final StoryFlagManager INSTANCE = new StoryFlagManager();
   private static final Logger LOGGER = LogManager.getFormatterLogger(StoryFlagManager.class);
   private static int current_submap = -1;
 
   private StoryFlagManager() {
-  }
-
-  public static StoryFlagManager getInstance() {
-    return INSTANCE;
   }
 
   public static int getCurrentSubmap() {
