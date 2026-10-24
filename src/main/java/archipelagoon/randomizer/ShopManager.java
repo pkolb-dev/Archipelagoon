@@ -40,11 +40,14 @@ public final class ShopManager {
     final int min = slotData.minimumShopPrice;
     final int max = slotData.maximumShopPrice + 1;
 
-    return (int)(rand.nextInt(min, max) * weight);
+    int price = max;
+    for(int i = 0; i < weight; i++) {
+      price = Math.min(price, rand.nextInt(min, max));
+    }
+    return Math.clamp(price, min, max);
   }
 
   public static int getItemPrice(final Random rand) {
-
     return getItemPrice(rand, 1);
   }
 
@@ -74,21 +77,17 @@ public final class ShopManager {
     final SlotData slotData = ctx.getSlotData();
 
     final int numberOfSlots = slotData.getShopSlots(shop.getRegistryId());
-    final List<Long> shopSlots = Shops.getShopLocationIds(shop.getRegistryId().toString()).stream().limit(numberOfSlots).toList();
+    final List<Long> shopSlots = Shops.getShopLocationIds(shop.getRegistryId()).stream().limit(numberOfSlots).toList();
     final List<LocationState> slots = GameEngine.CONFIG.getConfig(LOCATION_STATE_REGISTRY.get()).stream()
       .filter(ls -> shopSlots.contains(ls.getLocationID())).toList();
 
     final List<ShopScreen.ShopEntry<?>> entries = new ArrayList<>();
 
-    final int shopSeed = Shops.getShopIndex(shop.getRegistryId().toString());
+    final int shopSeed = Shops.getShopIndex(shop.getRegistryId());
     final Random rand = new Random(slotData.slotSeed + shopSeed);
-    final double weight = Math.pow(rand.nextDouble(), 3);
+    final double weight = Math.pow(rand.nextDouble(), 10);
 
     for(final LocationState locationState : slots) {
-      if(locationState.isApplied()) {
-        continue;
-      }
-
       final int price;
 
       if(shop.getRegistryId() == LodShops.FOREST_ITEM_SHOP.getId()) {
@@ -99,6 +98,11 @@ public final class ShopManager {
         price = getItemPrice(rand, weight);
       } else {
         price = getItemPrice(rand);
+      }
+
+      // moved down here to keep costs matched with the appropriate item
+      if(locationState.isApplied()) {
+        continue;
       }
 
       final APInventoryEntry entry = new APInventoryEntry(locationState);

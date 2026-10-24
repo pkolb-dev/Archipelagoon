@@ -4,6 +4,7 @@ import archipelagoon.ap.APContext;
 import archipelagoon.ap.mapping.LocationState;
 import archipelagoon.ap.mapping.items.Goods;
 import archipelagoon.ap.mapping.locations.Additions;
+import archipelagoon.ap.mapping.locations.GoodsLocations;
 import archipelagoon.config.ArchipelagoConfigEntry;
 import archipelagoon.config.GoldMultiplierConfigEntry;
 import archipelagoon.config.ItemIndexConfigEntry;
@@ -12,33 +13,56 @@ import archipelagoon.config.XpMultiplierConfigEntry;
 import archipelagoon.data.APInventoryEntry;
 import archipelagoon.data.APShopExtension;
 import archipelagoon.data.SlotData;
-import archipelagoon.data.enums.AdditionRandomizerType;
 import archipelagoon.icons.APIconUiType;
+import archipelagoon.interfaces.LloydInterface;
+import archipelagoon.interfaces.LloydNotLoaded;
 import archipelagoon.randomizer.AdditionManager;
 import archipelagoon.randomizer.MagicManager;
 import archipelagoon.randomizer.ShopManager;
+import archipelagoon.randomizer.StoryFlagManager;
+import legend.core.AddRegistryEvent;
 import legend.core.GameEngine;
+import legend.core.lang.I18nText;
+import legend.game.characters.LevelUpSource;
+import legend.game.combat.BattleTransitionMode;
 import legend.game.combat.deff.RegisterDeffsEvent;
+import legend.game.combat.effects.TransformationMode;
 import legend.game.inventory.Good;
 import legend.game.inventory.GoodsRegistryEvent;
+import legend.game.inventory.GoodsSource;
 import legend.game.inventory.Item;
 import legend.game.inventory.ItemRegistryEvent;
 import legend.game.inventory.screens.GatherShopExtensionsEvent;
 import legend.game.inventory.screens.ShopScreen;
+import legend.game.modding.coremod.CoreEngineStateTypes;
+import legend.game.modding.coremod.config.QuickTextMode;
 import legend.game.modding.events.RenderEvent;
 import legend.game.modding.events.battle.BattleEndedEvent;
 import legend.game.modding.events.battle.EnemyRewardsEvent;
 import legend.game.modding.events.characters.AdditionUnlockEvent;
+import legend.game.modding.events.characters.CloneCharacterEvent;
+import legend.game.modding.events.characters.PostAdditionLevelUpEvent;
 import legend.game.modding.events.characters.PostCharacterDragoonLevelUpEvent;
 import legend.game.modding.events.characters.PostCharacterLevelUpEvent;
+import legend.game.modding.events.engine.EngineStateChangeEvent;
 import legend.game.modding.events.gamestate.GameLoadedEvent;
 import legend.game.modding.events.gamestate.NewGameEvent;
+import legend.game.modding.events.gamestate.PartyFlagsChangeEvent;
+import legend.game.modding.events.gamestate.PrimaryPartyChangeEvent;
 import legend.game.modding.events.inventory.GiveGoodsEvent;
+import legend.game.modding.events.inventory.ScriptFlags1ChangedEvent;
+import legend.game.modding.events.inventory.ScriptFlags2ChangedEvent;
 import legend.game.modding.events.inventory.ShopBuyEvent;
 import legend.game.modding.events.inventory.ShopContentsEvent;
 import legend.game.modding.events.inventory.TakeGoodsEvent;
+import legend.game.modding.events.scripting.ReadGlobalFlagsEvent;
+import legend.game.modding.events.submap.SubmapWarpEvent;
 import legend.game.saves.ConfigCategory;
+import legend.game.saves.ConfigCollection;
+import legend.game.saves.ConfigDefaultPresetsEvent;
 import legend.game.saves.ConfigEntry;
+import legend.game.saves.ConfigPreset;
+import legend.game.saves.ConfigPresetEntry;
 import legend.game.saves.ConfigRegistryEvent;
 import legend.game.saves.ConfigStorageLocation;
 import legend.game.saves.StringConfigEntry;
@@ -47,20 +71,36 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.legendofdragoon.modloader.Mod;
 import org.legendofdragoon.modloader.events.EventListener;
+import org.legendofdragoon.modloader.events.Priority;
 import org.legendofdragoon.modloader.registries.Registrar;
 import org.legendofdragoon.modloader.registries.RegistryDelegate;
+import org.legendofdragoon.modloader.registries.RegistryId;
 
+import java.lang.reflect.InvocationTargetException;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
+import java.util.concurrent.CompletableFuture;
 
 import static legend.core.GameEngine.EVENTS;
+import static legend.core.GameEngine.MODS;
 import static legend.game.SItem.buildUiRenderable;
 import static legend.game.Scus94491BpeSegment_8005.submapCut_80052c30;
 import static legend.game.Scus94491BpeSegment_8006.battleState_8006e398;
+import static legend.game.modding.coremod.CoreMod.AUTO_TEXT_CONFIG;
+import static legend.game.modding.coremod.CoreMod.AUTO_TEXT_DELAY_CONFIG;
+import static legend.game.modding.coremod.CoreMod.BATTLE_TRANSITION_MODE_CONFIG;
+import static legend.game.modding.coremod.CoreMod.INVENTORY_SIZE_CONFIG;
+import static legend.game.modding.coremod.CoreMod.QUICK_TEXT_CONFIG;
+import static legend.game.modding.coremod.CoreMod.SAVE_ANYWHERE_CONFIG;
+import static legend.game.modding.coremod.CoreMod.SECONDARY_CHARACTER_XP_MULTIPLIER_CONFIG;
+import static legend.game.modding.coremod.CoreMod.TRANSFORMATION_MODE_CONFIG;
+import static legend.game.modding.coremod.CoreMod.UNLOCK_PARTY_CONFIG;
+import static legend.lodmod.LodConfig.EXTENDED_DRAGOON_ACTIONS;
+import static legend.lodmod.LodConfig.ITEM_STACK_SIZE;
 
 @Mod(id = Archipelagoon.MOD_ID, version = "^3.0.0")
 public class Archipelagoon {
@@ -76,9 +116,34 @@ public class Archipelagoon {
   public static final RegistryDelegate<LocationStateRegistry> LOCATION_STATE_REGISTRY = CONFIG_REGISTRAR.register("location_states", LocationStateRegistry::new);
   private static final Registrar<Item, ItemRegistryEvent> ITEM_REGISTRAR = new Registrar<>(GameEngine.REGISTRIES.items, MOD_ID);
   private static final Logger LOGGER = LogManager.getFormatterLogger(Archipelagoon.class);
+  private LloydInterface lloydInterface = new LloydNotLoaded();
 
   public Archipelagoon() {
     EVENTS.register(this);
+  }
+
+  private static ConfigPreset getArchipelagoonDefaultPreset() {
+    final ConfigCollection config = new ConfigCollection();
+    config.setConfig(BATTLE_TRANSITION_MODE_CONFIG.get(), BattleTransitionMode.INSTANT);
+    config.setConfig(TRANSFORMATION_MODE_CONFIG.get(), TransformationMode.SHORT);
+    config.setConfig(AUTO_TEXT_CONFIG.get(), true);
+    config.setConfig(AUTO_TEXT_DELAY_CONFIG.get(), 0.0f);
+    config.setConfig(QUICK_TEXT_CONFIG.get(), QuickTextMode.INSTANT);
+    config.setConfig(UNLOCK_PARTY_CONFIG.get(), true);
+    config.setConfig(SAVE_ANYWHERE_CONFIG.get(), true);
+    config.setConfig(SECONDARY_CHARACTER_XP_MULTIPLIER_CONFIG.get(), 1.0f);
+    config.setConfig(INVENTORY_SIZE_CONFIG.get(), 108);
+    config.setConfig(ITEM_STACK_SIZE.get(), 32);
+    config.setConfig(EXTENDED_DRAGOON_ACTIONS.get(), true);
+
+    return new ConfigPreset(new I18nText(MOD_ID + ".config_presets.default"), config);
+  }
+
+  @EventListener
+  public void presetEvent(final ConfigDefaultPresetsEvent event) {
+    final ConfigPreset defaultPreset = getArchipelagoonDefaultPreset();
+
+    event.presetEntries.add(new ConfigPresetEntry(null, defaultPreset.name, CompletableFuture.completedFuture(defaultPreset), false));
   }
 
   @EventListener
@@ -102,7 +167,15 @@ public class Archipelagoon {
   }
 
   @EventListener
-  public void newGame(final NewGameEvent event) {
+  public void gameStateChangeListener(final EngineStateChangeEvent event) {
+    final APContext ctx = APContext.getContext();
+    if(event.engineState.type.getRegistryId() == CoreEngineStateTypes.TITLE.getId()) {
+      ctx.disconnect();
+    }
+  }
+
+  @EventListener(priority = Priority.LOWEST)
+  public void newGameEventListener(final NewGameEvent event) {
     final APContext ctx = APContext.getContext();
     ctx.initGame(event.gameState);
     // causes error on new game, still works though?
@@ -114,14 +187,13 @@ public class Archipelagoon {
     event.addExtension(new APShopExtension(), 999);
   }
 
-  @EventListener
-  public void gameLoaded(final GameLoadedEvent game) {
+  @EventListener(priority = Priority.LOWEST)
+  public void gameLoaded(final GameLoadedEvent event) {
     final APContext ctx = APContext.getContext();
 
     if(ctx.isConnected()) {
-      ctx.initAdditions(game.gameState);
-      ctx.initMagic(game.gameState);
-      return;
+      ctx.initAdditions(event.gameState);
+      ctx.initMagic(event.gameState);
     }
 
     try {
@@ -136,21 +208,15 @@ public class Archipelagoon {
   @EventListener
   public void additionUnlock(final AdditionUnlockEvent event) {
     final APContext ctx = APContext.getContext();
-    if(AdditionRandomizerType.values()[ctx.getSlotData().additionRandomizer] == AdditionRandomizerType.OFF) {
+
+    if(!Additions.getStaticMap().containsKey(event.addition.getRegistryId())) {
       return;
     }
 
-    if(!Additions.getStaticMap().containsValue(event.addition.getRegistryId().toString())) {
-      return;
-    }
-
-    final long apId = Additions.getAPLocationIdFromRegistryId(event.addition.getRegistryId());
+    final long apId = Additions.getAPLocationId(event.addition.getRegistryId());
 
     final List<LocationState> locationStates = GameEngine.CONFIG.getConfig(LOCATION_STATE_REGISTRY.get());
-    final LocationState locationState = locationStates.stream()
-      .filter(ls -> ls.getLocationID() == apId)
-      .findFirst()
-      .orElse(null);
+    final LocationState locationState = locationStates.stream().filter(ls -> ls.getLocationID() == apId).findFirst().orElse(null);
 
     event.cancel();
 
@@ -191,10 +257,7 @@ public class Archipelagoon {
 
     final APContext ctx = APContext.getContext();
     final List<LocationState> locationStates = GameEngine.CONFIG.getConfig(LOCATION_STATE_REGISTRY.get());
-    final LocationState locationState = locationStates.stream()
-      .filter(ls -> ls.getLocationID() == entry.locationId)
-      .findFirst()
-      .orElse(null);
+    final LocationState locationState = locationStates.stream().filter(ls -> ls.getLocationID() == entry.locationId).findFirst().orElse(null);
     if(locationState == null) {
       return;
     }
@@ -213,17 +276,66 @@ public class Archipelagoon {
     final Set<Long> receivedIds = Set.copyOf(ctx.getReceivedItemIDs());
     final List<Good> allowedGoods = new ArrayList<>();
 
-    for(final Good good : event.givenGoods) {
-      if(Objects.equals(good.getRegistryId(), LodGoods.LAW_MAKER.getId())) {
-        if(receivedIds.contains(Goods.getAPItemIdFromRegistryId(APGoods.LAW_MAKING_LICENSE.getId()))) {
-          allowedGoods.add(good);
-        }
-      } else if(Objects.equals(good.getRegistryId(), LodGoods.LAW_OUTPUT.getId())) {
-        if(receivedIds.contains(Goods.getAPItemIdFromRegistryId(APGoods.LAW_LAUNCHING_LICENSE.getId()))) {
-          allowedGoods.add(good);
-        }
+    switch(event.source) {
+      case GoodsSource.INITIALIZATION:
+        allowedGoods.addAll(this.handleExternalGoods(event.givenGoods, receivedIds));
+        break;
+      case GoodsSource.DEBUGGER:
+      case GoodsSource.EXTERNAL:
+        allowedGoods.addAll(this.handleExternalGoods(event.givenGoods, receivedIds));
+        // handle AP? good
+        break;
+      case GoodsSource.GAMEPLAY:
+        // given from story
+        allowedGoods.addAll(this.handleGameplayGoods(event.givenGoods, receivedIds));
+        break;
+      default:
+        break;
+    }
+
+    if(allowedGoods.isEmpty()) {
+      event.cancel();
+    } else {
+      event.givenGoods.clear();
+      event.givenGoods.addAll(allowedGoods);
+    }
+  }
+
+  private Collection<? extends Good> handleGameplayGoods(final List<Good> givenGoods, final Set<Long> receivedIds) {
+    final List<Good> allowedGoods = new ArrayList<>();
+
+    for(final Good good : givenGoods) {
+      final RegistryId id = good.getRegistryId();
+      final Long apId;
+      if(Objects.equals(id, LodGoods.LAW_MAKER.getId())) {
+        apId = Goods.getAPItemIdFromRegistryId(APGoods.LAW_MAKING_LICENSE.getId());
+      } else if(Objects.equals(id, LodGoods.LAW_OUTPUT.getId())) {
+        apId = Goods.getAPItemIdFromRegistryId(APGoods.LAW_LAUNCHING_LICENSE.getId());
+      } else {
+        // if not law maker or law output, we check a location
+        //        apId = Goods.getAPItemIdFromRegistryId(id);
+        final APContext ctx = APContext.getContext();
+        ctx.checkLocation(GoodsLocations.getAPLocationId(id));
+        // no good to add here
+        apId = null;
       }
 
+      if(apId == null) {
+        continue;
+      }
+
+      if(receivedIds.contains(apId)) {
+        allowedGoods.add(good);
+      }
+    }
+
+    return allowedGoods;
+  }
+
+  private Collection<? extends Good> handleExternalGoods(final List<Good> givenGoods, final Set<Long> receivedIds) {
+    final List<Good> allowedGoods = new ArrayList<>();
+
+    for(final Good good : givenGoods) {
       final Long apId = Goods.getAPItemIdFromRegistryId(good.getRegistryId());
       if(apId == null) {
         continue;
@@ -234,12 +346,7 @@ public class Archipelagoon {
       }
     }
 
-    if(allowedGoods.isEmpty()) {
-      event.cancel();
-    } else {
-      event.givenGoods.clear();
-      event.givenGoods.addAll(allowedGoods);
-    }
+    return allowedGoods;
   }
 
   @EventListener
@@ -265,7 +372,16 @@ public class Archipelagoon {
   }
 
   @EventListener
+  public void additionLevelUpListener(final PostAdditionLevelUpEvent event) {
+    AdditionManager.getInstance().checkAdditionLevelLocation(event.additionId, event.additionInfo.level);
+  }
+
+  @EventListener
   public void characterLevelUp(final PostCharacterLevelUpEvent event) {
+    if(event.source != LevelUpSource.GAMEPLAY) {
+      return;
+    }
+
     AdditionManager.getInstance().checkUnlock(event.character);
   }
 
@@ -305,10 +421,72 @@ public class Archipelagoon {
     ctx.renderMessage();
   }
 
+  @EventListener
+  public void submapWarpListener(final SubmapWarpEvent event) {
+    StoryFlagManager.submapWarpListener(event);
+  }
+
+  @EventListener
+  public void readScriptFlags(final ReadGlobalFlagsEvent event) {
+    StoryFlagManager.readScriptFlags(event);
+  }
+
+  @EventListener
+  public void cloneCharacterListener(final CloneCharacterEvent event) {
+    event.cancel();
+  }
+
 /* Example of giving the player an ice trap item impersonating healing breeze
   @EventListener
   public void onLoad(final GameLoadedEvent event) {
     event.gameState.items_2e9.give(APItems.ICE_TRAP.get().impersonate(LodItems.HEALING_BREEZE.get()));
   }
 */
+
+  @EventListener
+  public void partyFlagChangedListener(final PartyFlagsChangeEvent event) {
+    event.partyFlags = event.gameState.charData_32c.get(event.characterIndex).partyFlags_04;
+  }
+
+  @EventListener
+  public void primaryPartyChangeListener(final PrimaryPartyChangeEvent event) {
+    try {
+      event.characterIndex = event.gameState.charIds_88.getInt(event.activePartySlot);
+    } catch(final Exception e) {
+      event.characterIndex = -1;
+    }
+  }
+
+  @EventListener
+  public void addRegistry(final AddRegistryEvent event) {
+    if(MODS.isLoaded("lloyd_mod")) {
+      try {
+        final Class<?> cls = Class.forName("archipelagoon.interfaces.LloydLoaded");
+        this.lloydInterface = (LloydInterface)cls.getConstructor().newInstance();
+      } catch(final ClassNotFoundException | InvocationTargetException | InstantiationException | IllegalAccessException | NoSuchMethodException e) {
+        throw new RuntimeException(e);
+      }
+    }
+    this.lloydInterface.registerEvents();
+  }
+
+  /**
+   * this listener handles locations that can't be hit b/c of already owning the good.
+   *
+   * @param event
+   */
+  @EventListener
+  public void scriptFlags1ChangedListener(final ScriptFlags1ChangedEvent event) {
+    StoryFlagManager.handleScriptFlagsChanged(event);
+  }
+
+  /**
+   * this listener handles locations that can't be hit b/c of already owning the good.
+   *
+   * @param event
+   */
+  @EventListener
+  public void scriptFlags2ChangedListener(final ScriptFlags2ChangedEvent event) {
+    StoryFlagManager.handleScriptFlagsChanged(event);
+  }
 }

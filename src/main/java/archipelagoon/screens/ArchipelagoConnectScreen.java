@@ -90,7 +90,7 @@ public class ArchipelagoConnectScreen extends VerticalLayoutScreen {
     this.statusLabel = new Label(new I18nText(Archipelagoon.MOD_ID + ".config." + (ctx.isConnected() ? "connected" : "not_connected")));
     this.addRow(new RawText(""), this.statusLabel);
 
-    if(currentEngineState_8004dd04.is(CoreEngineStateTypes.TITLE.get())) {
+    if(currentEngineState_8004dd04.is(CoreEngineStateTypes.TITLE.getId())) {
       return;
     }
 
