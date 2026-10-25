@@ -278,12 +278,12 @@ public class Archipelagoon {
 
     switch(event.source) {
       case GoodsSource.INITIALIZATION:
-        allowedGoods.addAll(this.handleExternalGoods(event.givenGoods, receivedIds));
+        // unsure if needed
+        // allowedGoods.addAll(this.handleExternalGoods(event.givenGoods, receivedIds));
         break;
       case GoodsSource.DEBUGGER:
       case GoodsSource.EXTERNAL:
-        allowedGoods.addAll(this.handleExternalGoods(event.givenGoods, receivedIds));
-        // handle AP? good
+        allowedGoods.addAll(event.givenGoods);
         break;
       case GoodsSource.GAMEPLAY:
         // given from story
@@ -320,23 +320,6 @@ public class Archipelagoon {
         apId = null;
       }
 
-      if(apId == null) {
-        continue;
-      }
-
-      if(receivedIds.contains(apId)) {
-        allowedGoods.add(good);
-      }
-    }
-
-    return allowedGoods;
-  }
-
-  private Collection<? extends Good> handleExternalGoods(final List<Good> givenGoods, final Set<Long> receivedIds) {
-    final List<Good> allowedGoods = new ArrayList<>();
-
-    for(final Good good : givenGoods) {
-      final Long apId = Goods.getAPItemIdFromRegistryId(good.getRegistryId());
       if(apId == null) {
         continue;
       }
@@ -473,7 +456,6 @@ public class Archipelagoon {
   /**
    * this listener handles locations that can't be hit b/c of already owning the good.
    *
-   * @param event
    */
   @EventListener
   public void scriptFlags1ChangedListener(final ScriptFlags1ChangedEvent event) {
@@ -483,7 +465,6 @@ public class Archipelagoon {
   /**
    * this listener handles locations that can't be hit b/c of already owning the good.
    *
-   * @param event
    */
   @EventListener
   public void scriptFlags2ChangedListener(final ScriptFlags2ChangedEvent event) {
