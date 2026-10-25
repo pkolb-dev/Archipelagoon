@@ -66,6 +66,7 @@ import legend.game.saves.ConfigPresetEntry;
 import legend.game.saves.ConfigRegistryEvent;
 import legend.game.saves.ConfigStorageLocation;
 import legend.game.saves.StringConfigEntry;
+import legend.lodmod.LodEncounters;
 import legend.lodmod.LodGoods;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -376,8 +377,17 @@ public class Archipelagoon {
   @EventListener
   public void battleEnded(final BattleEndedEvent event) {
     final APContext ctx = APContext.getContext();
-    if(battleState_8006e398.hasAlivePlayers()) {
-      ctx.handleEncounter(event.encounter.getRegistryId());
+    final ArrayList<RegistryId> heroCompEncounters = new ArrayList<>(List.of(
+      LodEncounters.ENCOUNTER_GORGAGA.getId(),
+      LodEncounters.ENCOUNTER_SERFIUS.getId(),
+      LodEncounters.ENCOUNTER_DANTON.getId(),
+      LodEncounters.ENCOUNTER_ATLOW.getId(),
+      LodEncounters.ENCOUNTER_LLOYD.getId()
+    ));
+
+    final RegistryId encounterId = event.encounter.getRegistryId();
+    if(battleState_8006e398.hasAlivePlayers() || heroCompEncounters.contains(encounterId)) {
+      ctx.handleEncounter(encounterId);
       return;
     }
 
