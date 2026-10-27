@@ -357,7 +357,7 @@ public class Archipelagoon {
 
   @EventListener
   public void additionLevelUpListener(final PostAdditionLevelUpEvent event) {
-    AdditionManager.getInstance().checkAdditionLevelLocation(event.additionId, event.additionInfo.level);
+    AdditionManager.getInstance().checkAdditionLevelLocation(event.additionId, event.additionInfo.level, event.charData);
   }
 
   @EventListener
