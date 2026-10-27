@@ -15,7 +15,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.legendofdragoon.modloader.registries.RegistryId;
 
-import java.util.List;
+import java.util.ArrayList;
 
 import static legend.game.Scus94491BpeSegment_800b.gameState_800babc8;
 
@@ -96,7 +96,7 @@ public final class StoryFlagManager {
     final APContext ctx = APContext.getContext();
     switch(event.index) {
       case StoryFlags.HELLENA_SHANA_DOOR:
-        if(current_submap == Submaps.HELLENA_ELEVATOR) {
+        if(current_submap == Submaps.HELLENA_PRISON_KEY_ROOM) {
           ctx.checkLocation(GoodsLocations.getAPLocationId(LodGoods.PRISON_KEY.getId()));
         }
         break;
@@ -106,10 +106,9 @@ public final class StoryFlagManager {
         }
       case StoryFlags.HOAX_POST_INVASION:
         if(current_submap == Submaps.HOAX_INVASION) {
-          final List<Long> goodsList = List.of(
-            GoodsLocations.getAPLocationId(LodGoods.RED_DRAGOON_SPIRIT.getId()),
-            GoodsLocations.getAPLocationId(LodGoods.DARK_DRAGOON_SPIRIT.getId())
-          );
+          final ArrayList<Long> goodsList = new ArrayList<>();
+          goodsList.add(GoodsLocations.getAPLocationId(LodGoods.RED_DRAGOON_SPIRIT.getId()));
+          goodsList.add(GoodsLocations.getAPLocationId(LodGoods.DARK_DRAGOON_SPIRIT.getId()));
           ctx.checkLocations(goodsList);
         }
         break;

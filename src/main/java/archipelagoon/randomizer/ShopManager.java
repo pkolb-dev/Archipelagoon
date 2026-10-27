@@ -11,7 +11,6 @@ import legend.game.inventory.InventoryEntry;
 import legend.game.inventory.ItemStack;
 import legend.game.inventory.screens.ShopScreen;
 import legend.game.types.Shop;
-import legend.lodmod.LodShops;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,12 +37,11 @@ public final class ShopManager {
     final SlotData slotData = ctx.getSlotData();
 
     final int min = slotData.minimumShopPrice;
-    final int max = slotData.maximumShopPrice + 1;
+    final int max = slotData.maximumShopPrice;
 
-    int price = max;
-    for(int i = 0; i < weight; i++) {
-      price = Math.min(price, rand.nextInt(min, max));
-    }
+    final int range = max - min;
+    final double offset = rand.nextDouble() * range;
+    final int price = min + (int)Math.round(weight * offset);
     return Math.clamp(price, min, max);
   }
 
@@ -85,19 +83,15 @@ public final class ShopManager {
 
     final int shopSeed = Shops.getShopIndex(shop.getRegistryId());
     final Random rand = new Random(slotData.slotSeed + shopSeed);
-    final double weight = Math.pow(rand.nextDouble(), 10);
+    final double weight = Math.pow(rand.nextDouble(), 50);
 
     for(final LocationState locationState : slots) {
       final int price;
 
-      if(shop.getRegistryId() == LodShops.FOREST_ITEM_SHOP.getId()) {
-        price = getItemPrice(rand, weight);
-      } else if(shop.getRegistryId() == LodShops.HELLENA_01_ITEM_SHOP.getId()) {
-        price = getItemPrice(rand, weight);
-      } else if(shop.getRegistryId() == LodShops.HELLENA_02_ITEM_SHOP.getId()) {
-        price = getItemPrice(rand, weight);
-      } else {
+      if(Shops.isPermanentShop(shop.getRegistryId())) {
         price = getItemPrice(rand);
+      } else {
+        price = getItemPrice(rand, weight);
       }
 
       // moved down here to keep costs matched with the appropriate item

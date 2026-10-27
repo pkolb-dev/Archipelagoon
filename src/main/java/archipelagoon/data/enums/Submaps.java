@@ -1,6 +1,7 @@
 package archipelagoon.data.enums;
 
 public final class Submaps {
+  public static final int HELLENA_PRISON_KEY_ROOM = 31;
   public static final int HELLENA_ELEVATOR = 20;
   public static final int PRAIRIE_SHACK_INSIDE = 41;
   public static final int PRAIRIE_CLIFF_TREE = 42;

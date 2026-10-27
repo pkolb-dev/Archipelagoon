@@ -142,7 +142,6 @@ public final class AdditionManager {
     final APContext apContext = APContext.getContext();
 
     for(final RegistryId id : charData.getAllAdditions()) {
-
       final CharacterAdditionInfo info = charData.getAdditionInfo(id);
 
       final var addition = GameEngine.REGISTRIES.additions.getEntry(id).get();
@@ -182,7 +181,7 @@ public final class AdditionManager {
     return additions.get(totalReceived);
   }
 
-  public void checkAdditionLevelLocation(final RegistryId additionId, final int level) {
+  public void checkAdditionLevelLocation(final RegistryId additionId, final int level, final CharacterData2c charData) {
     final APContext apContext = APContext.getContext();
 
     final var addition = GameEngine.REGISTRIES.additions.getEntry(additionId).get();
@@ -193,6 +192,10 @@ public final class AdditionManager {
     final Long apId = archipelagoon.ap.mapping.locations.Additions.getAPLocationId(additionId, level);
     if(apId != null) {
       apContext.checkLocation(apId);
+    }
+
+    if(level == 5) {
+      this.checkUnlock(charData);
     }
   }
 }
