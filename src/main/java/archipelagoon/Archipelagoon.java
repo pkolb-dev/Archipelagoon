@@ -13,6 +13,7 @@ import archipelagoon.config.XpMultiplierConfigEntry;
 import archipelagoon.data.APInventoryEntry;
 import archipelagoon.data.APShopExtension;
 import archipelagoon.data.SlotData;
+import archipelagoon.data.enums.Submaps;
 import archipelagoon.icons.APIconUiType;
 import archipelagoon.interfaces.LloydInterface;
 import archipelagoon.interfaces.LloydNotLoaded;
@@ -444,7 +445,14 @@ public class Archipelagoon {
   @EventListener
   public void primaryPartyChangeListener(final PrimaryPartyChangeEvent event) {
     try {
-      event.characterIndex = event.gameState.charIds_88.getInt(event.activePartySlot);
+      switch(StoryFlagManager.getCurrentSubmap()) {
+        case Submaps.VALLEY_OF_CORRUPTED_GRAVITY_POST_VIRAGE:
+        case Submaps.HOME_OF_GIGANTO_GEHRICH_ROOM:
+          break;
+        default:
+          event.characterIndex = event.gameState.charIds_88.getInt(event.activePartySlot);
+          break;
+      }
     } catch(final Exception e) {
       event.characterIndex = -1;
     }

@@ -17,6 +17,7 @@ import org.legendofdragoon.modloader.registries.RegistryId;
 
 import java.util.ArrayList;
 
+import static legend.game.Scus94491BpeSegment_8005.submapCut_80052c30;
 import static legend.game.Scus94491BpeSegment_800b.gameState_800babc8;
 
 public final class StoryFlagManager {
@@ -29,6 +30,7 @@ public final class StoryFlagManager {
   public static int getCurrentSubmap() {
     if(current_submap == -1) {
       LOGGER.warn("StoryFlagManager.getCurrentSubmap() returned a -1. Submap variable may not have been initialized yet.");
+      return submapCut_80052c30;
     }
     return current_submap;
   }
