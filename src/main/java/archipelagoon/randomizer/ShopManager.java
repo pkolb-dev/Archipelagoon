@@ -83,7 +83,7 @@ public final class ShopManager {
 
     final int shopSeed = Shops.getShopIndex(shop.getRegistryId());
     final Random rand = new Random(slotData.slotSeed + shopSeed);
-    final double weight = Math.pow(rand.nextDouble(), 50);
+    final double weight = Math.pow(rand.nextDouble(), 6);
 
     for(final LocationState locationState : slots) {
       final int price;
@@ -92,11 +92,6 @@ public final class ShopManager {
         price = getItemPrice(rand);
       } else {
         price = getItemPrice(rand, weight);
-      }
-
-      // moved down here to keep costs matched with the appropriate item
-      if(locationState.isApplied()) {
-        continue;
       }
 
       final APInventoryEntry entry = new APInventoryEntry(locationState);
