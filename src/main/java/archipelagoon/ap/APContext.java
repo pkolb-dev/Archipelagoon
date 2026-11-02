@@ -113,7 +113,7 @@ public class APContext {
     }
   }
 
-  public void checkLocations(final List<Long> ids) {
+  public void checkLocations(final ArrayList<Long> ids) {
     if(this.client.checkLocations(ids).getCode() != APResult.ResultCode.SUCCESS) {
       return;
     }

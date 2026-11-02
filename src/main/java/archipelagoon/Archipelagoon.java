@@ -13,6 +13,7 @@ import archipelagoon.config.XpMultiplierConfigEntry;
 import archipelagoon.data.APInventoryEntry;
 import archipelagoon.data.APShopExtension;
 import archipelagoon.data.SlotData;
+import archipelagoon.data.enums.Submaps;
 import archipelagoon.icons.APIconUiType;
 import archipelagoon.interfaces.LloydInterface;
 import archipelagoon.interfaces.LloydNotLoaded;
@@ -66,6 +67,7 @@ import legend.game.saves.ConfigPresetEntry;
 import legend.game.saves.ConfigRegistryEvent;
 import legend.game.saves.ConfigStorageLocation;
 import legend.game.saves.StringConfigEntry;
+import legend.lodmod.LodEncounters;
 import legend.lodmod.LodGoods;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -278,12 +280,12 @@ public class Archipelagoon {
 
     switch(event.source) {
       case GoodsSource.INITIALIZATION:
-        allowedGoods.addAll(this.handleExternalGoods(event.givenGoods, receivedIds));
+        // unsure if needed
+        // allowedGoods.addAll(this.handleExternalGoods(event.givenGoods, receivedIds));
         break;
       case GoodsSource.DEBUGGER:
       case GoodsSource.EXTERNAL:
-        allowedGoods.addAll(this.handleExternalGoods(event.givenGoods, receivedIds));
-        // handle AP? good
+        allowedGoods.addAll(event.givenGoods);
         break;
       case GoodsSource.GAMEPLAY:
         // given from story
@@ -332,23 +334,6 @@ public class Archipelagoon {
     return allowedGoods;
   }
 
-  private Collection<? extends Good> handleExternalGoods(final List<Good> givenGoods, final Set<Long> receivedIds) {
-    final List<Good> allowedGoods = new ArrayList<>();
-
-    for(final Good good : givenGoods) {
-      final Long apId = Goods.getAPItemIdFromRegistryId(good.getRegistryId());
-      if(apId == null) {
-        continue;
-      }
-
-      if(receivedIds.contains(apId)) {
-        allowedGoods.add(good);
-      }
-    }
-
-    return allowedGoods;
-  }
-
   @EventListener
   public void takeGood(final TakeGoodsEvent event) {
     final List<Good> allowedGoods = new ArrayList<>();
@@ -373,7 +358,7 @@ public class Archipelagoon {
 
   @EventListener
   public void additionLevelUpListener(final PostAdditionLevelUpEvent event) {
-    AdditionManager.getInstance().checkAdditionLevelLocation(event.additionId, event.additionInfo.level);
+    AdditionManager.getInstance().checkAdditionLevelLocation(event.additionId, event.additionInfo.level, event.charData);
   }
 
   @EventListener
@@ -393,8 +378,17 @@ public class Archipelagoon {
   @EventListener
   public void battleEnded(final BattleEndedEvent event) {
     final APContext ctx = APContext.getContext();
-    if(battleState_8006e398.hasAlivePlayers()) {
-      ctx.handleEncounter(event.encounter.getRegistryId());
+    final ArrayList<RegistryId> heroCompEncounters = new ArrayList<>(List.of(
+      LodEncounters.ENCOUNTER_GORGAGA.getId(),
+      LodEncounters.ENCOUNTER_SERFIUS.getId(),
+      LodEncounters.ENCOUNTER_DANTON.getId(),
+      LodEncounters.ENCOUNTER_ATLOW.getId(),
+      LodEncounters.ENCOUNTER_LLOYD.getId()
+    ));
+
+    final RegistryId encounterId = event.encounter.getRegistryId();
+    if(battleState_8006e398.hasAlivePlayers() || heroCompEncounters.contains(encounterId)) {
+      ctx.handleEncounter(encounterId);
       return;
     }
 
@@ -451,7 +445,14 @@ public class Archipelagoon {
   @EventListener
   public void primaryPartyChangeListener(final PrimaryPartyChangeEvent event) {
     try {
-      event.characterIndex = event.gameState.charIds_88.getInt(event.activePartySlot);
+      switch(StoryFlagManager.getCurrentSubmap()) {
+        case Submaps.VALLEY_OF_CORRUPTED_GRAVITY_POST_VIRAGE:
+        case Submaps.HOME_OF_GIGANTO_GEHRICH_ROOM:
+          break;
+        default:
+          event.characterIndex = event.gameState.charIds_88.getInt(event.activePartySlot);
+          break;
+      }
     } catch(final Exception e) {
       event.characterIndex = -1;
     }
@@ -473,7 +474,6 @@ public class Archipelagoon {
   /**
    * this listener handles locations that can't be hit b/c of already owning the good.
    *
-   * @param event
    */
   @EventListener
   public void scriptFlags1ChangedListener(final ScriptFlags1ChangedEvent event) {
@@ -483,7 +483,6 @@ public class Archipelagoon {
   /**
    * this listener handles locations that can't be hit b/c of already owning the good.
    *
-   * @param event
    */
   @EventListener
   public void scriptFlags2ChangedListener(final ScriptFlags2ChangedEvent event) {
