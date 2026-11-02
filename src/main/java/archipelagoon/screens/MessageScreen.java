@@ -23,7 +23,7 @@ public class MessageScreen extends MenuScreen {
   private int framesRemaining;
 
   public MessageScreen(final String messageKey, final Consumer<MessageBoxResult> onResult) {
-    this.framesRemaining = 180;
+    this.framesRemaining = 120;
     setMessageBoxText(this.messageBox, I18n.translate(messageKey), MessageBoxType.ALERT);
     final RawText yes = new RawText("");
     final RawText no = new RawText("null");

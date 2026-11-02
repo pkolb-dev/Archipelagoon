@@ -1,5 +1,6 @@
 package archipelagoon.ap.mapping.items;
 
+import legend.lodmod.LodCharacterTemplates;
 import legend.lodmod.LodSpells;
 import org.legendofdragoon.modloader.registries.RegistryId;
 
@@ -11,7 +12,7 @@ import java.util.Objects;
 
 public final class Magic {
   private static final Map<Long, RegistryId> MAGIC_MAP = new HashMap<>();
-  private static final Map<Integer, Long> PROGRESSIVE_MAGIC_MAP = new LinkedHashMap<>();
+  private static final Map<RegistryId, Long> PROGRESSIVE_MAGIC_MAP = new LinkedHashMap<>();
 
   static {
     MAGIC_MAP.put(108_31001L, LodSpells.FLAMESHOT.getId());
@@ -60,15 +61,24 @@ public final class Magic {
     MAGIC_MAP.put(108_31083L, LodSpells.MIRANDA_GATES_OF_HEAVEN.getId());
     MAGIC_MAP.put(108_31084L, LodSpells.WHITE_SILVER_DRAGON.getId());
 
-    PROGRESSIVE_MAGIC_MAP.put(0, 108_31000L);
-    PROGRESSIVE_MAGIC_MAP.put(1, 108_31010L);
-    PROGRESSIVE_MAGIC_MAP.put(2, 108_31020L);
-    PROGRESSIVE_MAGIC_MAP.put(3, 108_31030L);
-    PROGRESSIVE_MAGIC_MAP.put(4, 108_31040L);
-    PROGRESSIVE_MAGIC_MAP.put(5, 108_31050L);
-    PROGRESSIVE_MAGIC_MAP.put(6, 108_31060L);
-    PROGRESSIVE_MAGIC_MAP.put(7, 108_31070L);
-    PROGRESSIVE_MAGIC_MAP.put(8, 108_31080L);
+    MAGIC_MAP.put(108_31091L, new RegistryId("lloyd_mod", "running_slash"));
+    MAGIC_MAP.put(108_31092L, new RegistryId("lloyd_mod", "spectral_sword"));
+    MAGIC_MAP.put(108_31093L, new RegistryId("lloyd_mod", "sword_rush"));
+    MAGIC_MAP.put(108_31094L, new RegistryId("lloyd_mod", "aerial_crash"));
+    MAGIC_MAP.put(108_31095L, new RegistryId("lloyd_mod", "ball_barrage"));
+    MAGIC_MAP.put(108_31096L, new RegistryId("lloyd_mod", "sigil_of_explosion"));
+    MAGIC_MAP.put(108_31097L, new RegistryId("lloyd_mod", "draconic_impale"));
+
+    PROGRESSIVE_MAGIC_MAP.put(LodCharacterTemplates.DART.getId(), 108_31000L);
+    PROGRESSIVE_MAGIC_MAP.put(LodCharacterTemplates.LAVITZ.getId(), 108_31010L);
+    PROGRESSIVE_MAGIC_MAP.put(LodCharacterTemplates.SHANA.getId(), 108_31020L);
+    PROGRESSIVE_MAGIC_MAP.put(LodCharacterTemplates.ROSE.getId(), 108_31030L);
+    PROGRESSIVE_MAGIC_MAP.put(LodCharacterTemplates.HASCHEL.getId(), 108_31040L);
+    PROGRESSIVE_MAGIC_MAP.put(LodCharacterTemplates.ALBERT.getId(), 108_31050L);
+    PROGRESSIVE_MAGIC_MAP.put(LodCharacterTemplates.MERU.getId(), 108_31060L);
+    PROGRESSIVE_MAGIC_MAP.put(LodCharacterTemplates.KONGOL.getId(), 108_31070L);
+    PROGRESSIVE_MAGIC_MAP.put(LodCharacterTemplates.MIRANDA.getId(), 108_31080L);
+    PROGRESSIVE_MAGIC_MAP.put(new RegistryId("lloyd_mod", "lloyd"), 108_31090L);
   }
 
   private Magic() {
@@ -78,37 +88,26 @@ public final class Magic {
     return Collections.unmodifiableMap(MAGIC_MAP);
   }
 
-  public static Map<Long, String> getIdStrings() {
-    final Map<Long, String> map = new HashMap<>();
-    MAGIC_MAP.forEach((id, name) -> {
-      map.put(id, name.toString());
-    });
-    return map;
-  }
-
-  private static Map<Integer, Long> getProgressiveStaticMap() {
+  private static Map<RegistryId, Long> getProgressiveStaticMap() {
     return Collections.unmodifiableMap(PROGRESSIVE_MAGIC_MAP);
   }
 
-  public static Long getAPItemIdFromCharacterIndex(final int characterIndex) {
-    if(PROGRESSIVE_MAGIC_MAP.containsKey(characterIndex)) {
-      return PROGRESSIVE_MAGIC_MAP.get(characterIndex);
-    }
-    return null;
+  public static Long getAPItemIdFromCharacterIndex(final RegistryId charId) {
+    return PROGRESSIVE_MAGIC_MAP.getOrDefault(charId, null);
   }
 
-  public static Integer getCharacterIndexFromAPItemId(final Long apItemId) {
+  public static RegistryId getCharacterIndexFromAPItemId(final Long apItemId) {
     if(!PROGRESSIVE_MAGIC_MAP.containsValue(apItemId)) {
-      return -1;
+      return null;
     }
 
-    for(final Map.Entry<Integer, Long> entry : PROGRESSIVE_MAGIC_MAP.entrySet()) {
+    for(final Map.Entry<RegistryId, Long> entry : PROGRESSIVE_MAGIC_MAP.entrySet()) {
       if(Objects.equals(entry.getValue(), apItemId)) {
         return entry.getKey();
       }
     }
 
-    return -1;
+    return null;
   }
 
   public static RegistryId getRegistryIdFromAPItemId(final Long itemId) {

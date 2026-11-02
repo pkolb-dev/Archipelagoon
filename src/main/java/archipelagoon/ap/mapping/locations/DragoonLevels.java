@@ -40,7 +40,6 @@ public final class DragoonLevels {
     rose_spells.put(5, 108_90034L);
     CHARACTER_MAGIC_LOCATIONS.put(LodCharacterTemplates.ROSE.getId(), rose_spells);
 
-    // Haschel
     final Map<Integer, Long> haschel_spells = new LinkedHashMap<>();
     haschel_spells.put(2, 108_90041L);
     haschel_spells.put(3, 108_90042L);
@@ -102,5 +101,16 @@ public final class DragoonLevels {
     } catch(final Exception e) {
       return -1L;
     }
+  }
+
+  public static Map<Long, String> getStaticFlatMap() {
+    final Map<Long, String> locationMap = new LinkedHashMap<>();
+    for(final Map.Entry<RegistryId, Map<Integer, Long>> magicInfo : CHARACTER_MAGIC_LOCATIONS.entrySet()) {
+      for(final Map.Entry<Integer, Long> slotInfo : magicInfo.getValue().entrySet()) {
+        locationMap.put(slotInfo.getValue(), String.valueOf(magicInfo.getKey()));
+      }
+    }
+
+    return Collections.unmodifiableMap(locationMap);
   }
 }

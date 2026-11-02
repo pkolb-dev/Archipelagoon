@@ -2,7 +2,6 @@ package archipelagoon.randomizer;
 
 import archipelagoon.ap.APClient;
 import legend.game.Scus94491BpeSegment_8006;
-import legend.game.characters.CharacterData2c;
 import legend.game.characters.StatCollection;
 import legend.game.characters.VitalsStat;
 import legend.game.combat.bent.BattleEntity27c;
@@ -36,13 +35,12 @@ public class DeathlinkManager {
   }
 
   private void handleOverworldDeathlink() {
-    for(int charIndex = 0; charIndex < 9; charIndex++) {
-      final CharacterData2c character = gameState_800babc8.charData_32c.get(charIndex);
-      final StatCollection stats = character.stats;
+    gameState_800babc8.charData_32c.forEach(cd -> {
+      final StatCollection stats = cd.stats;
       final VitalsStat stat = stats.getStat(HP_STAT.get());
 
       stat.setCurrent(0);
-    }
+    });
   }
 
   private void handleCombatDeathlink() {

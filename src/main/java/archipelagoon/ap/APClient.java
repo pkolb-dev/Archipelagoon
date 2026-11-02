@@ -34,6 +34,10 @@ public class APClient extends Client {
     this.connect(host);
   }
 
+  public boolean isAlreadyChecked(final Long location) {
+    return this.getLocationManager().getCheckedLocations().contains(location);
+  }
+
   private void registerDefaultListeners() {
     this.getEventManager().registerListener(new ConnectionResultListener());
     this.getEventManager().registerListener(new DeathLinkListener());

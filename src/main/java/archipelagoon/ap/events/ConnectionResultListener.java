@@ -10,11 +10,20 @@ import legend.core.GameEngine;
 import legend.game.SItem;
 import legend.game.i18n.I18n;
 
-import java.math.BigInteger;
-
 import static legend.game.FullScreenEffects.startFadeEffect;
 
 public class ConnectionResultListener {
+
+  private static long stringToSeed(final String s) {
+    if(s == null) {
+      return 0;
+    }
+    long hash = 0;
+    for(final char c : s.toCharArray()) {
+      hash = 31L * hash + c;
+    }
+    return hash;
+  }
 
   @ArchipelagoEventListener
   public void onConnectionResult(final ConnectionResultEvent event) {
@@ -24,7 +33,6 @@ public class ConnectionResultListener {
 
     final String msg = switch(event.getResult()) {
       case SlotAlreadyTaken -> "archipelagoon.connection.slot_already_taken";
-      case Success -> "archipelagoon.connection.success"; // unused
       case InvalidSlot -> "archipelagoon.connection.invalid_slot";
       case InvalidPassword -> "archipelagoon.connection.invalid_password";
       case IncompatibleVersion -> "archipelagoon.connection.incompatible_version";
@@ -53,7 +61,7 @@ public class ConnectionResultListener {
       return;
     }
 
-    long seedName = new BigInteger(event.getSeedName()).longValue();
+    long seedName = stringToSeed(event.getSeedName());
     seedName += event.getSlot();
 
     slotData.slotSeed = seedName;
@@ -64,5 +72,9 @@ public class ConnectionResultListener {
     }
 
     ctx.retrieveLocations();
+    ctx.initAdditions(null);
+    ctx.initMagic(null);
+
+    ctx.displayMessage(I18n.translate("archipelagoon.connection.success"));
   }
 }

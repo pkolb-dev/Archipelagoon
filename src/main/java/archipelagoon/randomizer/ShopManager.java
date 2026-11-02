@@ -11,7 +11,6 @@ import legend.game.inventory.InventoryEntry;
 import legend.game.inventory.ItemStack;
 import legend.game.inventory.screens.ShopScreen;
 import legend.game.types.Shop;
-import legend.lodmod.LodShops;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,13 +37,15 @@ public final class ShopManager {
     final SlotData slotData = ctx.getSlotData();
 
     final int min = slotData.minimumShopPrice;
-    final int max = slotData.maximumShopPrice + 1;
+    final int max = slotData.maximumShopPrice;
 
-    return (int)(rand.nextInt(min, max) * weight);
+    final int range = max - min;
+    final double offset = rand.nextDouble() * range;
+    final int price = min + (int)Math.round(weight * offset);
+    return Math.clamp(price, min, max);
   }
 
   public static int getItemPrice(final Random rand) {
-
     return getItemPrice(rand, 1);
   }
 
@@ -74,31 +75,23 @@ public final class ShopManager {
     final SlotData slotData = ctx.getSlotData();
 
     final int numberOfSlots = slotData.getShopSlots(shop.getRegistryId());
-    final List<Long> shopSlots = Shops.getShopLocationIds(shop.getRegistryId().toString()).stream().limit(numberOfSlots).toList();
+    final List<Long> shopSlots = Shops.getShopLocationIds(shop.getRegistryId()).stream().limit(numberOfSlots).toList();
     final List<LocationState> slots = GameEngine.CONFIG.getConfig(LOCATION_STATE_REGISTRY.get()).stream()
       .filter(ls -> shopSlots.contains(ls.getLocationID())).toList();
 
     final List<ShopScreen.ShopEntry<?>> entries = new ArrayList<>();
 
-    final int shopSeed = Shops.getShopIndex(shop.getRegistryId().toString());
+    final int shopSeed = Shops.getShopIndex(shop.getRegistryId());
     final Random rand = new Random(slotData.slotSeed + shopSeed);
-    final double weight = Math.pow(rand.nextDouble(), 3);
+    final double weight = Math.pow(rand.nextDouble(), 6);
 
     for(final LocationState locationState : slots) {
-      if(locationState.isApplied()) {
-        continue;
-      }
-
       final int price;
 
-      if(shop.getRegistryId() == LodShops.FOREST_ITEM_SHOP.getId()) {
-        price = getItemPrice(rand, weight);
-      } else if(shop.getRegistryId() == LodShops.HELLENA_01_ITEM_SHOP.getId()) {
-        price = getItemPrice(rand, weight);
-      } else if(shop.getRegistryId() == LodShops.HELLENA_02_ITEM_SHOP.getId()) {
-        price = getItemPrice(rand, weight);
-      } else {
+      if(Shops.isPermanentShop(shop.getRegistryId())) {
         price = getItemPrice(rand);
+      } else {
+        price = getItemPrice(rand, weight);
       }
 
       final APInventoryEntry entry = new APInventoryEntry(locationState);
