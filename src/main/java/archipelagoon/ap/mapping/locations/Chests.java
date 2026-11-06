@@ -24,7 +24,16 @@ public final class Chests {
     CHEST_LOCATIONS.put(Submaps.HELLENA_SHANA_WEST_CELL, ChestData.hellena_shana_tower_west_chests);
     CHEST_LOCATIONS.put(Submaps.PRAIRIE_SHACK_OUTSIDE, ChestData.prairie_shack_chests);
     CHEST_LOCATIONS.put(Submaps.PRAIRIE_COAST_BEFORE_TREE, ChestData.prairie_rock_arch_chests);
-    CHEST_LOCATIONS.put(Submaps.PRAIRIE_OUTSIDE_OF_CAVE, ChestData.prairie_before_cave);
+    CHEST_LOCATIONS.put(Submaps.PRAIRIE_OUTSIDE_OF_CAVE, ChestData.prairie_before_cave_chests);
+    CHEST_LOCATIONS.put(Submaps.LIMESTONE_CAVE_ENTRY, ChestData.limestone_cave_entry_chests);
+    CHEST_LOCATIONS.put(Submaps.LIMESTONE_CAVE_WATERSLIDE, ChestData.limestone_cave_waterslide_chests);
+    CHEST_LOCATIONS.put(Submaps.LIMESTONE_CAVE_HOPPING_ROCKS_ROOM, ChestData.limestone_cave_hopping_rocks_chests);
+    CHEST_LOCATIONS.put(Submaps.LIMESTONE_CAVE_FROG_ROOM, ChestData.limestone_cave_frog_chests);
+    CHEST_LOCATIONS.put(Submaps.LIMESTONE_CAVE_ROCK_FIREFLIES_ROOM, ChestData.limestone_cave_rock_fireflies_chests);
+    CHEST_LOCATIONS.put(Submaps.LIMESTONE_CAVE_STONE_BRIDGE_ROOM, ChestData.limestone_cave_stone_bridge_chests);
+    CHEST_LOCATIONS.put(Submaps.LIMESTONE_CAVE_SAVE_ROOM, ChestData.limestone_cave_save_room_chests);
+    CHEST_LOCATIONS.put(Submaps.LIMESTONE_CAVE_WINDING_TUNNEL, ChestData.limestone_cave_winding_tunnel_chests);
+
     CHEST_LOCATIONS.put(Submaps.BARRENS_FLETZ_EXIT, ChestData.barrens_fletz_exit_chests);
     CHEST_LOCATIONS.put(Submaps.BARRENS_DONAU_EXIT, ChestData.barrens_donau_exit_chests);
     CHEST_LOCATIONS.put(Submaps.VALLEY_OF_CORRUPTED_GRAVITY_FIREFLIES, ChestData.valley_area1_chests);

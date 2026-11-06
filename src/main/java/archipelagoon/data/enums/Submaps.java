@@ -19,6 +19,14 @@ public final class Submaps {
   public static final int PRAIRIE_SHACK_INSIDE = 41;
   public static final int PRAIRIE_CLIFF_TREE = 42;
   public static final int PRAIRIE_OUTSIDE_OF_CAVE = 44;
+  public static final int LIMESTONE_CAVE_ENTRY = 45;
+  public static final int LIMESTONE_CAVE_WATERSLIDE = 46;
+  public static final int LIMESTONE_CAVE_HOPPING_ROCKS_ROOM = 47;
+  public static final int LIMESTONE_CAVE_ROCK_FIREFLIES_ROOM = 48;
+  public static final int LIMESTONE_CAVE_STONE_BRIDGE_ROOM = 49;
+  public static final int LIMESTONE_CAVE_FROG_ROOM = 50;
+  public static final int LIMESTONE_CAVE_SAVE_ROOM = 52;
+  public static final int LIMESTONE_CAVE_WINDING_TUNNEL = 54;
   public static final int NEST_OF_DRAGON_LIFE_WATER = 134;
   public static final int NEST_OF_DRAGON_PLANT = 132;
   public static final int NEST_OF_DRAGON_GREHAM_ROOM = 656;
