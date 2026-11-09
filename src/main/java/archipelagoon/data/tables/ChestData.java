@@ -25,6 +25,53 @@ public final class ChestData {
   public static final Map<Integer, Long> limestone_cave_stone_bridge_chests = new LinkedHashMap<>();
   public static final Map<Integer, Long> limestone_cave_save_room_chests = new LinkedHashMap<>();
   public static final Map<Integer, Long> limestone_cave_winding_tunnel_chests = new LinkedHashMap<>();
+  public static final Map<Integer, Long> bale_artist_chests = new LinkedHashMap<>();
+  public static final Map<Integer, Long> bale_castle_1st_floor_chests = new LinkedHashMap<>();
+  public static final Map<Integer, Long> bale_castle_2nd_floor_chests = new LinkedHashMap<>();
+  public static final Map<Integer, Long> bale_castle_3rd_floor_chests = new LinkedHashMap<>();
+  public static final Map<Integer, Long> bale_lavitz_chests = new LinkedHashMap<>();
+  public static final Map<Integer, Long> bale_barn_chests = new LinkedHashMap<>();
+  public static final Map<Integer, Long> bale_underground_hall_chests = new LinkedHashMap<>();
+  public static final Map<Integer, Long> hoax_inn_chests = new LinkedHashMap<>();
+  public static final Map<Integer, Long> hoax_nurse_attic_chests = new LinkedHashMap<>();
+  public static final Map<Integer, Long> hoax_guard_room_chests = new LinkedHashMap<>();
+  public static final Map<Integer, Long> marshland_outside_fort_chests = new LinkedHashMap<>();
+  public static final Map<Integer, Long> marshland_fort_chests = new LinkedHashMap<>();
+  public static final Map<Integer, Long> marshland_east_swamp_chests = new LinkedHashMap<>();
+  public static final Map<Integer, Long> marshland_west_swamp_chests = new LinkedHashMap<>();
+  public static final Map<Integer, Long> volcano_area_2_chests = new LinkedHashMap<>();
+  public static final Map<Integer, Long> volcano_area_3_chests = new LinkedHashMap<>();
+  public static final Map<Integer, Long> volcano_east_cliff_chests = new LinkedHashMap<>();
+  public static final Map<Integer, Long> volcano_dabas_chests = new LinkedHashMap<>();
+  public static final Map<Integer, Long> nest_of_dragon_stream_chests = new LinkedHashMap<>();
+  public static final Map<Integer, Long> nest_of_dragon_pool_chests = new LinkedHashMap<>();
+  public static final Map<Integer, Long> nest_of_dragon_save_room_chests = new LinkedHashMap<>();
+  public static final Map<Integer, Long> lohan_inn_chests = new LinkedHashMap<>();
+  public static final Map<Integer, Long> lohan_outside_shops_chests = new LinkedHashMap<>();
+  public static final Map<Integer, Long> lohan_outside_arena_chests = new LinkedHashMap<>();
+  public static final Map<Integer, Long> shrine_of_shirley_entrance_chests = new LinkedHashMap<>();
+  public static final Map<Integer, Long> shrine_of_shirley_east_chests = new LinkedHashMap<>();
+  public static final Map<Integer, Long> shrine_of_shirley_west_chests = new LinkedHashMap<>();
+  public static final Map<Integer, Long> shrine_of_shirley_cart_chests = new LinkedHashMap<>();
+  public static final Map<Integer, Long> shrine_of_shirley_apex_chests = new LinkedHashMap<>();
+  public static final Map<Integer, Long> shrine_of_shirley_treasure_chests = new LinkedHashMap<>();
+  public static final Map<Integer, Long> hellena_ladder_chests = new LinkedHashMap<>();
+  public static final Map<Integer, Long> hellena_elevator_room_chests = new LinkedHashMap<>();
+  public static final Map<Integer, Long> hellena_trapdoor_chests = new LinkedHashMap<>();
+  public static final Map<Integer, Long> hellena_dungeon_chests = new LinkedHashMap<>();
+  public static final Map<Integer, Long> hellena_jiango_stairs_chests = new LinkedHashMap<>();
+  public static final Map<Integer, Long> hellena_apex_chests = new LinkedHashMap<>();
+  public static final Map<Integer, Long> kazas_recruiter_chests = new LinkedHashMap<>();
+  public static final Map<Integer, Long> kazas_storage_house_chests = new LinkedHashMap<>();
+  public static final Map<Integer, Long> kazas_tunnels_chests = new LinkedHashMap<>();
+  public static final Map<Integer, Long> black_castle_underground_chests = new LinkedHashMap<>();
+  public static final Map<Integer, Long> black_castle_drawbridge_chests = new LinkedHashMap<>();
+  public static final Map<Integer, Long> black_castle_garbage_floor_chests = new LinkedHashMap<>();
+  public static final Map<Integer, Long> black_castle_garbage_lever_chests = new LinkedHashMap<>();
+  public static final Map<Integer, Long> black_castle_magi_chests = new LinkedHashMap<>();
+  public static final Map<Integer, Long> black_castle_elevator_chests = new LinkedHashMap<>();
+  public static final Map<Integer, Long> black_castle_workers_chests = new LinkedHashMap<>();
+  public static final Map<Integer, Long> black_castle_kongol_chests = new LinkedHashMap<>();
 
   public static final Map<Integer, Long> barrens_fletz_exit_chests = new LinkedHashMap<>();
   public static final Map<Integer, Long> barrens_donau_exit_chests = new LinkedHashMap<>();
@@ -95,6 +142,7 @@ public final class ChestData {
     forest_maze_chests.put(8, 108_40004L);
 
     hellena_01_nw_entrance_chests.put(1, 108_40005L);
+    hellena_01_nw_entrance_chests.put(2, 108_40081L); /*accessible from hellena 2*/
 
     hellena_barracks_chests.put(4, 108_40006L);
     hellena_barracks_chests.put(6, 108_40007L);
@@ -137,6 +185,128 @@ public final class ChestData {
 
     limestone_cave_winding_tunnel_chests.put(1, 108_40030L);
     limestone_cave_winding_tunnel_chests.put(2, 108_40031L);
+
+    bale_artist_chests.put(3, 108_40032L);
+
+    bale_castle_1st_floor_chests.put(6, 108_40033L);
+    bale_castle_1st_floor_chests.put(7, 108_40040L);
+
+    bale_castle_2nd_floor_chests.put(6, 108_40034L);
+    bale_castle_2nd_floor_chests.put(7, 108_40036L);
+
+    bale_castle_3rd_floor_chests.put(5, 108_40035L);
+
+    bale_lavitz_chests.put(7, 108_40037L);
+
+    bale_barn_chests.put(1, 108_40038L);
+
+    bale_underground_hall_chests.put(1, 108_40039L);
+
+    hoax_inn_chests.put(4, 108_40041L);
+
+    hoax_nurse_attic_chests.put(1, 108_40042L);
+
+    hoax_guard_room_chests.put(8, 108_40043L);
+
+    marshland_outside_fort_chests.put(8, 108_40044L);
+    marshland_outside_fort_chests.put(9, 108_40048L);
+
+    marshland_fort_chests.put(9, 108_40045L);
+    marshland_fort_chests.put(11,108_40046L);
+    marshland_fort_chests.put(10,108_40047L);
+
+    marshland_east_swamp_chests.put(9, 108_40049L);
+    marshland_east_swamp_chests.put(10, 108_40050L);
+    marshland_east_swamp_chests.put(11, 108_40051L);
+
+    marshland_west_swamp_chests.put(6, 108_40052L);
+    marshland_west_swamp_chests.put(7, 108_40053L);
+
+    volcano_area_2_chests.put(4, 108_40054L);
+
+    volcano_area_3_chests.put(1, 108_40055L);
+
+    volcano_east_cliff_chests.put(4, 108_40056L);
+
+    volcano_dabas_chests.put(2, 108_40057L);
+
+    nest_of_dragon_stream_chests.put(2, 108_40058L);
+
+    nest_of_dragon_pool_chests.put(5, 108_40059L);
+    nest_of_dragon_pool_chests.put(6, 108_40060L);
+    nest_of_dragon_pool_chests.put(7, 108_40061L);
+
+    nest_of_dragon_save_room_chests.put(7, 108_40062L);
+
+    lohan_inn_chests.put(4, 108_40063L);
+
+    lohan_outside_shops_chests.put(7, 108_40064L);
+
+    lohan_outside_arena_chests.put(7, 108_40065L);
+
+    shrine_of_shirley_entrance_chests.put(6, 108_40066L);
+
+    shrine_of_shirley_east_chests.put(6, 108_40067L);
+    shrine_of_shirley_east_chests.put(3, 108_40068L);
+
+    shrine_of_shirley_west_chests.put(5, 108_40069L);
+
+    shrine_of_shirley_cart_chests.put(4, 108_40070L);
+
+    shrine_of_shirley_apex_chests.put(2, 108_40071L);
+
+    shrine_of_shirley_treasure_chests.put(1, 108_40072L);
+    shrine_of_shirley_treasure_chests.put(2, 108_40073L);
+    shrine_of_shirley_treasure_chests.put(3, 108_40074L);
+    shrine_of_shirley_treasure_chests.put(4, 108_40075L);
+    shrine_of_shirley_treasure_chests.put(5, 108_40076L);
+    shrine_of_shirley_treasure_chests.put(6, 108_40077L);
+    shrine_of_shirley_treasure_chests.put(7, 108_40078L);
+    shrine_of_shirley_treasure_chests.put(8, 108_40079L);
+    shrine_of_shirley_treasure_chests.put(9, 108_40080L);
+
+    hellena_ladder_chests.put(3, 108_40082L);
+
+    hellena_elevator_room_chests.put(7, 108_40083L);
+    hellena_elevator_room_chests.put(5, 108_40084L);
+    hellena_elevator_room_chests.put(8, 108_40085L);
+    hellena_elevator_room_chests.put(6, 108_40086L);
+
+    hellena_trapdoor_chests.put(6, 108_40087L);
+
+    hellena_dungeon_chests.put(9, 108_40088L);
+
+    hellena_jiango_stairs_chests.put(1, 108_40089L);
+
+    hellena_apex_chests.put(1, 108_40090L);
+    hellena_apex_chests.put(2, 108_40091L);
+    hellena_apex_chests.put(3, 108_40092L);
+
+    kazas_recruiter_chests.put(4, 108_40093L);
+
+    kazas_storage_house_chests.put(8, 108_40094L);
+
+    kazas_tunnels_chests.put(2, 108_40095L);
+
+    black_castle_underground_chests.put(5, 108_40096L);
+
+    black_castle_drawbridge_chests.put(8, 108_40097L);
+    black_castle_drawbridge_chests.put(7, 108_40098L);
+
+    black_castle_garbage_floor_chests.put(1, 108_40099L);
+    black_castle_garbage_floor_chests.put(2, 108_40100L);
+
+    black_castle_garbage_lever_chests.put(2, 108_40101L);
+
+    black_castle_magi_chests.put(7, 108_40102L);
+
+    black_castle_elevator_chests.put(8, 108_40103L);
+    black_castle_elevator_chests.put(4, 108_40104L);
+
+    black_castle_workers_chests.put(4, 108_40105L);
+    black_castle_workers_chests.put(3, 108_40106L);
+
+    black_castle_kongol_chests.put(8, 108_40107L);
 
     barrens_fletz_exit_chests.put(2, 108_40108L);
 
