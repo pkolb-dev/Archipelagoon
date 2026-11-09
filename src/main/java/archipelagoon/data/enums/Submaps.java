@@ -62,6 +62,38 @@ public final class Submaps {
   public static final int UNDERSEA_CAVE_WEST_ROOM = 304;
   public static final int UNDERSEA_CAVE_SAVE_ROOM = 305;
   public static final int FLETZ_TRAINING_ROOM = 225;
+  public static final int EVERGREEN_FOREST_KAMUI_HILL = 340;
+  public static final int EVERGREEN_FOREST_RAT_TREE = 341;
+  public static final int EVERGREEN_FOREST_MOUNTAIN_GUARD = 342;
+  public static final int EVERGREEN_FOREST_WEST_PATH = 344;
+  public static final int CRYSTAL_PALACE_ENTRANCE = 367;
+  public static final int CRYSTAL_PALACE_DINING = 369;
+  public static final int FORBIDDEN_LAND_STEAM_VENTS = 394;
+  public static final int FORBIDDEN_LAND_TELEPORTERS_2 = 396;
+  public static final int FORBIDDEN_LAND_PLATFORM_ROOM = 404;
+  public static final int MOUNTAIN_OF_MORTAL_DRAGON_BONE_PATH = 414;
+  public static final int MOUNTAIN_OF_MORTAL_DRAGON_LEDGE = 418;
+  public static final int MOUNTAIN_OF_MORTAL_DRAGON_FORK_PATH = 415;
+  public static final int MOUNTAIN_OF_MORTAL_DRAGON_SAVE_ROOM = 421;
+  public static final int MOUNTAIN_OF_MORTAL_DRAGON_PRE_BOSS = 422;
+  public static final int KASHUA_GLACIER_ENTRANCE = 433;
+  public static final int KASHUA_GLACIER_SIGN_ROOM = 434;
+  public static final int KASHUA_GLACIER_MERCHANT = 435;
+  public static final int KASHUA_GLACIER_ICICLE_ROOM = 436;
+  public static final int KASHUA_GLACIER_BOSS_ROOM = 437;
+  public static final int KASHUA_GLACIER_TOWER = 438;
+  public static final int FLANVEL_TOWER_ENTRANCE = 441;
+  public static final int FLANVEL_TOWER_INTERIOR = 443;
+  public static final int FLANVEL_TOWER_APPARITION = 445;
+  public static final int FLANVEL_TOWER_SAVE_ROOM_2 = 449;
+  public static final int FLANVEL_TOWER_FAUST = 452;
+  public static final int SNOWFIELD_ARCHES = 457;
+  public static final int SNOWFIELD_CLIFF_SLIDE = 462;
+  public static final int FORT_MAGRAD_ENTRANCE = 465;
+  public static final int FORT_MAGRAD_SAVE_ROOM = 466;
+  public static final int FORT_MAGRAD_BOSS = 467;
+  public static final int VELLWEB_MERCHANTS = 479;
+  public static final int VELLWEB_STAIR_CHEST_PATHS = 494;
 
   private Submaps() {
   }
