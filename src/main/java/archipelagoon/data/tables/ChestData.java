@@ -129,6 +129,48 @@ public final class ChestData {
   public static final Map<Integer, Long> vellweb_stair_bottom_chests = new LinkedHashMap<>();
   public static final Map<Integer, Long> vellweb_stairs_chests = new LinkedHashMap<>();
 
+  public static final Map<Integer, Long> death_frontier_maze1_cave_chests = new LinkedHashMap<>();
+  public static final Map<Integer, Long> death_frontier_maze1_middle_chests = new LinkedHashMap<>();
+  public static final Map<Integer, Long> death_frontier_maze1_corner_chests = new LinkedHashMap<>();
+  public static final Map<Integer, Long> death_frontier_maze2_left_chests = new LinkedHashMap<>();
+  public static final Map<Integer, Long> death_frontier_maze2_south_east_chests = new LinkedHashMap<>();
+  public static final Map<Integer, Long> death_frontier_maze2_north_east_chests = new LinkedHashMap<>();
+  public static final Map<Integer, Long> death_frontier_maze2_cave_front_chests = new LinkedHashMap<>();
+  public static final Map<Integer, Long> death_frontier_maze2_cave_back_chests = new LinkedHashMap<>();
+  public static final Map<Integer, Long> ulara_entrance_chests = new LinkedHashMap<>();
+  public static final Map<Integer, Long> ulara_charle_chests = new LinkedHashMap<>();
+  public static final Map<Integer, Long> rouge_land_chests = new LinkedHashMap<>();
+  public static final Map<Integer, Long> rouge_inside_chests = new LinkedHashMap<>();
+  public static final Map<Integer, Long> aglis_teleporter_1_chests = new LinkedHashMap<>();
+  public static final Map<Integer, Long> aglis_teleporter_2_chests = new LinkedHashMap<>();
+  public static final Map<Integer, Long> aglis_research_room_chests = new LinkedHashMap<>();
+  public static final Map<Integer, Long> aglis_teleporter_3_chests = new LinkedHashMap<>();
+  public static final Map<Integer, Long> aglis_teleporter_4_chests = new LinkedHashMap<>();
+  public static final Map<Integer, Long> aglis_after_bomb_room_chests = new LinkedHashMap<>();
+  public static final Map<Integer, Long> zenebatos_legislation_teleporters_chests = new LinkedHashMap<>();
+  public static final Map<Integer, Long> zenebatos_factory_teleporters_chests = new LinkedHashMap<>();
+  public static final Map<Integer, Long> zenebatos_launcher_teleporters_chests = new LinkedHashMap<>();
+  public static final Map<Integer, Long> zenebatos_jail_chests = new LinkedHashMap<>();
+  public static final Map<Integer, Long> mayfil_area_3_chests = new LinkedHashMap<>();
+  public static final Map<Integer, Long> mayfil_area_7_chests = new LinkedHashMap<>();
+  public static final Map<Integer, Long> mayfil_area_5_chests = new LinkedHashMap<>();
+  public static final Map<Integer, Long> mayfil_divine_dragon_chests = new LinkedHashMap<>();
+  public static final Map<Integer, Long> mayfil_under_light_bridge_chests = new LinkedHashMap<>();
+  public static final Map<Integer, Long> mayfil_healing_room_chests = new LinkedHashMap<>();
+  public static final Map<Integer, Long> mayfil_lavitz_chests = new LinkedHashMap<>();
+  public static final Map<Integer, Long> mayfil_before_signet_chests = new LinkedHashMap<>();
+  public static final Map<Integer, Long> divine_tree_first_room_chests = new LinkedHashMap<>();
+  public static final Map<Integer, Long> divine_tree_healing_water_chests = new LinkedHashMap<>();
+  public static final Map<Integer, Long> moon_forest_chests = new LinkedHashMap<>();
+  public static final Map<Integer, Long> moon_snow_chests = new LinkedHashMap<>();
+  public static final Map<Integer, Long> moon_minintos_chests = new LinkedHashMap<>();
+  public static final Map<Integer, Long> moon_after_minintos_chests = new LinkedHashMap<>();
+  public static final Map<Integer, Long> moon_south_path_chests = new LinkedHashMap<>();
+  public static final Map<Integer, Long> moon_giganto_chests = new LinkedHashMap<>();
+  public static final Map<Integer, Long> moon_michaels_realm_chests = new LinkedHashMap<>();
+  public static final Map<Integer, Long> moon_tv_core_chests = new LinkedHashMap<>();
+  public static final Map<Integer, Long> moon_virage_save_room_chests = new LinkedHashMap<>();
+
   static {
     /* (script index, chest ID) */
     seles_chests.put(8, 108_40000L);
@@ -447,6 +489,104 @@ public final class ChestData {
 
     vellweb_stairs_chests.put(2, 108_40193L);
     vellweb_stairs_chests.put(1, 108_40194L);
+
+    death_frontier_maze1_cave_chests.put(5, 108_40195L);
+    death_frontier_maze1_cave_chests.put(4, 108_40197L);
+
+    death_frontier_maze1_middle_chests.put(19, 108_40196L);
+
+    death_frontier_maze1_corner_chests.put(19, 108_40198L);
+
+    death_frontier_maze2_cave_front_chests.put(4, 108_40199L);
+    death_frontier_maze2_cave_front_chests.put(5, 108_40202L);
+
+    death_frontier_maze2_south_east_chests.put(9, 108_40200L);
+
+    death_frontier_maze2_left_chests.put(9, 108_40201L);
+
+    death_frontier_maze2_cave_back_chests.put(4, 108_40204L);
+
+    death_frontier_maze2_north_east_chests.put(19, 108_40203L);
+
+    ulara_entrance_chests.put(12, 108_40205L);
+
+    ulara_charle_chests.put(7, 108_40206L);
+
+    rouge_land_chests.put(9, 108_40207L);
+    rouge_land_chests.put(11, 108_40208L);
+
+    rouge_inside_chests.put(3, 108_40209L);
+
+    aglis_teleporter_1_chests.put(10, 108_40210L);
+    aglis_teleporter_1_chests.put(11, 108_40211L);
+
+    aglis_teleporter_2_chests.put(12, 108_40212L);
+    aglis_teleporter_2_chests.put(10, 108_40213L);
+
+    aglis_research_room_chests.put(6, 108_40214L);
+
+    aglis_teleporter_3_chests.put(4, 108_40215L);
+
+    aglis_teleporter_4_chests.put(11, 108_40216L);
+    aglis_teleporter_4_chests.put(10, 108_40217L);
+
+    aglis_after_bomb_room_chests.put(10, 108_40218L);
+    aglis_after_bomb_room_chests.put(11, 108_40219L);
+
+    zenebatos_legislation_teleporters_chests.put(8, 108_40220L);
+    zenebatos_legislation_teleporters_chests.put(7, 108_40221L);
+
+    zenebatos_factory_teleporters_chests.put(9, 108_40222L);
+    zenebatos_factory_teleporters_chests.put(10, 108_40223L);
+    zenebatos_factory_teleporters_chests.put(11, 108_40224L);
+
+    zenebatos_launcher_teleporters_chests.put(8, 108_40225L);
+    zenebatos_launcher_teleporters_chests.put(9, 108_40226L);
+    zenebatos_launcher_teleporters_chests.put(10, 108_40227L);
+
+    zenebatos_jail_chests.put(3, 108_40228L);
+    zenebatos_jail_chests.put(4, 108_40229L);
+
+    mayfil_area_3_chests.put(2, 108_40230L);
+    mayfil_area_3_chests.put(3, 108_40234L);
+
+    mayfil_area_7_chests.put(2, 108_40231L);
+
+    mayfil_area_5_chests.put(3, 108_40232L);
+    mayfil_area_5_chests.put(2, 108_40233L);
+
+    mayfil_divine_dragon_chests.put(12, 108_40235L);
+
+    mayfil_under_light_bridge_chests.put(2, 108_40236L);
+
+    mayfil_healing_room_chests.put(9, 108_40237L);
+
+    mayfil_lavitz_chests.put(6, 108_40238L);
+
+    mayfil_before_signet_chests.put(7, 108_40239L);
+
+    divine_tree_first_room_chests.put(7, 108_40240L);
+
+    divine_tree_healing_water_chests.put(8, 108_40241L);
+
+    moon_forest_chests.put(7, 108_40242L);
+
+    moon_snow_chests.put(3, 108_40243L);
+
+    moon_minintos_chests.put(13, 108_40244L);
+
+    moon_after_minintos_chests.put(1, 108_40245L);
+
+    moon_south_path_chests.put(1, 108_40246L);
+
+    moon_giganto_chests.put(3, 108_40247L);
+
+    moon_michaels_realm_chests.put(2, 108_40248L);
+    moon_michaels_realm_chests.put(1, 108_40249L);
+
+    moon_tv_core_chests.put(1, 108_40250L);
+
+    moon_virage_save_room_chests.put(2, 108_40251L);
   }
 
   private ChestData() {

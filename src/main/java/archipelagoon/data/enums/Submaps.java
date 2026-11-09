@@ -140,6 +140,47 @@ public final class Submaps {
   public static final int FORT_MAGRAD_BOSS = 467;
   public static final int VELLWEB_MERCHANTS = 479;
   public static final int VELLWEB_STAIR_CHEST_PATHS = 494;
+  public static final int DEATH_FRONTIER_MAZE_1_CAVE = 788;
+  public static final int DEATH_FRONTIER_MAZE_1_MIDDLE_CHEST = 751;
+  public static final int DEATH_FRONTIER_MAZE_1_BOTTOM_LEFT_CHEST = 756;
+  public static final int DEATH_FRONTIER_MAZE_2_CAVE_FRONT = 790;
+  public static final int DEATH_FRONTIER_MAZE_2_CAVE_BACK = 789;
+  public static final int DEATH_FRONTIER_MAZE_2_BOTTOM_RIGHT_CHEST = 762;
+  public static final int DEATH_FRONTIER_MAZE_2_LEFT_CHEST = 775;
+  public static final int DEATH_FRONTIER_MAZE_2_TOP_RIGHT_CHEST = 786;
+  public static final int ULARA_PORTAL = 513;
+  public static final int ULARA_CHARLE_HOME = 520;
+  public static final int ROUGE_BACK = 568;
+  public static final int ROUGE_FRONT_CHEST = 566;
+  public static final int AGLIS_TELEPORTER_ROOM_1 = 573;
+  public static final int AGLIS_TELEPORTER_ROOM_2 = 574;
+  public static final int AGLIS_RESEARCH_ROOM = 575;
+  public static final int AGLIS_TELEPORTER_ROOM_3 = 576;
+  public static final int AGLIS_TELEPORTER_ROOM_4 = 578;
+  public static final int AGLIS_AFTER_BOMB = 712;
+  public static final int ZENEBATOS_LEGISLATION_TELEPORTERS = 533;
+  public static final int ZENEBATOS_FACTORY_TELEPORTERS = 537;
+  public static final int ZENEBATOS_LAUNCHER_TELEPORTERS = 535;
+  public static final int ZENEBATOS_JAIL = 532;
+  public static final int MAYFIL_AREA_3 = 543;
+  public static final int MAYFIL_AREA_7 = 547;
+  public static final int MAYFIL_AREA_5 = 545;
+  public static final int MAYFIL_DIVINE_DRAGON_ROOM = 546;
+  public static final int MAYFIL_UNDER_LIGHT_BRIDGE = 549;
+  public static final int MAYFIL_RECOVERY_ROOM = 550;
+  public static final int MAYFIL_LAVITZ_ROOM = 552;
+  public static final int MAYFIL_BEFORE_SIGNET = 707;
+  public static final int DIVINE_TREE_FIRST_ROOM = 584;
+  public static final int DIVINE_TREE_HEALING_ROOM = 589;
+  public static final int MOON_FOREST = 604;
+  public static final int MOON_SNOW = 606;
+  public static final int MOON_MININTOS_HOMES = 608;
+  public static final int MOON_MININTOS_PATH = 609;
+  public static final int MOON_SOUTH_PATH = 739;
+  public static final int MOON_GIGANTOS_HOME = 738;
+  public static final int MOON_MICHAELS_REALM_2 = 616;
+  public static final int MOON_TV_ROOM_2 = 731;
+  public static final int MOON_VIRAGE_SAVE_ROOM = 734;
 
   private Submaps() {
   }

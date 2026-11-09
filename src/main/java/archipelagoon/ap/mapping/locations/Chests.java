@@ -136,6 +136,48 @@ public final class Chests {
     CHEST_LOCATIONS.put(Submaps.FORT_MAGRAD_BOSS, ChestData.fort_magrad_boss_chests);
     CHEST_LOCATIONS.put(Submaps.VELLWEB_MERCHANTS, ChestData.vellweb_stair_bottom_chests);
     CHEST_LOCATIONS.put(Submaps.VELLWEB_STAIR_CHEST_PATHS, ChestData.vellweb_stairs_chests);
+
+    CHEST_LOCATIONS.put(Submaps.DEATH_FRONTIER_MAZE_1_CAVE, ChestData.death_frontier_maze1_cave_chests);
+    CHEST_LOCATIONS.put(Submaps.DEATH_FRONTIER_MAZE_1_MIDDLE_CHEST, ChestData.death_frontier_maze1_middle_chests);
+    CHEST_LOCATIONS.put(Submaps.DEATH_FRONTIER_MAZE_1_BOTTOM_LEFT_CHEST, ChestData.death_frontier_maze1_corner_chests);
+    CHEST_LOCATIONS.put(Submaps.DEATH_FRONTIER_MAZE_2_BOTTOM_RIGHT_CHEST, ChestData.death_frontier_maze2_south_east_chests);
+    CHEST_LOCATIONS.put(Submaps.DEATH_FRONTIER_MAZE_2_LEFT_CHEST, ChestData.death_frontier_maze2_left_chests);
+    CHEST_LOCATIONS.put(Submaps.DEATH_FRONTIER_MAZE_2_TOP_RIGHT_CHEST, ChestData.death_frontier_maze2_north_east_chests);
+    CHEST_LOCATIONS.put(Submaps.DEATH_FRONTIER_MAZE_2_CAVE_FRONT, ChestData.death_frontier_maze2_cave_front_chests);
+    CHEST_LOCATIONS.put(Submaps.DEATH_FRONTIER_MAZE_2_CAVE_BACK, ChestData.death_frontier_maze2_cave_back_chests);
+    CHEST_LOCATIONS.put(Submaps.ULARA_PORTAL, ChestData.ulara_entrance_chests);
+    CHEST_LOCATIONS.put(Submaps.ULARA_CHARLE_HOME, ChestData.ulara_charle_chests);
+    CHEST_LOCATIONS.put(Submaps.ROUGE_BACK, ChestData.rouge_land_chests);
+    CHEST_LOCATIONS.put(Submaps.ROUGE_FRONT_CHEST, ChestData.rouge_inside_chests);
+    CHEST_LOCATIONS.put(Submaps.AGLIS_TELEPORTER_ROOM_1, ChestData.aglis_teleporter_1_chests);
+    CHEST_LOCATIONS.put(Submaps.AGLIS_TELEPORTER_ROOM_2, ChestData.aglis_teleporter_2_chests);
+    CHEST_LOCATIONS.put(Submaps.AGLIS_TELEPORTER_ROOM_3, ChestData.aglis_teleporter_3_chests);
+    CHEST_LOCATIONS.put(Submaps.AGLIS_TELEPORTER_ROOM_4, ChestData.aglis_teleporter_4_chests);
+    CHEST_LOCATIONS.put(Submaps.AGLIS_RESEARCH_ROOM, ChestData.aglis_research_room_chests);
+    CHEST_LOCATIONS.put(Submaps.AGLIS_AFTER_BOMB, ChestData.aglis_after_bomb_room_chests);
+    CHEST_LOCATIONS.put(Submaps.ZENEBATOS_FACTORY_TELEPORTERS, ChestData.zenebatos_factory_teleporters_chests);
+    CHEST_LOCATIONS.put(Submaps.ZENEBATOS_LEGISLATION_TELEPORTERS, ChestData.zenebatos_legislation_teleporters_chests);
+    CHEST_LOCATIONS.put(Submaps.ZENEBATOS_LAUNCHER_TELEPORTERS, ChestData.zenebatos_launcher_teleporters_chests);
+    CHEST_LOCATIONS.put(Submaps.ZENEBATOS_JAIL, ChestData.zenebatos_jail_chests);
+    CHEST_LOCATIONS.put(Submaps.MAYFIL_AREA_3, ChestData.mayfil_area_3_chests);
+    CHEST_LOCATIONS.put(Submaps.MAYFIL_AREA_5, ChestData.mayfil_area_5_chests);
+    CHEST_LOCATIONS.put(Submaps.MAYFIL_AREA_7, ChestData.mayfil_area_7_chests);
+    CHEST_LOCATIONS.put(Submaps.MAYFIL_DIVINE_DRAGON_ROOM, ChestData.mayfil_divine_dragon_chests);
+    CHEST_LOCATIONS.put(Submaps.MAYFIL_UNDER_LIGHT_BRIDGE, ChestData.mayfil_under_light_bridge_chests);
+    CHEST_LOCATIONS.put(Submaps.MAYFIL_RECOVERY_ROOM, ChestData.mayfil_healing_room_chests);
+    CHEST_LOCATIONS.put(Submaps.MAYFIL_LAVITZ_ROOM, ChestData.mayfil_lavitz_chests);
+    CHEST_LOCATIONS.put(Submaps.MAYFIL_BEFORE_SIGNET, ChestData.mayfil_before_signet_chests);
+    CHEST_LOCATIONS.put(Submaps.DIVINE_TREE_FIRST_ROOM, ChestData.divine_tree_first_room_chests);
+    CHEST_LOCATIONS.put(Submaps.DIVINE_TREE_HEALING_ROOM, ChestData.divine_tree_healing_water_chests);
+    CHEST_LOCATIONS.put(Submaps.MOON_FOREST, ChestData.moon_forest_chests);
+    CHEST_LOCATIONS.put(Submaps.MOON_SNOW, ChestData.moon_snow_chests);
+    CHEST_LOCATIONS.put(Submaps.MOON_MININTOS_HOMES, ChestData.moon_minintos_chests);
+    CHEST_LOCATIONS.put(Submaps.MOON_MININTOS_PATH, ChestData.moon_after_minintos_chests);
+    CHEST_LOCATIONS.put(Submaps.MOON_SOUTH_PATH, ChestData.moon_south_path_chests);
+    CHEST_LOCATIONS.put(Submaps.MOON_GIGANTOS_HOME, ChestData.moon_giganto_chests);
+    CHEST_LOCATIONS.put(Submaps.MOON_MICHAELS_REALM_2, ChestData.moon_michaels_realm_chests);
+    CHEST_LOCATIONS.put(Submaps.MOON_TV_ROOM_2, ChestData.moon_tv_core_chests);
+    CHEST_LOCATIONS.put(Submaps.MOON_VIRAGE_SAVE_ROOM, ChestData.moon_virage_save_room_chests);
   }
 
   private Chests() {
