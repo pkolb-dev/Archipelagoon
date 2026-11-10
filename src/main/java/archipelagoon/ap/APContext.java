@@ -291,7 +291,7 @@ public class APContext {
     this.checkLocation(locationId);
   }
 
-  public void storeObjectIndex(int scriptIndex) {
+  public void storeObjectIndex(final int scriptIndex) {
     this.chestManager.updateObjectIndex(scriptIndex);
   }
 }
