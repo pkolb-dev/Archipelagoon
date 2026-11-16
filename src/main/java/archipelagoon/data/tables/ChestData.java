@@ -381,7 +381,7 @@ public final class ChestData {
     phantom_ship_captain_chests.put(9, 108_40125L);
     phantom_ship_captain_chests.put(8, 108_40126L);
 
-    phantom_ship_puzzle_chests.put(1, 108_40127L); /*
+    phantom_ship_puzzle_chests.put(6, 108_40127L); /*
     phantom_ship_puzzle_chests.put(1, 108_40128L)
     phantom_ship_puzzle_chests.put(1, 108_40129L)  puzzle chest levels
     phantom_ship_puzzle_chests.put(1, 108_40130L)
@@ -500,9 +500,9 @@ public final class ChestData {
     death_frontier_maze2_cave_front_chests.put(4, 108_40199L);
     death_frontier_maze2_cave_front_chests.put(5, 108_40202L);
 
-    death_frontier_maze2_south_east_chests.put(9, 108_40200L);
+    death_frontier_maze2_south_east_chests.put(19, 108_40200L);
 
-    death_frontier_maze2_left_chests.put(5, 108_40201L);
+    death_frontier_maze2_left_chests.put(19, 108_40201L);
 
     death_frontier_maze2_cave_back_chests.put(4, 108_40204L);
 
@@ -565,9 +565,9 @@ public final class ChestData {
 
     mayfil_before_signet_chests.put(7, 108_40239L);
 
-    divine_tree_first_room_chests.put(7, 108_40240L);
+    divine_tree_first_room_chests.put(0, 108_40240L);
 
-    divine_tree_healing_water_chests.put(8, 108_40241L);
+    divine_tree_healing_water_chests.put(0, 108_40241L);
 
     moon_forest_chests.put(7, 108_40242L);
 
