@@ -20,7 +20,9 @@ import io.github.archipelagomw.flags.ItemsHandling;
 import io.github.archipelagomw.network.client.CreateAsHint;
 import legend.core.GameEngine;
 import legend.game.i18n.I18n;
+import legend.game.scripting.ScriptLifecycleEvent;
 import legend.game.types.GameState52c;
+import org.legendofdragoon.modloader.events.EventListener;
 import org.legendofdragoon.modloader.registries.RegistryId;
 
 import java.net.URISyntaxException;
@@ -257,7 +259,7 @@ public class APContext {
     this.client.setDeathLinkEnabled(true);
   }
 
-  public void handleChest(final ChestType _chestType) {
+  public void handleChest(final ChestType chestType) {
     final boolean isFromChest = StackWalker
       .getInstance(StackWalker.Option.RETAIN_CLASS_REFERENCE)
       .walk(frames -> frames
@@ -276,6 +278,8 @@ public class APContext {
     if(locationId == -1) {
       return;
     }
+
+    this.chestManager.listenToChest(chestType, locationId);
 
     this.checkLocation(locationId);
   }
