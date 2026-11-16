@@ -3,10 +3,11 @@ package archipelagoon.ap.mapping.locations;
 import legend.lodmod.LodCharacterTemplates;
 import org.legendofdragoon.modloader.registries.RegistryId;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.Map;
+import java.util.Set;
 
 public final class DragoonLevels {
   private static final Map<RegistryId, Map<Integer, Long>> CHARACTER_MAGIC_LOCATIONS = new LinkedHashMap<>();
@@ -74,6 +75,13 @@ public final class DragoonLevels {
     miranda_spells.put(4, 108_90083L);
     miranda_spells.put(5, 108_90084L);
     CHARACTER_MAGIC_LOCATIONS.put(LodCharacterTemplates.MIRANDA.getId(), miranda_spells);
+
+    final Map<Integer, Long> lloyd_spells = new LinkedHashMap<>();
+    lloyd_spells.put(2, 108_90091L);
+    lloyd_spells.put(3, 108_90092L);
+    lloyd_spells.put(4, 108_90093L);
+    lloyd_spells.put(5, 108_90094L);
+    CHARACTER_MAGIC_LOCATIONS.put(new RegistryId("lloyd_mod", "lloyd"), lloyd_spells);
   }
 
   private DragoonLevels() {
@@ -81,18 +89,6 @@ public final class DragoonLevels {
 
   public static Map<RegistryId, Map<Integer, Long>> getStaticMap() {
     return Collections.unmodifiableMap(CHARACTER_MAGIC_LOCATIONS);
-  }
-
-  public static ArrayList<Long> getAllLocationIds() {
-    // create array of longs
-    final ArrayList<Long> locations = new ArrayList<>();
-
-    // iterate through magic locations and add each value to the array above
-    CHARACTER_MAGIC_LOCATIONS.forEach((id, location) -> {
-      locations.addAll(location.values());
-    });
-
-    return locations;
   }
 
   public static Long getLocationId(final RegistryId charId, final int level) {
@@ -103,14 +99,12 @@ public final class DragoonLevels {
     }
   }
 
-  public static Map<Long, String> getStaticFlatMap() {
-    final Map<Long, String> locationMap = new LinkedHashMap<>();
+  public static Set<Long> getStaticFlatMap() {
+    final LinkedHashSet<Long> locationSet = new LinkedHashSet<>();
     for(final Map.Entry<RegistryId, Map<Integer, Long>> magicInfo : CHARACTER_MAGIC_LOCATIONS.entrySet()) {
-      for(final Map.Entry<Integer, Long> slotInfo : magicInfo.getValue().entrySet()) {
-        locationMap.put(slotInfo.getValue(), String.valueOf(magicInfo.getKey()));
-      }
+      locationSet.addAll(magicInfo.getValue().values());
     }
 
-    return Collections.unmodifiableMap(locationMap);
+    return Collections.unmodifiableSet(locationSet);
   }
 }

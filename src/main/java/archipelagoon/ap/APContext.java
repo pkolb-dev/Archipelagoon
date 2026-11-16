@@ -3,13 +3,14 @@ package archipelagoon.ap;
 import archipelagoon.Archipelagoon;
 import archipelagoon.ap.mapping.LocationState;
 import archipelagoon.ap.mapping.goals.Goals;
-import archipelagoon.ap.mapping.locations.DragoonLevels;
 import archipelagoon.ap.mapping.locations.Enemies;
 import archipelagoon.ap.mapping.locations.Locations;
 import archipelagoon.data.SlotData;
+import archipelagoon.data.enums.ChestType;
 import archipelagoon.data.tables.ProgressiveDartSpirit;
 import archipelagoon.randomizer.AdditionManager;
 import archipelagoon.randomizer.CharacterManager;
+import archipelagoon.randomizer.ChestManager;
 import archipelagoon.randomizer.DeathlinkManager;
 import archipelagoon.randomizer.MagicManager;
 import archipelagoon.randomizer.MessageManager;
@@ -43,6 +44,7 @@ public class APContext {
   private final MessageManager messageManager = MessageManager.getInstance();
   private final DeathlinkManager deathlinkManager = DeathlinkManager.getInstance();
   private final CharacterManager characterManager = CharacterManager.getInstance();
+  private final ChestManager chestManager = ChestManager.getInstance();
   private SlotData slotData;
 
   public APContext() {
@@ -130,8 +132,7 @@ public class APContext {
   }
 
   public void retrieveLocations() {
-    final ArrayList<Long> locationIDs = new ArrayList<>(Locations.getStaticMap().keySet());
-    locationIDs.addAll(DragoonLevels.getAllLocationIds());
+    final ArrayList<Long> locationIDs = new ArrayList<>(Locations.getStaticSet());
     final var result = this.client.scoutLocations(locationIDs, CreateAsHint.NO);
   }
 
@@ -148,18 +149,12 @@ public class APContext {
       return;
     }
 
-    final Map<String, Long> reverseMap = Enemies.getStaticReverseMap();
-
-    if(!reverseMap.containsKey(encounterRegistryId.toString())) {
-      return;
-    }
-
     this.checkEncounter(encounterRegistryId);
     this.tryGoal(encounterRegistryId);
   }
 
   public void checkEncounter(final RegistryId encounterRegistryId) {
-    final long apId = Enemies.getAPLocationIdFromRegistryId(encounterRegistryId);
+    final Long apId = Enemies.getAPLocationIdFromRegistryId(encounterRegistryId);
     final List<LocationState> locationStates = GameEngine.CONFIG.getConfig(LOCATION_STATE_REGISTRY.get());
     final LocationState locationState = locationStates.stream()
       .filter(ls -> ls.getLocationID() == apId)
@@ -174,10 +169,7 @@ public class APContext {
       return;
     }
 
-    final Long location = Enemies.getAPLocationIdFromRegistryId(encounterRegistryId);
-    if(location != null) {
-      this.checkLocation(locationState.getLocationID());
-    }
+    this.checkLocation(apId);
   }
 
   public void tryGoal(final RegistryId encounter) {
@@ -263,5 +255,32 @@ public class APContext {
 
   public void enableDeathlink() {
     this.client.setDeathLinkEnabled(true);
+  }
+
+  public void handleChest(final ChestType _chestType) {
+    final boolean isFromChest = StackWalker
+      .getInstance(StackWalker.Option.RETAIN_CLASS_REFERENCE)
+      .walk(frames -> frames
+        .filter(frame ->
+          "scriptGiveChestContents".equals(frame.getMethodName())
+        )
+        .findFirst()
+      ).isPresent();
+
+    if(!isFromChest) {
+      return;
+    }
+
+    final Long locationId = this.chestManager.getChestId();
+
+    if(locationId == -1) {
+      return;
+    }
+
+    this.checkLocation(locationId);
+  }
+
+  public void storeObjectIndex(final int scriptIndex) {
+    this.chestManager.updateObjectIndex(scriptIndex);
   }
 }

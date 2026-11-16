@@ -13,6 +13,7 @@ import archipelagoon.config.XpMultiplierConfigEntry;
 import archipelagoon.data.APInventoryEntry;
 import archipelagoon.data.APShopExtension;
 import archipelagoon.data.SlotData;
+import archipelagoon.data.enums.ChestType;
 import archipelagoon.data.enums.Submaps;
 import archipelagoon.icons.APIconUiType;
 import archipelagoon.interfaces.LloydInterface;
@@ -50,7 +51,9 @@ import legend.game.modding.events.gamestate.GameLoadedEvent;
 import legend.game.modding.events.gamestate.NewGameEvent;
 import legend.game.modding.events.gamestate.PartyFlagsChangeEvent;
 import legend.game.modding.events.gamestate.PrimaryPartyChangeEvent;
+import legend.game.modding.events.inventory.GiveEquipmentEvent;
 import legend.game.modding.events.inventory.GiveGoodsEvent;
+import legend.game.modding.events.inventory.GiveItemEvent;
 import legend.game.modding.events.inventory.ScriptFlags1ChangedEvent;
 import legend.game.modding.events.inventory.ScriptFlags2ChangedEvent;
 import legend.game.modding.events.inventory.ShopBuyEvent;
@@ -67,6 +70,7 @@ import legend.game.saves.ConfigPresetEntry;
 import legend.game.saves.ConfigRegistryEvent;
 import legend.game.saves.ConfigStorageLocation;
 import legend.game.saves.StringConfigEntry;
+import legend.game.scripting.ScriptLifecycleEvent;
 import legend.lodmod.LodEncounters;
 import legend.lodmod.LodGoods;
 import org.apache.logging.log4j.LogManager;
@@ -101,6 +105,7 @@ import static legend.game.modding.coremod.CoreMod.SAVE_ANYWHERE_CONFIG;
 import static legend.game.modding.coremod.CoreMod.SECONDARY_CHARACTER_XP_MULTIPLIER_CONFIG;
 import static legend.game.modding.coremod.CoreMod.TRANSFORMATION_MODE_CONFIG;
 import static legend.game.modding.coremod.CoreMod.UNLOCK_PARTY_CONFIG;
+import static legend.game.scripting.ScriptLifecycleEvent.Lifecycle.PRE_SCRIPT_VM_TICK;
 import static legend.lodmod.LodConfig.EXTENDED_DRAGOON_ACTIONS;
 import static legend.lodmod.LodConfig.ITEM_STACK_SIZE;
 
@@ -421,6 +426,16 @@ public class Archipelagoon {
   }
 
   @EventListener
+  public void scriptLifecycleListener(final ScriptLifecycleEvent event) {
+    if(event.getLifecycle() != PRE_SCRIPT_VM_TICK) {
+      return;
+    }
+
+    final APContext ctx = APContext.getContext();
+    ctx.storeObjectIndex(event.scriptIndex);
+  }
+
+  @EventListener
   public void readScriptFlags(final ReadGlobalFlagsEvent event) {
     StoryFlagManager.readScriptFlags(event);
   }
@@ -438,6 +453,18 @@ public class Archipelagoon {
 */
 
   @EventListener
+  public void giveItemListener(final GiveItemEvent event) {
+    final APContext ctx = APContext.getContext();
+    ctx.handleChest(ChestType.ITEM);
+  }
+
+  @EventListener
+  public void giveEquipmentListener(final GiveEquipmentEvent event) {
+    final APContext ctx = APContext.getContext();
+    ctx.handleChest(ChestType.EQUIPMENT);
+  }
+
+  @EventListener
   public void partyFlagChangedListener(final PartyFlagsChangeEvent event) {
     event.partyFlags = event.gameState.charData_32c.get(event.characterIndex).partyFlags_04;
   }
@@ -448,6 +475,7 @@ public class Archipelagoon {
       switch(StoryFlagManager.getCurrentSubmap()) {
         case Submaps.VALLEY_OF_CORRUPTED_GRAVITY_POST_VIRAGE:
         case Submaps.HOME_OF_GIGANTO_GEHRICH_ROOM:
+        case Submaps.HOME_OF_GIGANTO_BELOW_THRONE:
           break;
         default:
           event.characterIndex = event.gameState.charIds_88.getInt(event.activePartySlot);
