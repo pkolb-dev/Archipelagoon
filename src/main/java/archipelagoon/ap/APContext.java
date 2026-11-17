@@ -20,9 +20,7 @@ import io.github.archipelagomw.flags.ItemsHandling;
 import io.github.archipelagomw.network.client.CreateAsHint;
 import legend.core.GameEngine;
 import legend.game.i18n.I18n;
-import legend.game.scripting.ScriptLifecycleEvent;
 import legend.game.types.GameState52c;
-import org.legendofdragoon.modloader.events.EventListener;
 import org.legendofdragoon.modloader.registries.RegistryId;
 
 import java.net.URISyntaxException;
@@ -100,6 +98,10 @@ public class APContext {
   }
 
   public void checkLocation(final Long locationId) {
+    this.checkLocation(locationId, false);
+  }
+
+  public void checkLocation(final Long locationId, final boolean isChest) {
     if(this.client.isAlreadyChecked(locationId)) {
       return;
     }
@@ -111,7 +113,7 @@ public class APContext {
     final LocationState item = GameEngine.CONFIG.getConfig(LOCATION_STATE_REGISTRY.get()).stream()
       .filter(ls -> locationId.equals(ls.getLocationID())).findFirst().orElse(null);
 
-    if(item != null) {
+    if(item != null && !isChest) {
       final String sendMessage = I18n.translate(Archipelagoon.MOD_ID + ".ap.event.checkLocation", item.getItemName(), item.getPlayerName());
       this.messageManager.displayMessage(sendMessage);
     }
@@ -279,7 +281,16 @@ public class APContext {
       return;
     }
 
-    this.chestManager.listenToChest(chestType, locationId);
+    final LocationState item = GameEngine.CONFIG.getConfig(LOCATION_STATE_REGISTRY.get()).stream()
+      .filter(ls -> locationId.equals(ls.getLocationID())).findFirst().orElse(null);
+
+    if(item == null) {
+      return;
+    }
+
+    final String sendMessage = "thingy!";
+    //    final String sendMessage = I18n.translate(Archipelagoon.MOD_ID + ".ap.event.checkLocation", item.getItemName(), item.getPlayerName());
+    this.chestManager.listenToChest(chestType, sendMessage);
 
     this.checkLocation(locationId);
   }
