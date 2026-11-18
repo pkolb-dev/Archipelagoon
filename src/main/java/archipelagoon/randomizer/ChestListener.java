@@ -1,24 +1,36 @@
 package archipelagoon.randomizer;
 
 import legend.game.scripting.ScriptLifecycleEvent;
+import legend.game.types.LodString;
+import legend.game.types.Textbox4c;
+import legend.game.types.TextboxChar08;
 import legend.game.types.TextboxText84;
 import org.legendofdragoon.modloader.events.EventListener;
 
 import java.util.Arrays;
 
 import static legend.core.GameEngine.EVENTS;
+import static legend.game.Text.calculateAppropriateTextboxBounds;
 import static legend.game.Text.textboxText_800bdf38;
+import static legend.game.Text.textboxes_800be358;
 import static legend.game.scripting.ScriptLifecycleEvent.Lifecycle.ALLOCATED;
 import static legend.game.scripting.ScriptLifecycleEvent.Lifecycle.POST_SCRIPT_VM_TICK;
 
 public class ChestListener {
 
-  private final String message;
+  private String message = "";
+  private int nameLength;
+  private int itemLength;
   private int scriptId = -1;
 
-  public ChestListener(final String message) {
+  public ChestListener() {
     EVENTS.register(this);
+  }
+
+  public void setMessage(final String message, final int itemLength, final int nameLength) {
     this.message = message;
+    this.nameLength = nameLength;
+    this.itemLength = itemLength;
   }
 
   @EventListener
@@ -27,8 +39,8 @@ public class ChestListener {
       return;
     }
 
-    if(event.getLifecycle() == ALLOCATED) {
-      this.scriptId = 0;
+    if(event.getLifecycle() == ALLOCATED && this.scriptId == -1) {
+      this.scriptId = event.scriptIndex;
       return;
     }
 
@@ -52,13 +64,28 @@ public class ChestListener {
         .findFirst()
         .orElse(null);
 
-      this.scriptId = -1;
-      if(textboxText84 == null) {
+      for(int i = 0; i < textboxText_800bdf38.length; i++) {
+        final TextboxText84 textboxText = textboxText_800bdf38[i];
+        final Textbox4c textbox = textboxes_800be358[i];
+
+        if(textboxText.str_24 == null) {
+          continue;
+        }
+
+        this.scriptId = -1;
+        textboxText.str_24 = new LodString(this.message);
+        final int textLength = Math.max(this.itemLength, this.nameLength);
+        textbox.chars_18 = textLength + 6;
+        textbox.lines_1a = 3;
+        textboxText.chars_1c = textbox.chars_18 - 1;
+        textboxText.lines_1e = textbox.lines_1a - 1;
+        textboxText.chars_58 = new TextboxChar08[textboxText.chars_1c * (textboxText.lines_1e + 1)];
+        Arrays.setAll(textboxText.chars_58, _ -> new TextboxChar08());
+        calculateAppropriateTextboxBounds(i, textbox.x_14, textbox.y_16);
+
+        ChestManager.getInstance().cleanupChestListener();
         return;
       }
-
-      textboxText84.str_24.set(this.message);
-      ChestManager.getInstance().cleanupChestListener();
     }
   }
 }

@@ -41,11 +41,16 @@ public class ChestManager {
     lastObjectIndex = scriptIndex;
   }
 
-  public void listenToChest(final ChestType _chestType, final String locationMessage) {
-    this.chestListener = new ChestListener(locationMessage);
+  public void listenToChest(final ChestType _chestType, final String locationMessage, final int itemLength, final int nameLength) {
+    this.chestListener.setMessage(locationMessage, itemLength, nameLength);
+  }
+
+  public void startChestListener() {
+    this.chestListener = new ChestListener();
   }
 
   public void cleanupChestListener() {
     this.chestListener = null;
+    this.startChestListener();
   }
 }

@@ -81,6 +81,7 @@ public class APContext {
 
     this.client.connectToServer(address, slotName, password);
     this.client.setItemsHandlingFlags(ItemsHandling.SEND_ITEMS + ItemsHandling.SEND_OWN_ITEMS + ItemsHandling.SEND_STARTING_INVENTORY);
+    this.chestManager.startChestListener();
   }
 
   public boolean isConnected() {
@@ -288,9 +289,10 @@ public class APContext {
       return;
     }
 
-    final String sendMessage = "thingy!";
-    //    final String sendMessage = I18n.translate(Archipelagoon.MOD_ID + ".ap.event.checkLocation", item.getItemName(), item.getPlayerName());
-    this.chestManager.listenToChest(chestType, sendMessage);
+    final String itemName = item.getItemName();
+    final String playerName = item.getPlayerName();
+    final String sendMessage = I18n.translate(Archipelagoon.MOD_ID + ".ap.event.checkLocationChest", itemName, playerName);
+    this.chestManager.listenToChest(chestType, sendMessage, itemName.length(), playerName.length());
 
     this.checkLocation(locationId);
   }
