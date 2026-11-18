@@ -81,6 +81,7 @@ public class APContext {
 
     this.client.connectToServer(address, slotName, password);
     this.client.setItemsHandlingFlags(ItemsHandling.SEND_ITEMS + ItemsHandling.SEND_OWN_ITEMS + ItemsHandling.SEND_STARTING_INVENTORY);
+    this.chestManager.startChestListener();
   }
 
   public boolean isConnected() {
@@ -98,6 +99,10 @@ public class APContext {
   }
 
   public void checkLocation(final Long locationId) {
+    this.checkLocation(locationId, false);
+  }
+
+  public void checkLocation(final Long locationId, final boolean isChest) {
     if(this.client.isAlreadyChecked(locationId)) {
       return;
     }
@@ -109,7 +114,7 @@ public class APContext {
     final LocationState item = GameEngine.CONFIG.getConfig(LOCATION_STATE_REGISTRY.get()).stream()
       .filter(ls -> locationId.equals(ls.getLocationID())).findFirst().orElse(null);
 
-    if(item != null) {
+    if(item != null && !isChest) {
       final String sendMessage = I18n.translate(Archipelagoon.MOD_ID + ".ap.event.checkLocation", item.getItemName(), item.getPlayerName());
       this.messageManager.displayMessage(sendMessage);
     }
@@ -257,7 +262,7 @@ public class APContext {
     this.client.setDeathLinkEnabled(true);
   }
 
-  public void handleChest(final ChestType _chestType) {
+  public void handleChest(final ChestType chestType) {
     final boolean isFromChest = StackWalker
       .getInstance(StackWalker.Option.RETAIN_CLASS_REFERENCE)
       .walk(frames -> frames
@@ -276,6 +281,18 @@ public class APContext {
     if(locationId == -1) {
       return;
     }
+
+    final LocationState item = GameEngine.CONFIG.getConfig(LOCATION_STATE_REGISTRY.get()).stream()
+      .filter(ls -> locationId.equals(ls.getLocationID())).findFirst().orElse(null);
+
+    if(item == null) {
+      return;
+    }
+
+    final String itemName = item.getItemName();
+    final String playerName = item.getPlayerName();
+    final String sendMessage = I18n.translate(Archipelagoon.MOD_ID + ".ap.event.checkLocationChest", itemName, playerName);
+    this.chestManager.listenToChest(chestType, sendMessage, itemName.length(), playerName.length());
 
     this.checkLocation(locationId);
   }
