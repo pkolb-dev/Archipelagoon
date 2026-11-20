@@ -2,16 +2,16 @@ package archipelagoon.randomizer;
 
 import archipelagoon.ap.APClient;
 import legend.game.Scus94491BpeSegment_8006;
-import legend.game.characters.StatCollection;
-import legend.game.characters.VitalsStat;
-import legend.game.combat.bent.BattleEntity27c;
-import legend.game.combat.types.battlestate.StatusConditions20;
-import legend.game.scripting.ScriptState;
-import legend.game.scripting.ScriptTempParam;
+import legend.game.modding.coremod.CorePostBattleActions;
+import legend.game.saves.RetailSavedGame;
+import legend.game.saves.SavedGame;
+import legend.lodmod.LodEngineStateTypes;
 
-import static legend.game.Scus94491BpeSegment_8006.battleState_8006e398;
+import static legend.game.EngineStates.currentEngineState_8004dd04;
+import static legend.game.EngineStates.engineStateOnceLoaded_8004dd24;
 import static legend.game.Scus94491BpeSegment_800b.gameState_800babc8;
-import static legend.lodmod.LodMod.HP_STAT;
+import static legend.game.Scus94491BpeSegment_800b.postBattleAction_800bc974;
+import static legend.game.Scus94491BpeSegment_800b.submapId_800bd808;
 
 public class DeathlinkManager {
   private static final DeathlinkManager INSTANCE = new DeathlinkManager();
@@ -28,34 +28,19 @@ public class DeathlinkManager {
     // check if in combat or not
     if(Scus94491BpeSegment_8006.battleState_8006e398 != null) {
       this.shouldHoldTrigger = true;
-      this.handleCombatDeathlink();
+      postBattleAction_800bc974 = CorePostBattleActions.GAME_OVER.get().inst();
+    } else if(submapId_800bd808 == -1) {
+      // what happens if you deathlink during FMV? - a nice little surprise ;)
+      engineStateOnceLoaded_8004dd24 = LodEngineStateTypes.GAME_OVER.get();
     } else {
       this.handleOverworldDeathlink();
     }
   }
 
   private void handleOverworldDeathlink() {
-    gameState_800babc8.charData_32c.forEach(cd -> {
-      final StatCollection stats = cd.stats;
-      final VitalsStat stat = stats.getStat(HP_STAT.get());
-
-      stat.setCurrent(0);
-    });
-  }
-
-  private void handleCombatDeathlink() {
-    for(final ScriptState<? extends BattleEntity27c> state : battleState_8006e398.playerBents_e40) {
-      // execute player bent deaths
-      final StatusConditions20 conditions = Scus94491BpeSegment_8006.battleState_8006e398.statusConditions_00[state.innerStruct_00.allBentSlot_274];
-      conditions.pandemoniumTurnsDiedAsDragoon_1d = 0x400 >>> 8 & 0xff;
-
-      // call various handlers
-      state.context.params_20[0] = new ScriptTempParam(state.index);
-      state.context.params_20[1] = new ScriptTempParam(4);
-      state.context.params_20[2] = new ScriptTempParam(0);
-
-      state.scriptForkAndReenter();
-    }
+    final SavedGame save = new RetailSavedGame(gameState_800babc8.campaign, gameState_800babc8.campaign.latestSave.version, gameState_800babc8.campaign.latestSave.fileName, gameState_800babc8.campaign.latestSave.saveName, gameState_800babc8.campaign.latestSave.campaignType, gameState_800babc8.campaign.latestSave.config);
+    save.engineState = LodEngineStateTypes.GAME_OVER.getId();
+    currentEngineState_8004dd04.loadSaveFromMenu(save);
   }
 
   public void sendDeathlink(final APClient client) {
