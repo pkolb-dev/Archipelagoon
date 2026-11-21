@@ -25,7 +25,6 @@ public class ChestListener {
 
   public ChestListener(final String message, final int itemLength, final int nameLength) {
     this.setMessage(message, itemLength, nameLength);
-    LOGGER.info("created with message: %s", this.message);
     this.isListening = true;
   }
 
@@ -39,7 +38,7 @@ public class ChestListener {
   public void renderListener(final RenderEvent event) {
     if(!this.isListening) {
       // this will repeatedly fire b/c listener isn't cleaned up properly
-      LOGGER.warn("Stale reference to this listener");
+      //      LOGGER.warn("Stale reference to this listener");
       return;
     }
 

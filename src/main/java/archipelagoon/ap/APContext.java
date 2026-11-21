@@ -294,7 +294,6 @@ public class APContext {
     final String itemName = item.getItemName();
     final String playerName = item.getPlayerName();
     final String sendMessage = I18n.translate(Archipelagoon.MOD_ID + ".ap.event.checkLocationChest", itemName, playerName);
-    LOGGER.info(sendMessage);
     this.chestManager.listenToChest(chestType, sendMessage, itemName.length(), playerName.length());
 
     this.checkLocation(locationId, true);
