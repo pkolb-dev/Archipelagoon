@@ -21,6 +21,8 @@ import io.github.archipelagomw.network.client.CreateAsHint;
 import legend.core.GameEngine;
 import legend.game.i18n.I18n;
 import legend.game.types.GameState52c;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.legendofdragoon.modloader.registries.RegistryId;
 
 import java.net.URISyntaxException;
@@ -38,6 +40,7 @@ import static archipelagoon.data.tables.ProgressiveDartSpirit.DART_PROGRESSIVE_S
 
 public class APContext {
   private static final APContext INSTANCE = new APContext();
+  private static final Logger LOGGER = LogManager.getFormatterLogger(APContext.class);
   private final APClient client;
   private final AdditionManager additionManager = AdditionManager.getInstance();
   private final MagicManager magicManager = MagicManager.getInstance();
@@ -81,7 +84,6 @@ public class APContext {
 
     this.client.connectToServer(address, slotName, password);
     this.client.setItemsHandlingFlags(ItemsHandling.SEND_ITEMS + ItemsHandling.SEND_OWN_ITEMS + ItemsHandling.SEND_STARTING_INVENTORY);
-    this.chestManager.startChestListener();
   }
 
   public boolean isConnected() {
@@ -294,7 +296,7 @@ public class APContext {
     final String sendMessage = I18n.translate(Archipelagoon.MOD_ID + ".ap.event.checkLocationChest", itemName, playerName);
     this.chestManager.listenToChest(chestType, sendMessage, itemName.length(), playerName.length());
 
-    this.checkLocation(locationId);
+    this.checkLocation(locationId, true);
   }
 
   public void storeObjectIndex(final int scriptIndex) {

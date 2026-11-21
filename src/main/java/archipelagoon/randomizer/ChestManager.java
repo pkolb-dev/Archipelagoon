@@ -8,6 +8,7 @@ import org.apache.logging.log4j.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import static legend.core.GameEngine.EVENTS;
 import static legend.core.GameEngine.SCRIPTS;
 import static legend.game.Scus94491BpeSegment_8005.submapCut_80052c30;
 
@@ -42,15 +43,13 @@ public class ChestManager {
   }
 
   public void listenToChest(final ChestType _chestType, final String locationMessage, final int itemLength, final int nameLength) {
-    this.chestListener.setMessage(locationMessage, itemLength, nameLength);
-  }
-
-  public void startChestListener() {
-    this.chestListener = new ChestListener();
+    EVENTS.clearStaleRefs();
+    this.chestListener = new ChestListener(locationMessage, itemLength, nameLength);
+    EVENTS.register(this.chestListener);
   }
 
   public void cleanupChestListener() {
     this.chestListener = null;
-    this.startChestListener();
+    EVENTS.clearStaleRefs();
   }
 }
