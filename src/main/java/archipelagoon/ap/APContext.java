@@ -291,12 +291,13 @@ public class APContext {
       return;
     }
 
-    final String itemName = item.getItemName();
-    final String playerName = item.getPlayerName();
-    final String sendMessage = I18n.translate(Archipelagoon.MOD_ID + ".ap.event.checkLocationChest", itemName, playerName);
-    this.chestManager.listenToChest(chestType, sendMessage, itemName.length(), playerName.length());
+    // TODO: requires SC 3.1 changes to work properly
+    //    final String itemName = item.getItemName();
+    //    final String playerName = item.getPlayerName();
+    //    final String sendMessage = I18n.translate(Archipelagoon.MOD_ID + ".ap.event.checkLocationChest", itemName, playerName);
+    //    this.chestManager.listenToChest(chestType, sendMessage, itemName.length(), playerName.length());
 
-    this.checkLocation(locationId, true);
+    this.checkLocation(locationId);
   }
 
   public void storeObjectIndex(final int scriptIndex) {
