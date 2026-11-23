@@ -25,10 +25,12 @@ import archipelagoon.randomizer.StoryFlagManager;
 import legend.core.AddRegistryEvent;
 import legend.core.GameEngine;
 import legend.core.lang.I18nText;
+import legend.game.Scus94491BpeSegment_800b;
 import legend.game.characters.LevelUpSource;
 import legend.game.combat.BattleTransitionMode;
 import legend.game.combat.deff.RegisterDeffsEvent;
 import legend.game.combat.effects.TransformationMode;
+import legend.game.combat.ui.GatherBattleActionsEvent;
 import legend.game.inventory.Good;
 import legend.game.inventory.GoodsRegistryEvent;
 import legend.game.inventory.GoodsSource;
@@ -71,6 +73,7 @@ import legend.game.saves.ConfigRegistryEvent;
 import legend.game.saves.ConfigStorageLocation;
 import legend.game.saves.StringConfigEntry;
 import legend.game.scripting.ScriptLifecycleEvent;
+import legend.lodmod.LodBattleActions;
 import legend.lodmod.LodEncounters;
 import legend.lodmod.LodGoods;
 import org.apache.logging.log4j.LogManager;
@@ -400,6 +403,15 @@ public class Archipelagoon {
     if(ctx.getSlotData().deathLink == 1) {
       ctx.sendDeathlink();
     }
+  }
+
+  @EventListener
+  public void gatherBattleActionsListener(final GatherBattleActionsEvent event) {
+    if(Scus94491BpeSegment_800b.encounter.getRegistryId() != LodEncounters.ENCOUNTER_LLOYD.getId()) {
+      return;
+    }
+
+    event.disabledActions.add(LodBattleActions.TRANSFORM.get());
   }
 
   @EventListener
