@@ -5,19 +5,16 @@ import legend.core.memory.types.IntRef;
 import legend.game.saves.ConfigCategory;
 import legend.game.saves.ConfigEntry;
 import legend.game.saves.ConfigStorageLocation;
-
 import legend.game.unpacker.ExpandableFileData;
 import legend.game.unpacker.FileData;
 
 import java.util.ArrayList;
 import java.util.List;
 
-
 public class LocationStateRegistry extends ConfigEntry<List<LocationState>> {
   public LocationStateRegistry() {
     super(List.of(), ConfigStorageLocation.CAMPAIGN, ConfigCategory.OTHER, LocationStateRegistry::serializer, LocationStateRegistry::deserializer);
   }
-
 
   private static byte[] serializer(final List<LocationState> states) {
     final FileData out = new ExpandableFileData(100);
@@ -26,9 +23,9 @@ public class LocationStateRegistry extends ConfigEntry<List<LocationState>> {
     out.writeInt(offset, states.size());
 
     for(final LocationState locationState : states) {
-      out.writeLong(offset, locationState.getItemID());
+      //      out.writeLong(offset, locationState.getItemID());
       out.writeLong(offset, locationState.getLocationID());
-      out.writeInt(offset, locationState.getPlayerID());
+      //      out.writeInt(offset, locationState.getPlayerID());
       out.writeInt(offset, locationState.getFlags());
       out.writeByte(offset, locationState.isApplied() ? 1 : 0);
       out.writeAscii(offset, locationState.getPlayerName());
@@ -38,8 +35,8 @@ public class LocationStateRegistry extends ConfigEntry<List<LocationState>> {
     return out.getBytes();
   }
 
-  private static List<LocationState> deserializer( final byte[] data) {
-    if (data.length < 1) {
+  private static List<LocationState> deserializer(final byte[] data) {
+    if(data.length < 1) {
       return List.of();
     }
 
@@ -50,18 +47,22 @@ public class LocationStateRegistry extends ConfigEntry<List<LocationState>> {
 
     final int statesSize = in.readInt(offset);
 
+    /**
+     * right now SC can't handle configs over 100kb, so this is a bandaid to reduce how often crashing occurs.
+     */
     for(int index = 0; index < statesSize; index++) {
-      final long itemID = in.readLong(offset);
+      //      final long itemID = in.readLong(offset);
       final long locationID = in.readLong(offset);
 
-      final int playerID = in.readInt(offset);
+      //      final int playerID = in.readInt(offset);
       final int flags = in.readInt(offset);
       final boolean applied = in.readByte(offset) != 0;
 
       final String playerName = in.readAscii(offset);
       final String itemName = in.readAscii(offset);
 
-      out.add(new LocationState(locationID, itemID, playerID, flags, applied, playerName, itemName));
+      //      out.add(new LocationState(locationID, itemID, playerID, flags, applied, playerName, itemName));
+      out.add(new LocationState(locationID, flags, applied, playerName, itemName));
     }
 
     return out;

@@ -3,13 +3,20 @@ package archipelagoon.ap.mapping;
 import io.github.archipelagomw.parts.NetworkItem;
 
 public class LocationState {
-  private long itemID;
   private final long locationID;
+  private final String playerName;
+  private final String itemName;
+  private long itemID;
   private int playerID;
   private int flags;
   private boolean applied; // optional, tracks if game logic has consumed it
-  private final String playerName;
-  private final String itemName;
+
+  /**
+   * temporary, do not use long term. 3.1 should resolve this
+   */
+  public LocationState(final long locationID, final int flags, final boolean applied, final String playerName, final String itemName) {
+    this(locationID, 0L, 0, flags, applied, playerName, itemName);
+  }
 
   public LocationState(final long locationID, final long itemID, final int playerID, final int flags, final boolean applied, final String playerName, final String itemName) {
     this.itemID = itemID;
@@ -32,19 +39,35 @@ public class LocationState {
   }
 
   // getters and setters
-  public long getLocationID() { return this.locationID; }
-  public long getItemID() { return this.itemID; }
-  public int getPlayerID() { return this.playerID; }
-  public int getFlags() { return this.flags; }
-  public boolean isApplied() { return this.applied; }
-  public void setApplied(final boolean applied) { this.applied = applied; }
-  public String getPlayerName() { return this.playerName; }
-  public String getItemName() { return this.itemName;  }
+  public long getLocationID() {
+    return this.locationID;
+  }
 
-  // optional: update state from new event
-  public void updateFromEvent(final long locationID, final long itemID, final int playerID, final int flags) {
-    this.itemID = itemID;
-    this.playerID = playerID;
-    this.flags = flags;
+  public long getItemID() {
+    return this.itemID;
+  }
+
+  public int getPlayerID() {
+    return this.playerID;
+  }
+
+  public int getFlags() {
+    return this.flags;
+  }
+
+  public boolean isApplied() {
+    return this.applied;
+  }
+
+  public void setApplied(final boolean applied) {
+    this.applied = applied;
+  }
+
+  public String getPlayerName() {
+    return this.playerName;
+  }
+
+  public String getItemName() {
+    return this.itemName;
   }
 }
